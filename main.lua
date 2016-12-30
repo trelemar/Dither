@@ -55,6 +55,8 @@ function love.draw()
 	camera:attach()
 	lg.draw(currentimage, 0, 0)
 	camera:detach()
+	drawGrid()
+	lg.setColor(255, 255, 255)
 	lg.rectangle("fill", 0, 0, sw, dp(44)) --top bar
 	gooi.draw()
 	lg.setColor(0, 0, 0, focus)
@@ -79,4 +81,19 @@ end
 function love.touchmoved(id, x, y)
 	gooi.moved(id, x, y)
 	touchx, touchy = camera:worldCoords(x, y)
+end
+
+function drawGrid()
+	love.graphics.setColor(0, 0, 0, 50)
+	love.graphics.setLineWidth(dp(1))
+	for i = 1, (currentimage:getWidth() - 1) do
+		local x, y = camera:cameraCoords(i, 0)
+		local x2, y2 = camera:cameraCoords(i, currentimage:getHeight())
+		love.graphics.line(x, y, x2, y2)
+	end
+	for i = 1, (currentimage:getHeight() - 1) do
+		local x, y = camera:cameraCoords(0, i)
+		local x2, y2 = camera:cameraCoords(currentimage:getWidth(), i)
+		love.graphics.line(x, y, x2, y2)
+	end
 end
