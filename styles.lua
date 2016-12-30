@@ -19,14 +19,14 @@ raisedbutton = {
 		font = fonts.rm,
 		bgColor = colors.primary,
 		fgColor = colors.white,
-		round = dp(.2),
+		round = .2,
 	}
 	
 raisedbuttonlight = {
 	font = fonts.rm,
 	bgColor = colors.white,
 	fgColor = colors.black,
-	round = dp(.2),
+	round = .2,
 	showBorder = true,
 	borderWidth = dp(1),
 	borderColor = colors.black,
@@ -44,5 +44,5 @@ raisedbuttonlight = {
 		--showBorder = true,
 		--borderColor = {0, 0, 0},
 		fgColor = colors.black,
-		round = dp(.2)
+		round = .2
 	}

@@ -1,4 +1,5 @@
 require "lib.gooi"
+require "pixelfunctions"
 dp = love.window.toPixels
 lg = love.graphics
 local nB = gooi.newButton
@@ -9,6 +10,7 @@ require "styles"
 Camera = require"lib.hump.camera"
 touchx = nil
 showfilemenu = false
+require "guifunctions"
 function love.load()
 	love.graphics.setDefaultFilter("nearest")
 	lg.setBackgroundColor(200, 200, 200)
@@ -17,7 +19,7 @@ function love.load()
 	redo = nB({text = "REDO", w = dp(112), h = dp(36)}):setIcon("icons/white/ic_redo_variant.png"):setOrientation("right")
 	undo = nB({text = "UNDO", x = dp(112), y = dp(16), w = dp(112), h = dp(36)}):setIcon("icons/white/ic_undo_variant.png"):setOrientation("right")
 	gooi.setStyle(flatbutton)
-	file = nB("FILE", 0, 0, dp(88), dp(36)):onPress(function() showfilemenu = not showfilemenu isvis = not isvis gooi.setGroupVisible("filemenu", isvis) candraw = not candraw end)
+	file = nB("FILE", 0, 0, dp(88), dp(36)):onPress(function() gui.toggleFileMenu() end)
 	options = nB("OPTIONS", 0, 0, dp(88), dp(36))
 	
 	glo = gooi.newPanel(0, 0, sw, sh, "game")
@@ -31,12 +33,13 @@ function love.load()
 	gooi.setStyle(header)
 	filemenu:add(gooi.newLabel("File"):setOrientation("center"):setGroup("filemenu"), "1,1")
 	gooi.setStyle(list)
-	filemenu:add(gooi.newButton("New File"):setOrientation("right"):setIcon("icons/black/ic_plus.png"):setGroup("filemenu"), "2,1")
+	filemenu:add(gooi.newButton("New File"):setOrientation("right"):setIcon("icons/black/ic_plus.png"):setGroup("filemenu"):onPress(function() gui.toggleFileMenu() newdata:mapPixel(pixelFunction.allwhite) end), "2,1")
 	filemenu:add(gooi.newButton({text = "Open File"}):setOrientation("right"):setIcon("icons/black/ic_file.png"):setGroup("filemenu"), "3,1")
 	filemenu:add(nB("Save File"):setOrientation("right"):setIcon("icons/black/ic_file_image.png"):setGroup("filemenu"), "4,1")
 	gooi.setGroupVisible("filemenu", isvis)
 	newdata = love.image.newImageData(32, 32)
 	camera = Camera(newdata:getWidth()/2, newdata:getHeight()/2, 4)
+	--[[
 	do
 		for i = 0, 31 do
 			newdata:setPixel(i, 0, 255, 255, 255, 255)
@@ -45,6 +48,8 @@ function love.load()
 			end
 		end
 	end
+	]]
+	newdata:mapPixel(pixelFunction.allwhite)
 	currentimage = love.graphics.newImage(newdata)
 	currentimage:setFilter("nearest", "nearest")
 	candraw = true
@@ -67,7 +72,11 @@ function love.update(dt)
 		a = a - 15
 		focus = focus - 7.5
 	end
-	camera:zoomTo(zoomslider.value *20)
+	if zoomslider.value <= 0.1 then
+		camera:zoomTo(1)
+	else
+		camera:zoomTo(zoomslider.value *20)
+	end
 	gooi.update(dt)
 end
 
@@ -76,7 +85,7 @@ function love.draw()
 	camera:attach()
 	lg.draw(currentimage, 0, 0)
 	camera:detach()
-	lg.rectangle("fill", 0, 0, sw, dp(44))
+	lg.rectangle("fill", 0, 0, sw, dp(44)) --top bar
 	gooi.draw()
 	lg.setColor(0, 0, 0, focus)
 	lg.rectangle("fill", 0, 0, sw, sh)
