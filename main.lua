@@ -2,58 +2,28 @@ require "lib.gooi"
 require "pixelfunctions"
 dp = love.window.toPixels
 lg = love.graphics
-local nB = gooi.newButton
-local sw, sh = lg.getDimensions()
-local a = 0; local focus = 0
-local isvis = false
+nB = gooi.newButton
+sw, sh = lg.getDimensions()
+a = 0; focus = 0
+isvis = false
 require "styles"
 Camera = require"lib.hump.camera"
 touchx = nil
 showfilemenu = false
 require "guifunctions"
+require "colorpicker"
 function love.load()
 	love.graphics.setDefaultFilter("nearest")
 	lg.setBackgroundColor(200, 200, 200)
-	gooi.setStyle(raisedbutton)
-	zoomslider = gooi.newSlider({w = dp(122), h = dp(36), value = 0.1})
-	redo = nB({text = "REDO", w = dp(112), h = dp(36)}):setIcon("icons/white/ic_redo_variant.png"):setOrientation("right")
-	undo = nB({text = "UNDO", x = dp(112), y = dp(16), w = dp(112), h = dp(36)}):setIcon("icons/white/ic_undo_variant.png"):setOrientation("right")
-	gooi.setStyle(flatbutton)
-	file = nB("FILE", 0, 0, dp(88), dp(36)):onPress(function() gui.toggleFileMenu() end)
-	options = nB("OPTIONS", 0, 0, dp(88), dp(36))
-	
-	glo = gooi.newPanel(0, 0, sw, sh, "game")
-	glo:add(redo, "b-r") glo:add(undo, "b-r") glo:add(options, "t-r")
-	glo:add(file, "t-l")
-	coordlabel = gooi.newLabel({w = dp(88), orientation = "left"})
-	glo:add(coordlabel, "b-l")
-	glo:add(zoomslider, "t-r")
-
-	filemenu = gooi.newPanel(sw/8 * 3, sh/4, sw/8 * 2, sh/2, "grid 6x1")
-	gooi.setStyle(header)
-	filemenu:add(gooi.newLabel("File"):setOrientation("center"):setGroup("filemenu"), "1,1")
-	gooi.setStyle(list)
-	filemenu:add(gooi.newButton("New File"):setOrientation("right"):setIcon("icons/black/ic_plus.png"):setGroup("filemenu"):onPress(function() gui.toggleFileMenu() newdata:mapPixel(pixelFunction.allwhite) end), "2,1")
-	filemenu:add(gooi.newButton({text = "Open File"}):setOrientation("right"):setIcon("icons/black/ic_file.png"):setGroup("filemenu"), "3,1")
-	filemenu:add(nB("Save File"):setOrientation("right"):setIcon("icons/black/ic_file_image.png"):setGroup("filemenu"), "4,1")
-	gooi.setGroupVisible("filemenu", isvis)
+	--gui.load()
 	newdata = love.image.newImageData(32, 32)
 	camera = Camera(newdata:getWidth()/2, newdata:getHeight()/2, 4)
-	--[[
-	do
-		for i = 0, 31 do
-			newdata:setPixel(i, 0, 255, 255, 255, 255)
-			for i2 = 0, 31 do
-				newdata:setPixel(i, i2, 255, 255, 255, 255)
-			end
-		end
-	end
-	]]
 	newdata:mapPixel(pixelFunction.allwhite)
 	currentimage = love.graphics.newImage(newdata)
-	currentimage:setFilter("nearest", "nearest")
 	candraw = true
 	currentcolor = {0, 0, 0, 255}
+	gui.load()
+	colorpicker.load()
 end
 
 function love.update(dt)
