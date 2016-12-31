@@ -12,7 +12,9 @@ touchx = nil
 showfilemenu = false
 require "guifunctions"
 require "colorpicker"
+require "toolbar"
 function love.load()
+	tool = "pencil"
 	love.graphics.setDefaultFilter("nearest")
 	lg.setBackgroundColor(200, 200, 200)
 	--gui.load()
@@ -24,6 +26,7 @@ function love.load()
 	currentcolor = {0, 0, 0, 255}
 	gui.load()
 	colorpicker.load()
+	toolbar.load()
 end
 
 function love.update(dt)
@@ -31,7 +34,13 @@ function love.update(dt)
 	--currentimage:setFilter("nearest", "nearest")
 	if candraw and touchx ~= nil and touchx >= 0 and touchx <= currentimage:getWidth() and touchy >=0 and touchy <= currentimage:getHeight() then
 		coordlabel.text = "x: " .. touchx
-		newdata:setPixel(touchx, touchy, currentcolor)
+		if tool == "pencil" then
+			newdata:setPixel(touchx, touchy, currentcolor)
+		elseif tool == "eraser" then
+			newdata:setPixel(touchx, touchy, 255, 255, 255)
+		elseif tool == "eyedropper" then
+			currentcolor = {newdata:getPixel(touchx, touchy)}
+		end
 	elseif touchx == nil then
 		coordlabel.text = "x: "
 	end
@@ -52,6 +61,7 @@ function love.update(dt)
 		local c = colorpicker
 	colorpicker.colorbox.bgColor = {c.rslider.value * 255, c.gslider.value * 255, c.bslider.value * 255}
 	end
+	cp.bgColor = currentcolor
 end
 
 function love.draw()
