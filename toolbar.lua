@@ -1,0 +1,2 @@
+toolbar = {}
+local tb = toolbar

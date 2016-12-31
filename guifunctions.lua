@@ -41,5 +41,6 @@ function gui.toggleColorPicker()
 	showfilemenu = not showfilemenu
 	isvis = not isvis
 	gooi.setGroupVisible("colorpicker", isvis)
+	gooi.setGroupEnabled("colorpicker", isvis)
 	candraw = not candraw
 end

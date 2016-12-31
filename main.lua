@@ -45,9 +45,13 @@ function love.update(dt)
 	if zoomslider.value <= 0.1 then
 		camera:zoomTo(1)
 	else
-		camera:zoomTo(zoomslider.value *20)
+		camera:zoomTo(zoomslider.value *25)
 	end
 	gooi.update(dt)
+	do
+		local c = colorpicker
+	colorpicker.colorbox.bgColor = {c.rslider.value * 255, c.gslider.value * 255, c.bslider.value * 255}
+	end
 end
 
 function love.draw()
@@ -64,6 +68,7 @@ function love.draw()
 		lg.setColor(255, 255, 255, a)
 		lg.rectangle("fill", sw/8 * 3, sh/4, sw/8 * 2, sh/2, dp(2), dp(2))
 		gooi.draw("filemenu")
+		gooi.draw("colorpicker")
 	lg.setColor(255, 255, 255)
 	--gooi.draw()
 end
@@ -84,7 +89,7 @@ function love.touchmoved(id, x, y)
 end
 
 function drawGrid()
-	love.graphics.setColor(0, 0, 0, 50)
+	love.graphics.setColor(0, 0, 255, 50)
 	love.graphics.setLineWidth(dp(1))
 	for i = 1, (currentimage:getWidth() - 1) do
 		local x, y = camera:cameraCoords(i, 0)
