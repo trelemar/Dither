@@ -28,11 +28,11 @@ function love.load()
 	paletteImage = love.graphics.newImage(palettedata)
 	--paletteCamera = Camera(paletteImage:getWidth(), paletteImage:getHeight())
 	paletteCamera = Camera(0,0)
-	paletteCamera:zoomTo(dp(20))
+	paletteCamera:zoomTo(dp(18))
 	local cx, cy = paletteCamera:worldCoords(sw, sh)
 	local wx, wy = paletteCamera:worldCoords(0, dp(46))
 	--paletteCamera:zoomTo(dp(20))
-	paletteCamera:lookAt(8 - cx, (-wy))
+	paletteCamera:lookAt(paletteImage:getWidth() - cx, (-wy))
 	--paletteCamera:move(0, wy)
 	--paletteCamera:zoomTo(dp(20))
 	candraw = true
@@ -101,6 +101,7 @@ function love.draw()
 	lg.draw(paletteImage, 0, 0)
 	paletteCamera:detach()
 	lg.rectangle("fill", 0, 0, sw, dp(44)) --top bar
+	--lg.rectangle("fill", 0, dp(46), dp(46), dp(46*6)) --toolbar back
 	gooi.draw()
 	lg.setColor(0, 0, 0, focus)
 	lg.rectangle("fill", 0, 0, sw, sh)
@@ -136,18 +137,18 @@ function love.touchmoved(id, x, y)
 end
 
 function drawGrid(xsize, ysize, color)
-if showgrid then
-	love.graphics.setColor(color)
-	love.graphics.setLineWidth(dp(1))
-	for i = xsize, (currentimage:getWidth() - 1), xsize do
-		local x, y = camera:cameraCoords(i, 0)
-		local x2, y2 = camera:cameraCoords(i, currentimage:getHeight())
-		love.graphics.line(x, y, x2, y2)
+	if showgrid then
+		love.graphics.setColor(color)
+		love.graphics.setLineWidth(dp(1))
+		for i = xsize, (currentimage:getWidth() - 1), xsize do
+			local x, y = camera:cameraCoords(i, 0)
+			local x2, y2 = camera:cameraCoords(i, currentimage:getHeight())
+			love.graphics.line(x, y, x2, y2)
+		end
+		for i = ysize, (currentimage:getHeight() - 1), ysize do
+			local x, y = camera:cameraCoords(0, i)
+			local x2, y2 = camera:cameraCoords(currentimage:getWidth(), i)
+			love.graphics.line(x, y, x2, y2)
+		end
 	end
-	for i = ysize, (currentimage:getHeight() - 1), ysize do
-		local x, y = camera:cameraCoords(0, i)
-		local x2, y2 = camera:cameraCoords(currentimage:getWidth(), i)
-		love.graphics.line(x, y, x2, y2)
-	end
-end
 end
