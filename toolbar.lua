@@ -20,6 +20,13 @@ function toolbar.load()
 	end
 	
 	options.grid = gooi.newButton():setIcon(icpath.."grid.png")
+	:onRelease(
+	  function(self)
+	    showgrid = not showgrid
+	    if showgrid then self:setIcon(icpath.."grid.png")
+	    elseif not showgrid then self:setIcon(icpath.."grid_off.png")
+	    end
+	  end)
 	
 	toolbar.layout = gooi.newPanel(0, dp(46), dp(46), dp(46*6), "grid 6x1")
 	tb.layout:add(tools.pencil, "1,1")

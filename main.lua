@@ -81,7 +81,9 @@ function love.draw()
 	camera:attach()
 	lg.draw(currentimage, 0, 0)
 	camera:detach()
-	drawGrid()
+	drawGrid(1, 1, {0, 0, 0, 50})
+	drawGrid(8, 8, {255, 0, 0, 250})
+	drawGrid(16, 16, {0, 0, 255, 250})
 	lg.setColor(255, 255, 255)
 	lg.rectangle("fill", 0, 0, sw, dp(44)) --top bar
 	gooi.draw()
@@ -115,16 +117,16 @@ function love.touchmoved(id, x, y)
 	end
 end
 
-function drawGrid()
+function drawGrid(xsize, ysize, color)
 if showgrid then
-	love.graphics.setColor(0, 0, 255, 50)
+	love.graphics.setColor(color)
 	love.graphics.setLineWidth(dp(1))
-	for i = 1, (currentimage:getWidth() - 1) do
+	for i = xsize, (currentimage:getWidth() - 1), xsize do
 		local x, y = camera:cameraCoords(i, 0)
 		local x2, y2 = camera:cameraCoords(i, currentimage:getHeight())
 		love.graphics.line(x, y, x2, y2)
 	end
-	for i = 1, (currentimage:getHeight() - 1) do
+	for i = ysize, (currentimage:getHeight() - 1), ysize do
 		local x, y = camera:cameraCoords(0, i)
 		local x2, y2 = camera:cameraCoords(currentimage:getWidth(), i)
 		love.graphics.line(x, y, x2, y2)
