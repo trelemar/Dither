@@ -1,6 +1,7 @@
 require "lib.gooi"
 require "pixelfunctions"
 dp = love.window.toPixels
+fd = love.window.fromPixels
 lg = love.graphics
 nB = gooi.newButton
 sw, sh = lg.getDimensions()
@@ -23,6 +24,17 @@ function love.load()
 	camera = Camera(newdata:getWidth()/2, newdata:getHeight()/2, 4)
 	newdata:mapPixel(pixelFunction.allwhite)
 	currentimage = love.graphics.newImage(newdata)
+	palettedata = love.image.newImageData("palettes/db32.png")
+	paletteImage = love.graphics.newImage(palettedata)
+	--paletteCamera = Camera(paletteImage:getWidth(), paletteImage:getHeight())
+	paletteCamera = Camera(0,0)
+	paletteCamera:zoomTo(dp(20))
+	local cx, cy = paletteCamera:worldCoords(sw, sh)
+	local wx, wy = paletteCamera:worldCoords(0, dp(44))
+	--paletteCamera:zoomTo(dp(20))
+	paletteCamera:lookAt(8 - cx, cy)
+	--paletteCamera:move(0, wy)
+	--paletteCamera:zoomTo(dp(20))
 	candraw = true
 	currentcolor = {0, 0, 0, 255}
 	gui.load()
@@ -85,7 +97,10 @@ function love.draw()
 	drawGrid(8, 8, {255, 0, 0, 250})
 	drawGrid(16, 16, {0, 0, 255, 250})
 	lg.setColor(255, 255, 255)
-	lg.rectangle("fill", 0, 0, sw, dp(44)) --top bar
+	paletteCamera:attach()
+	lg.draw(paletteImage, 0, 0)
+	paletteCamera:detach()
+	--lg.rectangle("fill", 0, 0, sw, dp(44)) --top bar
 	gooi.draw()
 	lg.setColor(0, 0, 0, focus)
 	lg.rectangle("fill", 0, 0, sw, sh)
@@ -100,7 +115,7 @@ end
 function love.touchpressed(id, x, y)
 	gooi.pressed(id, x, y)
 	touchx, touchy = camera:worldCoords(x, y)
-	if y <= dp(46) or x <= dp(44) then candraw = false
+	if y <= dp(46) or x <= dp(44) or isvis then candraw = false
 	else candraw = true
 	end
 end
