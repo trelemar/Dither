@@ -32,7 +32,7 @@ function love.load()
 end
 
 function love.update(dt)
-	currentimage = love.graphics.newImage(newdata)
+	currentimage:refresh()
 	if candraw and touchx ~= nil and touchx >= 0 and touchx <= currentimage:getWidth() and touchy >=0 and touchy <= currentimage:getHeight() then
 		coordlabel.text = "x: " .. touchx
 		if tool == tools.pencil then
@@ -41,6 +41,8 @@ function love.update(dt)
 			newdata:setPixel(touchx, touchy, 255, 255, 255)
 		elseif tool == tools.eyedropper then
 			currentcolor = {newdata:getPixel(touchx, touchy)}
+		elseif tool == tools.fill then
+			--floodfill()
 		else
 		end
 	elseif touchx == nil then
@@ -64,7 +66,9 @@ function love.update(dt)
 	colorpicker.colorbox.bgColor = {c.rslider.value * 255, c.gslider.value * 255, c.bslider.value * 255}
 	end
 	cp.bgColor = currentcolor
-	tool.bgColor = colors.secondary --sets currently selected tools background to red
+	if tool ~= none then
+		tool.bgColor = colors.secondary --sets currently selected tools background to red
+	end
 	for i, v in pairs(tools) do
 		if tool ~= v then
 			v.bgColor = colors.primary

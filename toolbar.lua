@@ -14,6 +14,11 @@ function toolbar.load()
 	:onRelease(function() tool = tools.fill end)
 	tools.pan = gooi.newButton():setIcon(icpath.."cursor_pointer.png")
 	:onRelease(function() tool = tools.pan end)
+	
+	for i, v in pairs(tools) do
+		v:onPress(function() tool = none end)
+	end
+	
 	options.grid = gooi.newButton():setIcon(icpath.."grid.png")
 	
 	toolbar.layout = gooi.newPanel(0, dp(46), dp(46), dp(46*6), "grid 6x1")
