@@ -4,11 +4,11 @@ dp = love.window.toPixels
 lg = love.graphics
 nB = gooi.newButton
 sw, sh = lg.getDimensions()
-a = 0; focus = 0
+a, focus = 0, 0
 isvis = false
 require "styles"
 Camera = require"lib.hump.camera"
-touchx = nil
+--touchx = nil
 showfilemenu = false
 showgrid = true
 require "guifunctions"
@@ -34,7 +34,7 @@ end
 function love.update(dt)
 	currentimage:refresh()
 	if candraw and touchx ~= nil and touchx >= 0 and touchx <= currentimage:getWidth() and touchy >=0 and touchy <= currentimage:getHeight() then
-		coordlabel.text = "x: " .. touchx
+		--coordlabel.text = "x: " .. touchx
 		if tool == tools.pencil then
 			newdata:setPixel(touchx, touchy, currentcolor)
 		elseif tool == tools.eraser then
@@ -43,10 +43,10 @@ function love.update(dt)
 			currentcolor = {newdata:getPixel(touchx, touchy)}
 		elseif tool == tools.fill then
 			--floodfill()
-		else
+		--else
 		end
-	elseif touchx == nil then
-		coordlabel.text = "x: "
+	--elseif touchx == nil then
+		--coordlabel.text = "x: "
 	end
 	if showfilemenu and a < 255 then
 		a = a + 15
@@ -100,6 +100,9 @@ end
 function love.touchpressed(id, x, y)
 	gooi.pressed(id, x, y)
 	touchx, touchy = camera:worldCoords(x, y)
+	if y <= dp(46) or x <= dp(44) then candraw = false
+	else candraw = true
+	end
 end
 
 function love.touchreleased(id, x, y)
@@ -111,7 +114,7 @@ function love.touchmoved(id, x, y)
 	gooi.moved(id, x, y)
 	if tool ~= tools.pan then
 		touchx, touchy = camera:worldCoords(x, y)
-	elseif tool == tools.pan then
+	elseif tool == tools.pan and y > dp(46) then
 		newtouchx, newtouchy = camera:worldCoords(x, y)
 		camera:move(touchx - newtouchx, touchy - newtouchy)
 	end
