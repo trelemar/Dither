@@ -11,7 +11,7 @@ function colorpicker.load()
 	colorpicker.gslider.bgColor = {0, 100, 0}
 	colorpicker.bslider = gooi.newSlider({value = 0}):setGroup("colorpicker")
 	colorpicker.bslider.bgColor = {0, 0, 100}
-	colorpicker.confirm = gooi.newButton({text = "CONFIRM"}):setGroup("colorpicker"):setGroup("colorpicker"):onPress(function() confirmColor() gui.toggleColorPicker() end)
+	colorpicker.confirm = gooi.newButton({text = "CONFIRM"}):setGroup("colorpicker"):setGroup("colorpicker"):onRelease(function() confirmColor() gui.toggleColorPicker() end)
 	colorpicker.layout = gooi.newPanel(sw/8 * 3, sh/4, sw/8 * 2, sh/2, "grid 6x1")
 	colorpicker.layout:add(colorpicker.header, "1,1")
 	colorpicker.layout:add(colorpicker.colorbox, "2,1")

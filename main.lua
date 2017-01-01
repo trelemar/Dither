@@ -10,13 +10,14 @@ require "styles"
 Camera = require"lib.hump.camera"
 touchx = nil
 showfilemenu = false
+showgrid = true
 require "guifunctions"
 require "colorpicker"
 require "toolbar"
 function love.load()
-	tool = "pencil"
+
 	love.graphics.setDefaultFilter("nearest")
-	lg.setBackgroundColor(200, 200, 200)
+	lg.setBackgroundColor(150, 150, 150)
 	--gui.load()
 	newdata = love.image.newImageData(32, 32)
 	camera = Camera(newdata:getWidth()/2, newdata:getHeight()/2, 4)
@@ -27,19 +28,20 @@ function love.load()
 	gui.load()
 	colorpicker.load()
 	toolbar.load()
+	tool = tools.pencil
 end
 
 function love.update(dt)
 	currentimage = love.graphics.newImage(newdata)
-	--currentimage:setFilter("nearest", "nearest")
 	if candraw and touchx ~= nil and touchx >= 0 and touchx <= currentimage:getWidth() and touchy >=0 and touchy <= currentimage:getHeight() then
 		coordlabel.text = "x: " .. touchx
-		if tool == "pencil" then
+		if tool == tools.pencil then
 			newdata:setPixel(touchx, touchy, currentcolor)
-		elseif tool == "eraser" then
+		elseif tool == tools.eraser then
 			newdata:setPixel(touchx, touchy, 255, 255, 255)
-		elseif tool == "eyedropper" then
+		elseif tool == tools.eyedropper then
 			currentcolor = {newdata:getPixel(touchx, touchy)}
+		else
 		end
 	elseif touchx == nil then
 		coordlabel.text = "x: "
@@ -54,7 +56,7 @@ function love.update(dt)
 	if zoomslider.value <= 0.1 then
 		camera:zoomTo(1)
 	else
-		camera:zoomTo(zoomslider.value *25)
+		camera:zoomTo(zoomslider.value *50)
 	end
 	gooi.update(dt)
 	do
@@ -62,6 +64,12 @@ function love.update(dt)
 	colorpicker.colorbox.bgColor = {c.rslider.value * 255, c.gslider.value * 255, c.bslider.value * 255}
 	end
 	cp.bgColor = currentcolor
+	tool.bgColor = colors.secondary --sets currently selected tools background to red
+	for i, v in pairs(tools) do
+		if tool ~= v then
+			v.bgColor = colors.primary
+		end
+	end
 end
 
 function love.draw()
@@ -95,10 +103,16 @@ end
 
 function love.touchmoved(id, x, y)
 	gooi.moved(id, x, y)
-	touchx, touchy = camera:worldCoords(x, y)
+	if tool ~= tools.pan then
+		touchx, touchy = camera:worldCoords(x, y)
+	elseif tool == tools.pan then
+		newtouchx, newtouchy = camera:worldCoords(x, y)
+		camera:move(touchx - newtouchx, touchy - newtouchy)
+	end
 end
 
 function drawGrid()
+if showgrid then
 	love.graphics.setColor(0, 0, 255, 50)
 	love.graphics.setLineWidth(dp(1))
 	for i = 1, (currentimage:getWidth() - 1) do
@@ -111,4 +125,5 @@ function drawGrid()
 		local x2, y2 = camera:cameraCoords(currentimage:getWidth(), i)
 		love.graphics.line(x, y, x2, y2)
 	end
+end
 end

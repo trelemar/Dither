@@ -6,10 +6,12 @@ fonts = {
 }
 
 colors = {
-	primary = "#001CB4",
+	primary = {80, 80, 80},
+	secondary = {255,0,0},
+	--"#001CB4",
 	primaryd = "#FF002C",
-	white = "#FFFFFF",
-	black = "#000000"
+	white = {255,255,255},
+	black = {0,0,0}
 }
 header = {
 	font = fonts.header,

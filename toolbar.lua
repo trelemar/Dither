@@ -1,17 +1,26 @@
 toolbar = {}
 local tb = toolbar
-local icpath = "icons/white/ic_"
+icpath = "icons/white/ic_"
 function toolbar.load()
-	tb.pencil = gooi.newButton():setIcon(icpath.."pencil.png")
-	:onPress(function(self) tool = "pencil" end)
-	tb.eraser= gooi.newButton():setIcon(icpath.."eraser.png")
-	:onPress(function() tool = "eraser" end)
-	tb.eyedropper = gooi.newButton():setIcon(icpath.."eyedropper.png")
-	:onPress(function() tool = "eyedropper" end)
+	tools = {}
+	options = {}
+	tools.pencil = gooi.newButton():setIcon(icpath.."pencil.png")
+	:onRelease(function(self) tool = tools.pencil end)
+	tools.eraser= gooi.newButton():setIcon(icpath.."eraser.png")
+	:onRelease(function() tool = tools.eraser end)
+	tools.eyedropper = gooi.newButton():setIcon(icpath.."eyedropper.png")
+	:onRelease(function() tool = tools.eyedropper end)
+	tools.fill = gooi.newButton():setIcon(icpath.."fill.png")
+	:onRelease(function() tool = tools.fill end)
+	tools.pan = gooi.newButton():setIcon(icpath.."cursor_pointer.png")
+	:onRelease(function() tool = tools.pan end)
+	options.grid = gooi.newButton():setIcon(icpath.."grid.png")
 	
-	
-	toolbar.layout = gooi.newPanel(0, dp(46), dp(46), dp(276), "grid 6x1")
-	tb.layout:add(tb.pencil, "1,1")
-	tb.layout:add(tb.eraser, "2,1")
-	tb.layout:add(tb.eyedropper, "3,1")
+	toolbar.layout = gooi.newPanel(0, dp(46), dp(46), dp(46*6), "grid 6x1")
+	tb.layout:add(tools.pencil, "1,1")
+	tb.layout:add(tools.eraser, "2,1")
+	tb.layout:add(tools.eyedropper, "3,1")
+	tb.layout:add(tools.fill, "4,1")
+	tb.layout:add(tools.pan, "5,1")
+	tb.layout:add(options.grid, "6,1")
 end
