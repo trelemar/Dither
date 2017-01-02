@@ -1512,14 +1512,16 @@ function gooi.dialog(msg, fPositive, fNegative, kind)
 			:setOpaque(false)
 		gooi.lblDialog.lblFlag = true
 		gooi.panelDialog:add(gooi.lblDialog, "1,1")
-
+		
+		--gooi.setStyle(raisedbutton) --testing
+		
 		if kind == "alert" then
 			gooi.okButton  = gooi.newButton("OK"):onRelease(function()
 				if fPositive then
 					fPositive()
 				end
 				gooi.closeDialog()
-			end)
+			end):setStyle(raisedbutton)
 			gooi.okButton.okFlag   = true
 			gooi.panelDialog:add(gooi.okButton,  "3,2")
 			gooi.radCorner = gooi.okButton.round * gooi.okButton.h / 2
@@ -1529,13 +1531,13 @@ function gooi.dialog(msg, fPositive, fNegative, kind)
 					fNegative()
 				end
 				gooi.closeDialog()
-			end)
+			end):setStyle(raisedbutton)
 			gooi.yesButton = gooi.newButton("YES"):onRelease(function()
 				if fPositive then
 					fPositive()
 				end
 				gooi.closeDialog()
-			end)
+			end):setStyle(raisedbutton)
 			gooi.noButton.noFlag   = true
 			gooi.yesButton.yesFlag = true
 			gooi.panelDialog:add(gooi.noButton,  "3,1")

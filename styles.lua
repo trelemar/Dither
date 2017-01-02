@@ -48,3 +48,13 @@ raisedbuttonlight = {
 		fgColor = colors.black,
 		round = .2
 	}
+	
+dialog = {
+	font = fonts.rr,
+	bgColor = colors.white,
+	fgColor = colors.black,
+	showBorder = true,
+	borderWidth = dp(2),
+	borderColor = colors.black,
+	round = 0
+}
