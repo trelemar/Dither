@@ -16,7 +16,8 @@ require "guifunctions"
 require "colorpicker"
 require "toolbar"
 function love.load()
-
+	--filedata = "none"
+	lg.setFont(fonts.rr)
 	love.graphics.setDefaultFilter("nearest")
 	lg.setBackgroundColor(150, 150, 150)
 	--gui.load()
@@ -28,7 +29,7 @@ function love.load()
 	paletteImage = love.graphics.newImage(palettedata)
 	--paletteCamera = Camera(paletteImage:getWidth(), paletteImage:getHeight())
 	paletteCamera = Camera(0,0)
-	paletteCamera:zoomTo(dp(18))
+	paletteCamera:zoomTo(dp(20))
 	local cx, cy = paletteCamera:worldCoords(sw, sh)
 	local wx, wy = paletteCamera:worldCoords(0, dp(46))
 	--paletteCamera:zoomTo(dp(20))
@@ -110,6 +111,10 @@ function love.draw()
 		gooi.draw("filemenu")
 		gooi.draw("colorpicker")
 	lg.setColor(255, 255, 255)
+	if success then
+		lg.print("Image Saved!", dp(2), sh - dp(18))
+	else
+	end
 	--gooi.draw()
 end
 
@@ -118,6 +123,10 @@ function love.touchpressed(id, x, y)
 	touchx, touchy = camera:worldCoords(x, y)
 	if y <= dp(46) or x <= dp(44) or isvis then candraw = false
 	else candraw = true
+	end
+	local palx, paly = paletteCamera:worldCoords(x, y)
+	if palx >= 0 and palx <= paletteImage:getWidth() and paly >= 0 and paly <= paletteImage:getHeight() then
+		currentcolor = {palettedata:getPixel(palx, paly)}
 	end
 end
 
