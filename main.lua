@@ -30,8 +30,8 @@ function love.load()
 	--paletteCamera = Camera(paletteImage:getWidth(), paletteImage:getHeight())
 	paletteCamera = Camera(0,0)
 	paletteCamera:zoomTo(dp(20))
-	local cx, cy = paletteCamera:worldCoords(sw, sh)
-	local wx, wy = paletteCamera:worldCoords(0, dp(46))
+	local cx, cy = paletteCamera:worldCoords(sw - dp(4), sh)
+	local wx, wy = paletteCamera:worldCoords(0, dp(48))
 	--paletteCamera:zoomTo(dp(20))
 	paletteCamera:lookAt(paletteImage:getWidth() - cx, (-wy))
 	--paletteCamera:move(0, wy)
@@ -49,7 +49,16 @@ function love.update(dt)
 	if candraw and touchx ~= nil and touchx >= 0 and touchx <= currentimage:getWidth() and touchy >=0 and touchy <= currentimage:getHeight() then
 		--coordlabel.text = "x: " .. touchx
 		if tool == tools.pencil then
-			newdata:setPixel(touchx, touchy, currentcolor)
+			if pencilSize == 1 then
+				newdata:setPixel(touchx, touchy, currentcolor)
+			elseif pencilSize ~= 1 then
+				for i = 0, pencilSize do
+					newdata:setPixel(touchx + i/2, touchy, currentcolor)
+					newdata:setPixel(touchx - i/2, touchy, currentcolor)
+					--newdata:setPixel(touchx, touchy + i/2, currentcolor)
+					--newdata:setPixel(touchx, touchy - i/2, curremtcolor)
+				end
+			end
 		elseif tool == tools.eraser then
 			newdata:setPixel(touchx, touchy, 255, 255, 255)
 		elseif tool == tools.eyedropper then
@@ -71,7 +80,7 @@ function love.update(dt)
 	if zoomslider.value <= 0.1 then
 		camera:zoomTo(1)
 	else
-		camera:zoomTo(zoomslider.value *50)
+		camera:zoomTo(zoomslider.value *dp(50))
 	end
 	gooi.update(dt)
 	do
@@ -87,6 +96,9 @@ function love.update(dt)
 			v.bgColor = colors.primary
 		end
 	end
+	if pencilSlider ~= nil then
+		pencilSize = pencilSlider.value
+	end
 end
 
 function love.draw()
@@ -101,6 +113,8 @@ function love.draw()
 	paletteCamera:attach()
 	lg.draw(paletteImage, 0, 0)
 	paletteCamera:detach()
+	drawPaletteGrid(colors.primary)
+	lg.setColor(255, 255, 255)
 	lg.rectangle("fill", 0, 0, sw, dp(44)) --top bar
 	--lg.rectangle("fill", 0, dp(46), dp(46), dp(46*6)) --toolbar back
 	gooi.draw()
@@ -158,6 +172,23 @@ function drawGrid(xsize, ysize, color)
 		for i = ysize, (currentimage:getHeight() - 1), ysize do
 			local x, y = camera:cameraCoords(0, i)
 			local x2, y2 = camera:cameraCoords(currentimage:getWidth(), i)
+			love.graphics.line(x, y, x2, y2)
+		end
+	end
+end
+
+function drawPaletteGrid(color)
+	if showgrid then
+		love.graphics.setColor(color)
+		love.graphics.setLineWidth(dp(1))
+		for i = 0, (paletteImage:getWidth()) do
+			local x, y = paletteCamera:cameraCoords(i, 0)
+			local x2, y2 = paletteCamera:cameraCoords(i, paletteImage:getHeight())
+			love.graphics.line(x, y, x2, y2)
+		end
+		for i = 0, (paletteImage:getHeight()) do
+			local x, y = paletteCamera:cameraCoords(0, i)
+			local x2, y2 = paletteCamera:cameraCoords(paletteImage:getWidth(), i)
 			love.graphics.line(x, y, x2, y2)
 		end
 	end

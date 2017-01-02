@@ -4,8 +4,19 @@ icpath = "icons/white/ic_"
 function toolbar.load()
 	tools = {}
 	options = {}
+	showingPencilSlider = false
+	pencilSize = 1
 	tools.pencil = gooi.newButton():setIcon(icpath.."pencil.png")
-	:onRelease(function(self) tool = tools.pencil end)
+	:onRelease(function(self)
+		tool = tools.pencil
+		if tool == tools.pencil and not showingPencilSlider then
+			showingPencilSlider = true
+			pencilSlider = gooi.newSpinner({x = self.x + dp(48), y = self.y, w = self.w * 3, h= self.h, min = 1, max = 10, value = pencilSize})
+		elseif tool == tools.pencil and showingPencilSlider then
+			gooi.removeComponent(pencilSlider)
+			showingPencilSlider = false
+		end
+	end)
 	tools.eraser= gooi.newButton():setIcon(icpath.."eraser.png")
 	:onRelease(function() tool = tools.eraser end)
 	tools.eyedropper = gooi.newButton():setIcon(icpath.."eyedropper.png")

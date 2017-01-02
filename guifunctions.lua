@@ -11,6 +11,20 @@ function gui.load()
 	options = nB("OPTIONS", 0, 0, dp(60), dp(36))--:setIcon("icons/black/ic_cog.png")
 	edit = nB("EDIT", 0, 0, dp(60), dp(36)):setOrientation("left")
 	view = nB("VIEW", 0, 0, dp(60), dp(36)):setOrientation("left")
+	:onPress(function(self)
+		if viewWindow == nil then
+			viewWindow = gooi.newPanel(sw/8 * 3, sh/4, sw/8 * 2, sh/2, "grid 6x1")
+			gridCheck = gooi.newCheck({text= "Show Grid", checked = true})
+			close = gooi.newButton("CLOSE")
+			:onPress(function()
+				gooi.removeComponent(viewWindow) viewWindow = nil candraw = true
+			end)
+			viewWindow:add(gridCheck, "1,1")
+			viewWindow:add(close, "6,1")
+			close.bgColor = colors.secondary
+		else gooi.removeComponent(viewWindow) viewWindow = nil candraw = true
+		end
+	end)
 	selection = nB("SELECTION", 0, 0, dp(60), dp(36)):setOrientation("left")
 	glo = gooi.newPanel(0, 0, sw, sh, "game")
 	glo:add(redo, "b-r") glo:add(undo, "b-r") glo:add(options, "t-r")
