@@ -8,14 +8,15 @@ function gui.load()
 	gooi.setStyle(flatbutton)
 	file = nB("FILE", 0, 0, dp(88), dp(36)):onRelease(function() gui.toggleFileMenu() end)
 	options = nB("OPTIONS", 0, 0, dp(88), dp(36))--:setIcon("icons/black/ic_cog.png")
-	
+	edit = nB("EDIT", 0, 0, dp(88), dp(36))
+	view = nB("VIEW", 0, 0, dp(88), dp(36))
 	glo = gooi.newPanel(0, 0, sw, sh, "game")
 	glo:add(redo, "b-r") glo:add(undo, "b-r") glo:add(options, "t-r")
-	glo:add(file, "t-l")
+	glo:add(file, "t-l") glo:add(edit, "t-l") glo:add(view, "t-l")
 	--coordlabel = gooi.newLabel({w = dp(88), orientation = "left"})
 	--glo:add(coordlabel, "b-l")
 	glo:add(zoomslider, "t-r")
-	glo:add(gooi.newLabel("Zoom:"), "t-r")
+	glo:add(gooi.newLabel("ZOOM:"), "t-r")
 
 
 	filemenu = gooi.newPanel(sw/8 * 3, sh/4, sw/8 * 2, sh/2, "grid 6x1")

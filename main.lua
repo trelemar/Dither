@@ -107,7 +107,7 @@ function love.draw()
 	lg.setColor(0, 0, 0, focus)
 	lg.rectangle("fill", 0, 0, sw, sh)
 		lg.setColor(255, 255, 255, a)
-		lg.rectangle("fill", sw/8 * 3, sh/4, sw/8 * 2, sh/2, dp(2), dp(2))
+		lg.rectangle("fill", sw/8 *3, sh/4, sw/4, sh/2, dp(2), dp(2))
 		gooi.draw("filemenu")
 		gooi.draw("colorpicker")
 	lg.setColor(255, 255, 255)
@@ -126,6 +126,7 @@ function love.touchpressed(id, x, y)
 	end
 	local palx, paly = paletteCamera:worldCoords(x, y)
 	if palx >= 0 and palx <= paletteImage:getWidth() and paly >= 0 and paly <= paletteImage:getHeight() then
+		candraw = false
 		currentcolor = {palettedata:getPixel(palx, paly)}
 	end
 end
