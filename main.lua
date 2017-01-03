@@ -99,6 +99,9 @@ function love.update(dt)
 	if pencilSlider ~= nil then
 		pencilSize = pencilSlider.value
 	end
+	if gridCheck ~= nil then
+		showgrid = gridCheck.checked
+	end
 end
 
 function love.draw()
@@ -135,8 +138,8 @@ end
 function love.touchpressed(id, x, y)
 	gooi.pressed(id, x, y)
 	touchx, touchy = camera:worldCoords(x, y)
-	if y <= dp(46) or x <= dp(44) or isvis then candraw = false
-	else candraw = true
+	if y <= dp(46) or x <= dp(44) or isvis or viewWindow ~= nil then candraw = false
+	elseif y > dp(46) or x > dp(44) or not isvis then candraw = true
 	end
 	local palx, paly = paletteCamera:worldCoords(x, y)
 	if palx >= 0 and palx <= paletteImage:getWidth() and paly >= 0 and paly <= paletteImage:getHeight() then

@@ -13,16 +13,25 @@ function gui.load()
 	view = nB("VIEW", 0, 0, dp(60), dp(36)):setOrientation("left")
 	:onPress(function(self)
 		if viewWindow == nil then
-			viewWindow = gooi.newPanel(sw/8 * 3, sh/4, sw/8 * 2, sh/2, "grid 6x1")
-			gridCheck = gooi.newCheck({text= "Show Grid", checked = true})
+			gooi.setStyle(window)
+			viewWindow = gooi.newPanel({x = sw/8 * 3, y = sh/4, w = sw/8 * 2, h = sh/2, layout = "grid 6x1"}):setOpaque(true)
+			gooi.setStyle(raisedbutton)
+			viewWindowLabel = gooi.newLabel({text = "VIEW", orientation = "center"})
+			gridCheck = gooi.newCheck({text= "Show Grid", checked = showgrid})
+			paletteScaleLabel = gooi.newLabel({text = "Color Palette Scale:", orientation = "center"}):setOpaque(true)
+			recenterImage = nB("RECENTER IMAGE"):onPress(function() camera:lookAt(newdata:getWidth()/2, newdata:getHeight()/2) end)
 			close = gooi.newButton("CLOSE")
 			:onPress(function()
-				gooi.removeComponent(viewWindow) viewWindow = nil candraw = true
+				gooi.removeComponent(viewWindow) viewWindow = nil 
 			end)
-			viewWindow:add(gridCheck, "1,1")
+			--viewWindow:setRowspan(1, 1, 6)
+			viewWindow:add(viewWindowLabel, "1,1")
+			viewWindow:add(paletteScaleLabel, "2,1")
+			viewWindow:add(recenterImage, "3,1")
+			viewWindow:add(gridCheck, "4,1")
 			viewWindow:add(close, "6,1")
 			close.bgColor = colors.secondary
-		else gooi.removeComponent(viewWindow) viewWindow = nil candraw = true
+		else gooi.removeComponent(viewWindow) viewWindow = nil
 		end
 	end)
 	selection = nB("SELECTION", 0, 0, dp(60), dp(36)):setOrientation("left")

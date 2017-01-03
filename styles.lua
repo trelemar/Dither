@@ -58,3 +58,8 @@ dialog = {
 	borderColor = colors.black,
 	round = 0
 }
+window = {
+	font = fonts.rr,
+	bgColor = {120, 120, 120},
+	round = 0
+}
