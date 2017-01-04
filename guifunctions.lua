@@ -104,6 +104,9 @@ function gui.toggleFileMenu()
 			gui.toggleFileBrowser()
 		end)
 		comps.saveFile = gooi.newButton("SAVE FILE")
+		:onRelease(function()
+			newdata:encode("png", fn)
+		end)
 		fileWindow:add(comps.Label, "1,1")
 		fileWindow:add(comps.newFile, "2,1")
 		fileWindow:add(comps.openFile, "3,1")
@@ -129,6 +132,7 @@ function gui.toggleFileBrowser()
 				:onRelease(function()
 					newdata = love.image.newImageData(filename)
 					currentimage = love.graphics.newImage(newdata)
+					fn = filename
 					gooi.removeComponent(fileBrowser) fileBrowser = nil
 				end))
 			end
