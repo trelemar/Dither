@@ -77,11 +77,7 @@ function love.update(dt)
 		a = a - 15
 		focus = focus - 7.5
 	end
-	if zoomslider.value <= 0.1 then
-		camera:zoomTo(1)
-	else
-		camera:zoomTo(zoomslider.value *dp(50))
-	end
+	camera:zoomTo(zoomslider.value *dp(50))
 	gooi.update(dt)
 	do
 		local c = colorpicker

@@ -103,9 +103,11 @@ function gui.toggleFileMenu()
 			]]
 			gui.toggleFileBrowser()
 		end)
+		comps.saveFile = gooi.newButton("SAVE FILE")
 		fileWindow:add(comps.Label, "1,1")
 		fileWindow:add(comps.newFile, "2,1")
 		fileWindow:add(comps.openFile, "3,1")
+		fileWindow:add(comps.saveFile, "4,1")
 	else gooi.removeComponent(fileWindow) fileWindow = nil
 	end
 end
@@ -114,19 +116,21 @@ function gui.toggleFileBrowser()
 	if fileBrowser == nil then
 		gooi.setStyle(window)
 		fileBrowser = gooi.newPanel(largeWindowArgs):setOpaque(true)
+		:setColspan(1, 1, 3)
 		gooi.setStyle(raisedbutton)
 		local dir = love.filesystem.getSaveDirectory()
-		local cwdLabel = gooi.newLabel(dir)
+		local cwdLabel = gooi.newLabel(dir):setOrientation("center")
 		fileBrowser:add(cwdLabel, "1,1")
 		gooi.setStyle(flatbutton)
 		local items = love.filesystem.getDirectoryItems("")
 		for i,filename in pairs(items) do
-			if i <= 6 then
-				fileBrowser:add(gooi.newButton({text = filename, orientation = "right"}), tostring(i+1)..",1")
-			elseif i >= 7 and i <= 12 then
-				fileBrowser:add(gooi.newButton({text = filename, orientation = "right"}), tostring(i-5)..",2")
-			elseif i >= 13 and i <= 18 then
-				fileBrowser:add(gooi.newButton({text= filename, orientation = "right"}), tostring(i-11)..",3")
+			if string.find(filename, ".png") then
+				fileBrowser:add(gooi.newButton({text = filename, orientation = "right"})
+				:onRelease(function()
+					newdata = love.image.newImageData(filename)
+					currentimage = love.graphics.newImage(newdata)
+					gooi.removeComponent(fileBrowser) fileBrowser = nil
+				end))
 			end
 		end
 	else gooi.removeComponent(fileBrowser) fileBrowser = nil
