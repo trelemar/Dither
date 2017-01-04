@@ -18,7 +18,7 @@ function gui.load()
 			gooi.setStyle(raisedbutton)
 			viewWindowLabel = gooi.newLabel({text = "VIEW", orientation = "center"})
 			gridCheck = gooi.newCheck({text= "Show Grid", checked = showgrid})
-			paletteScaleLabel = gooi.newLabel({text = "Color Palette Scale:", orientation = "center"}):setOpaque(true)
+			--paletteScaleLabel = gooi.newLabel({text = "Color Palette Scale:", orientation = "center"}):setOpaque(true)
 			recenterImage = nB("RECENTER IMAGE"):onPress(function() camera:lookAt(newdata:getWidth()/2, newdata:getHeight()/2) end)
 			close = gooi.newButton("CLOSE")
 			:onPress(function()
@@ -26,7 +26,7 @@ function gui.load()
 			end)
 			--viewWindow:setRowspan(1, 1, 6)
 			viewWindow:add(viewWindowLabel, "1,1")
-			viewWindow:add(paletteScaleLabel, "2,1")
+			--viewWindow:add(paletteScaleLabel, "2,1")
 			viewWindow:add(recenterImage, "3,1")
 			viewWindow:add(gridCheck, "4,1")
 			viewWindow:add(close, "6,1")
@@ -70,11 +70,67 @@ function gui.load()
 	cp.bgColor = currentcolor
 end 
 
-function gui.toggleFileMenu()
+function gui.openFileMenu()
 	 showfilemenu = not showfilemenu 
 	 isvis = not isvis 
 	 gooi.setGroupVisible("filemenu", isvis) 
 	 candraw = not candraw
+end
+
+function gui.toggleFileMenu()
+	if fileWindow == nil then
+		gooi.setStyle(window)
+		--fileWindow = gooi.newPanel({x = sw/8 * 3, y = sh/4, w = sw/8 * 2, h = sh/2, layout = "grid 6x1"}):setOpaque(true)
+		fileWindow = gooi.newPanel(defWindowArgs):setOpaque(true)
+		fileWindow.components = {}
+		local comps = fileWindow.components
+		gooi.setStyle(raisedbutton)
+		comps.Label = gooi.newLabel("FILE"):setOpaque(false):setOrientation("center")
+		comps.newFile = nB("NEW FILE")
+		:onRelease(function()
+			gooi.confirm("Start a new file?", function() newdata:mapPixel(pixelFunction.allwhite) end)
+		end)
+		comps.openFile = gooi.newButton("OPEN FILE")
+		:onPress(function()
+			gui.toggleFileMenu()
+			--[[
+			local dir = ""
+			local files = love.filesystem.getDirectoryItems(dir)
+			fileBrowser = gooi.newPanel(defWindowArgs)
+			for i, v in pairs(files) do
+				fileBrowser:add(gooi.newButton(v))
+			end
+			]]
+			gui.toggleFileBrowser()
+		end)
+		fileWindow:add(comps.Label, "1,1")
+		fileWindow:add(comps.newFile, "2,1")
+		fileWindow:add(comps.openFile, "3,1")
+	else gooi.removeComponent(fileWindow) fileWindow = nil
+	end
+end
+
+function gui.toggleFileBrowser()
+	if fileBrowser == nil then
+		gooi.setStyle(window)
+		fileBrowser = gooi.newPanel(largeWindowArgs):setOpaque(true)
+		gooi.setStyle(raisedbutton)
+		local dir = love.filesystem.getSaveDirectory()
+		local cwdLabel = gooi.newLabel(dir)
+		fileBrowser:add(cwdLabel, "1,1")
+		gooi.setStyle(flatbutton)
+		local items = love.filesystem.getDirectoryItems("")
+		for i,filename in pairs(items) do
+			if i <= 6 then
+				fileBrowser:add(gooi.newButton({text = filename, orientation = "right"}), tostring(i+1)..",1")
+			elseif i >= 7 and i <= 12 then
+				fileBrowser:add(gooi.newButton({text = filename, orientation = "right"}), tostring(i-5)..",2")
+			elseif i >= 13 and i <= 18 then
+				fileBrowser:add(gooi.newButton({text= filename, orientation = "right"}), tostring(i-11)..",3")
+			end
+		end
+	else gooi.removeComponent(fileBrowser) fileBrowser = nil
+	end
 end
 
 function gui.toggleColorPicker()

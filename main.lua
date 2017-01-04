@@ -181,7 +181,6 @@ function drawGrid(xsize, ysize, color)
 end
 
 function drawPaletteGrid(color)
-	if showgrid then
 		love.graphics.setColor(color)
 		love.graphics.setLineWidth(dp(1))
 		for i = 0, (paletteImage:getWidth()) do
@@ -194,5 +193,4 @@ function drawPaletteGrid(color)
 			local x2, y2 = paletteCamera:cameraCoords(paletteImage:getWidth(), i)
 			love.graphics.line(x, y, x2, y2)
 		end
-	end
 end

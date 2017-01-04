@@ -63,3 +63,17 @@ window = {
 	bgColor = {120, 120, 120},
 	round = 0
 }
+defWindowArgs = {
+	x = sw/8 * 3, 
+	y = sh/4, 
+	w = sw/8 * 2, 
+	h = sh/2, 
+	layout = "grid 6x1"
+}
+largeWindowArgs = {
+	x = sw/8* 1,
+	y = sh/6,
+	w = sw/8 * 6,
+	h = sh/6 * 4,
+	layout = "grid 8x3"
+}
