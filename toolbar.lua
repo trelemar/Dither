@@ -13,6 +13,7 @@ function toolbar.load()
 			showingPencilSlider = true
 			gooi.setStyle(raisedbutton)
 			pencilSlider = gooi.newSpinner({x = self.x + dp(48), y = self.y, w = self.w * 3, h= self.h, min = 1, max = 10, value = pencilSize})
+			pencilSlider.bgColor = colors.secondary
 		elseif tool == tools.pencil and showingPencilSlider then
 			gooi.removeComponent(pencilSlider)
 			showingPencilSlider = false

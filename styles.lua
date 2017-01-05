@@ -7,7 +7,8 @@ fonts = {
 
 colors = {
 	primary = {80, 80, 80},
-	secondary = {255,0,0},
+	secondary = {0, 200, 0},
+	tertairy = {200, 0, 0},
 	--"#001CB4",
 	primaryd = "#FF002C",
 	white = {255,255,255},
@@ -36,8 +37,8 @@ raisedbuttonlight = {
 	
 	flatbutton = {
 		font = fonts.rm,
-		bgColor = colors.white,
-		fgColor = colors.primary,
+		bgColor = colors.primary,
+		fgColor = colors.white,
 	}
 	
 	list = {

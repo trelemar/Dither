@@ -30,7 +30,7 @@ function gui.load()
 			viewWindow:add(recenterImage, "3,1")
 			viewWindow:add(gridCheck, "4,1")
 			viewWindow:add(close, "6,1")
-			close.bgColor = colors.secondary
+			close.bgColor = colors.tertairy
 		else gooi.removeComponent(viewWindow) viewWindow = nil
 		end
 	end)
@@ -52,7 +52,7 @@ function gui.load()
 	filemenu:add(gooi.newButton("New File"):setOrientation("right"):setIcon("icons/black/ic_plus.png"):setGroup("filemenu")
 	:onRelease(function()
 		gooi.setStyle(dialog)
-		gooi.confirm("Start a new file?", function() newdata:mapPixel(pixelFunction.allwhite) gui.toggleFileMenu() end)
+		gooi.confirm("Start a new file?", function() newdata:mapPixel(pixelFunction.allwhite) gui.toggleFileMenu() fn = nil end)
 		--gui.toggleFileMenu()
 		--newdata:mapPixel(pixelFunction.allwhite) 
 	end), "2,1")
@@ -105,7 +105,12 @@ function gui.toggleFileMenu()
 		end)
 		comps.saveFile = gooi.newButton("SAVE FILE")
 		:onRelease(function()
-			newdata:encode("png", fn)
+			if fn == nil then
+				gui.toggleFileMenu()
+				gui.toggleSaveMenu()
+			else
+				newdata:encode("png", fn)
+			end
 		end)
 		fileWindow:add(comps.Label, "1,1")
 		fileWindow:add(comps.newFile, "2,1")
@@ -122,8 +127,16 @@ function gui.toggleFileBrowser()
 		:setColspan(1, 1, 3)
 		gooi.setStyle(raisedbutton)
 		local dir = love.filesystem.getSaveDirectory()
-		local cwdLabel = gooi.newLabel(dir):setOrientation("center")
-		fileBrowser:add(cwdLabel, "1,1")
+		local Label = gooi.newLabel(dir):setOrientation("center")
+		local textBox = gooi.newText("test")
+		local Cancel = gooi.newButton("CANCEL")
+		:onRelease(function()
+			gui.toggleFileBrowser()
+		end)
+		Cancel.bgColor = colors.tertairy
+		fileBrowser:add(Label, "1,1")
+		fileBrowser:add(Cancel, "8,1")
+		fileBrowser:add(textBox, "8,2")
 		gooi.setStyle(flatbutton)
 		local items = love.filesystem.getDirectoryItems("")
 		for i,filename in pairs(items) do
@@ -138,6 +151,36 @@ function gui.toggleFileBrowser()
 			end
 		end
 	else gooi.removeComponent(fileBrowser) fileBrowser = nil
+	end
+end
+
+function gui.toggleSaveMenu()
+	if saveMenu == nil then
+		gooi.setStyle(window)
+		saveMenu = gooi.newPanel(defWindowArgs):setOpaque(true)
+		saveMenu.components = {}
+		local comps = saveMenu.components
+		gooi.setStyle(raisedbutton)
+		
+		comps.Label = gooi.newLabel("SAVE NEW FILE"):setOrientation("center")
+		comps.TextBox = gooi.newText("")
+		comps.Cancel = gooi.newButton("CANCEL")
+		:onRelease(function()
+			gui.toggleSaveMenu()
+		end)
+		comps.Save = gooi.newButton("SAVE")
+		:onRelease(function()
+			fn = comps.TextBox.text
+			newdata:encode("png", fn..".png")
+			gui.toggleSaveMenu()
+		end)
+		
+		saveMenu:add(comps.Label, "1,1")
+		saveMenu:add(comps.TextBox, "3,1")
+		saveMenu:add(comps.Cancel, "5,1")
+		saveMenu:add(comps.Save, "6,1")
+		
+	else gooi.removeComponent(saveMenu) saveMenu = nil
 	end
 end
 

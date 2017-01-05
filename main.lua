@@ -77,7 +77,11 @@ function love.update(dt)
 		a = a - 15
 		focus = focus - 7.5
 	end
-	camera:zoomTo(zoomslider.value *dp(50))
+	if zoomslider.value <= 0.1 then
+		camera:zoomTo(1)
+	else
+		camera:zoomTo(zoomslider.value *dp(50))
+	end
 	gooi.update(dt)
 	do
 		local c = colorpicker
@@ -113,7 +117,7 @@ function love.draw()
 	lg.draw(paletteImage, 0, 0)
 	paletteCamera:detach()
 	drawPaletteGrid(colors.primary)
-	lg.setColor(255, 255, 255)
+	lg.setColor(colors.primary)
 	lg.rectangle("fill", 0, 0, sw, dp(44)) --top bar
 	--lg.rectangle("fill", 0, dp(46), dp(46), dp(46*6)) --toolbar back
 	gooi.draw()
@@ -157,6 +161,10 @@ function love.touchmoved(id, x, y)
 		newtouchx, newtouchy = camera:worldCoords(x, y)
 		camera:move(touchx - newtouchx, touchy - newtouchy)
 	end
+end
+
+function love.textinput(text)
+	gooi.textinput(text)
 end
 
 function drawGrid(xsize, ysize, color)
