@@ -8,79 +8,24 @@ function gui.load()
 	undo = nB({text = "UNDO", x = dp(112), y = dp(16), w = dp(112), h = dp(36)}):setIcon("icons/white/ic_undo_variant.png"):setOrientation("right")
 	gooi.setStyle(flatbutton)
 	file = nB("FILE", 0, 0, dp(60), dp(36)):onRelease(function() gui.toggleFileMenu() end):setOrientation("left")
-	options = nB("OPTIONS", 0, 0, dp(60), dp(36))--:setIcon("icons/black/ic_cog.png")
+	options = nB("OPTIONS", 0, 0, dp(60), dp(36))
 	edit = nB("EDIT", 0, 0, dp(60), dp(36)):setOrientation("left")
-	view = nB("VIEW", 0, 0, dp(60), dp(36)):setOrientation("left")
-	:onPress(function(self)
-		if viewWindow == nil then
-			gooi.setStyle(window)
-			viewWindow = gooi.newPanel({x = sw/8 * 3, y = sh/4, w = sw/8 * 2, h = sh/2, layout = "grid 6x1"}):setOpaque(true)
-			gooi.setStyle(raisedbutton)
-			viewWindowLabel = gooi.newLabel({text = "VIEW", orientation = "center"})
-			gridCheck = gooi.newCheck({text= "Show Grid", checked = showgrid})
-			--paletteScaleLabel = gooi.newLabel({text = "Color Palette Scale:", orientation = "center"}):setOpaque(true)
-			recenterImage = nB("RECENTER IMAGE"):onPress(function() camera:lookAt(newdata:getWidth()/2, newdata:getHeight()/2) end)
-			close = gooi.newButton("CLOSE")
-			:onPress(function()
-				gooi.removeComponent(viewWindow) viewWindow = nil 
-			end)
-			--viewWindow:setRowspan(1, 1, 6)
-			viewWindow:add(viewWindowLabel, "1,1")
-			--viewWindow:add(paletteScaleLabel, "2,1")
-			viewWindow:add(recenterImage, "3,1")
-			viewWindow:add(gridCheck, "4,1")
-			viewWindow:add(close, "6,1")
-			close.bgColor = colors.tertairy
-		else gooi.removeComponent(viewWindow) viewWindow = nil
-		end
-	end)
+	view = nB("VIEW", 0, 0, dp(60), dp(36)):setOrientation("left"):onPress(function() gui.toggleViewMenu() end)
 	selection = nB("SELECTION", 0, 0, dp(60), dp(36)):setOrientation("left")
 	glo = gooi.newPanel(0, 0, sw, sh, "game")
 	glo:add(redo, "b-r") glo:add(undo, "b-r") glo:add(options, "t-r")
 	glo:add(file, "t-l") glo:add(edit, "t-l") glo:add(view, "t-l")
 	glo:add(selection, "t-l")
-	--coordlabel = gooi.newLabel({w = dp(88), orientation = "left"})
-	--glo:add(coordlabel, "b-l")
 	glo:add(zoomslider, "t-r")
 	glo:add(gooi.newLabel("ZOOM:"), "t-r")
-
-
-	filemenu = gooi.newPanel(sw/8 * 3, sh/4, sw/8 * 2, sh/2, "grid 6x1")
-	gooi.setStyle(header)
-	filemenu:add(gooi.newLabel("File"):setOrientation("center"):setGroup("filemenu"), "1,1")
-	gooi.setStyle(list)
-	filemenu:add(gooi.newButton("New File"):setOrientation("right"):setIcon("icons/black/ic_plus.png"):setGroup("filemenu")
-	:onRelease(function()
-		gooi.setStyle(dialog)
-		gooi.confirm("Start a new file?", function() newdata:mapPixel(pixelFunction.allwhite) gui.toggleFileMenu() fn = nil end)
-		--gui.toggleFileMenu()
-		--newdata:mapPixel(pixelFunction.allwhite) 
-	end), "2,1")
-	filemenu:add(gooi.newButton({text = "Open File"}):setOrientation("right"):setIcon("icons/black/ic_file.png"):setGroup("filemenu"), "3,1")
-	save = nB("Save File"):setOrientation("right"):setIcon("icons/black/ic_content_save.png"):setGroup("filemenu")
-	:onRelease(function()
-		filedata = newdata:encode("png", "test2.png")
-		success = love.filesystem.write("test.png", filedata)
-		if success then gooi.setStyle(dialog) gooi.alert("Save Successful!") gui.toggleFileMenu() end
-	end)
-	filemenu:add(save, "4,1")
-	gooi.setGroupVisible("filemenu", isvis)
 	gooi.setStyle(raisedbutton)
 	cp = nB({x = sw - dp(46), y = sh/2 - dp(23), w = dp(46), h = dp(46)}):onRelease(function() gui.toggleColorPicker() end)
 	cp.bgColor = currentcolor
 end 
 
-function gui.openFileMenu()
-	 showfilemenu = not showfilemenu 
-	 isvis = not isvis 
-	 gooi.setGroupVisible("filemenu", isvis) 
-	 candraw = not candraw
-end
-
 function gui.toggleFileMenu()
 	if fileWindow == nil then
 		gooi.setStyle(window)
-		--fileWindow = gooi.newPanel({x = sw/8 * 3, y = sh/4, w = sw/8 * 2, h = sh/2, layout = "grid 6x1"}):setOpaque(true)
 		fileWindow = gooi.newPanel(defWindowArgs):setOpaque(true)
 		fileWindow.components = {}
 		local comps = fileWindow.components
@@ -88,19 +33,11 @@ function gui.toggleFileMenu()
 		comps.Label = gooi.newLabel("FILE"):setOpaque(false):setOrientation("center")
 		comps.newFile = nB("NEW FILE")
 		:onRelease(function()
-			gooi.confirm("Start a new file?", function() newdata:mapPixel(pixelFunction.allwhite) end)
+			gooi.confirm("Start a new file?", function() newdata:mapPixel(pixelFunction.allwhite) fn = nil end)
 		end)
 		comps.openFile = gooi.newButton("OPEN FILE")
 		:onPress(function()
 			gui.toggleFileMenu()
-			--[[
-			local dir = ""
-			local files = love.filesystem.getDirectoryItems(dir)
-			fileBrowser = gooi.newPanel(defWindowArgs)
-			for i, v in pairs(files) do
-				fileBrowser:add(gooi.newButton(v))
-			end
-			]]
 			gui.toggleFileBrowser()
 		end)
 		comps.saveFile = gooi.newButton("SAVE FILE")
@@ -182,6 +119,27 @@ function gui.toggleSaveMenu()
 		
 	else gooi.removeComponent(saveMenu) saveMenu = nil
 	end
+end
+
+function gui.toggleViewMenu()
+	 if viewMenu == nil then
+			gooi.setStyle(window)
+			viewMenu = gooi.newPanel(defWindowArgs):setOpaque(true)
+			gooi.setStyle(raisedbutton)
+			viewMenuLabel = gooi.newLabel({text = "VIEW", orientation = "center"})
+			gridCheck = gooi.newCheck({text= "Show Grid", checked = showgrid})
+			recenterImage = nB("RECENTER IMAGE"):onPress(function() camera:lookAt(newdata:getWidth()/2, newdata:getHeight()/2) end)
+			close = gooi.newButton("CLOSE")
+			:onPress(function()
+				gooi.removeComponent(viewMenu) viewMenu = nil 
+			end)
+			viewMenu:add(viewMenuLabel, "1,1")
+			viewMenu:add(recenterImage, "3,1")
+			viewMenu:add(gridCheck, "4,1")
+			viewMenu:add(close, "6,1")
+			close.bgColor = colors.tertairy
+		else gooi.removeComponent(viewMenu) viewMenu = nil
+		end
 end
 
 function gui.toggleColorPicker()

@@ -32,21 +32,37 @@ function toolbar.load()
 		v:onPress(function() tool = none end)
 	end
 	
-	--[[
-	options.grid = gooi.newButton():setIcon(icpath.."grid.png")
-	:onRelease(
-	  function(self)
-	    showgrid = not showgrid
-	    if showgrid then self:setIcon(icpath.."grid.png")
-	    elseif not showgrid then self:setIcon(icpath.."grid_off.png")
-	    end
-	  end)
-	]]
 	toolbar.layout = gooi.newPanel(0, dp(46), dp(46), dp(46*6), "grid 6x1")
 	tb.layout:add(tools.pencil, "1,1")
 	tb.layout:add(tools.eraser, "2,1")
 	tb.layout:add(tools.eyedropper, "3,1")
 	tb.layout:add(tools.fill, "4,1")
 	tb.layout:add(tools.pan, "5,1")
-	--tb.layout:add(options.grid, "6,1")
+end
+
+function drawFunctions()
+	 if candraw and touchx ~= nil and touchx >= 0 and touchx <= currentimage:getWidth() and touchy >=0 and touchy <= currentimage:getHeight() then
+		--coordlabel.text = "x: " .. touchx
+		if tool == tools.pencil then
+			if pencilSize == 1 then
+				newdata:setPixel(touchx, touchy, currentcolor)
+			elseif pencilSize ~= 1 then
+				for i = 0, pencilSize do
+					newdata:setPixel(touchx + i/2, touchy, currentcolor)
+					newdata:setPixel(touchx - i/2, touchy, currentcolor)
+					--newdata:setPixel(touchx, touchy + i/2, currentcolor)
+					--newdata:setPixel(touchx, touchy - i/2, curremtcolor)
+				end
+			end
+		elseif tool == tools.eraser then
+			newdata:setPixel(touchx, touchy, 255, 255, 255)
+		elseif tool == tools.eyedropper then
+			currentcolor = {newdata:getPixel(touchx, touchy)}
+		elseif tool == tools.fill then
+			--floodfill()
+		--else
+		end
+	--elseif touchx == nil then
+		--coordlabel.text = "x: "
+	end
 end
