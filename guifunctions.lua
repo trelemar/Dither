@@ -6,6 +6,7 @@ function gui.load()
 	zoomslider = gooi.newSlider({w = dp(122), h = dp(36), value = 0.1})
 	redo = nB({text = "REDO", w = dp(112), h = dp(36)}):setIcon("icons/white/ic_redo_variant.png"):setOrientation("right")
 	undo = nB({text = "UNDO", x = dp(112), y = dp(16), w = dp(112), h = dp(36)}):setIcon("icons/white/ic_undo_variant.png"):setOrientation("right")
+	undo.bgColor, redo.bgColor = colors.tertairy, colors.secondary
 	gooi.setStyle(flatbutton)
 	file = nB("FILE", 0, 0, dp(60), dp(36)):onRelease(function() gui.toggleFileMenu() end):setOrientation("left")
 	options = nB("OPTIONS", 0, 0, dp(60), dp(36))
@@ -33,7 +34,11 @@ function gui.toggleFileMenu()
 		comps.Label = gooi.newLabel("FILE"):setOpaque(false):setOrientation("center")
 		comps.newFile = nB("NEW FILE")
 		:onRelease(function()
-			gooi.confirm("Start a new file?", function() newdata:mapPixel(pixelFunction.allwhite) fn = nil end)
+			gooi.confirm("Start a new file?", function()
+			--newdata:mapPixel(pixelFunction.allwhite) fn = nil
+			gui.toggleFileMenu()
+			gui.toggleNewFileMenu()
+			end)
 		end)
 		comps.openFile = gooi.newButton("OPEN FILE")
 		:onPress(function()
@@ -142,10 +147,44 @@ function gui.toggleViewMenu()
 		end
 end
 
+function gui.toggleNewFileMenu()
+	local def = defWindowArgs
+	if newFileMenu == nil then
+		gooi.setStyle(window)
+		newFileMenu = gooi.newPanel(def.x, def.y, def.w, def.h, "grid 6x2"):setOpaque(true)
+		:setColspan(1, 1, 2)
+		:setColspan(6, 1, 2)
+		newFileMenu.components = {}
+		local comp = newFileMenu.components
+		gooi.setStyle(raisedbutton)
+		comp.Label = gooi.newLabel("NEW FILE"):setOrientation("center")
+		comp.wLabel = gooi.newLabel("WIDTH"):setOrientation("center")
+		comp.wText = gooi.newText("32")
+		comp.hLabel = gooi.newLabel("HEIGHT"):setOrientation("center")
+		comp.hText = gooi.newText("32")
+		comp.confirm = gooi.newButton("CONFIRM")
+		:onPress(function()
+			newdata = love.image.newImageData(comp.wText.text, comp.hText.text)
+			currentimage = love.graphics.newImage(newdata)
+			gui.toggleNewFileMenu()
+		end)
+		comp.confirm.bgColor = colors.secondary
+		
+		newFileMenu:add(comp.Label, "1,1")
+		newFileMenu:add(comp.wLabel, "3,1")
+		newFileMenu:add(comp.wText, "3,2")
+		newFileMenu:add(comp.hLabel, "4,1")
+		newFileMenu:add(comp.hText, "4,2")
+		newFileMenu:add(comp.confirm, "6,1")
+	else gooi.removeComponent(newFileMenu) newFileMenu = nil
+	end
+end
+
 function gui.toggleColorPicker()
-	showfilemenu = not showfilemenu
-	isvis = not isvis
-	gooi.setGroupVisible("colorpicker", isvis)
-	gooi.setGroupEnabled("colorpicker", isvis)
-	candraw = not candraw
+	--showfilemenu = not showfilemenu
+	--isvis = not isvis
+	gooi.setGroupVisible("colorpicker", not colorpicker.enabled)
+	gooi.setGroupEnabled("colorpicker", not colorpicker.enabled)
+	colorpicker.enabled = not colorpicker.enabled
+	--candraw = not candraw
 end

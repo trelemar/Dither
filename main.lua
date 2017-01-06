@@ -5,11 +5,11 @@ fd = love.window.fromPixels
 lg = love.graphics
 nB = gooi.newButton
 sw, sh = lg.getDimensions()
-a, focus = 0, 0
-isvis = false
+--a, focus = 0, 0
+--isvis = false
 require "styles"
 Camera = require"lib.hump.camera"
-showfilemenu = false
+--showfilemenu = false
 showgrid = true
 require "guifunctions"
 require "colorpicker"
@@ -25,7 +25,7 @@ function love.load()
 	palettedata = love.image.newImageData("palettes/db32.png")
 	paletteImage = love.graphics.newImage(palettedata)
 	paletteCamera = Camera(0,0)
-	paletteCamera:zoomTo(dp(20))
+	paletteCamera:zoomTo(dp(22))
 	local cx, cy = paletteCamera:worldCoords(sw - dp(4), sh)
 	local wx, wy = paletteCamera:worldCoords(0, dp(48))
 	paletteCamera:lookAt(paletteImage:getWidth() - cx, (-wy))
@@ -37,6 +37,7 @@ function love.load()
 end
 
 function love.update(dt)
+--[[
 	if showfilemenu and a < 255 then
 		a = a + 15
 		focus = focus + 7.5
@@ -44,6 +45,7 @@ function love.update(dt)
 		a = a - 15
 		focus = focus - 7.5
 	end
+	]]
 	if zoomslider.value <= 0.01 then
 		camera:zoomTo(1)
 	else
@@ -57,7 +59,7 @@ function love.update(dt)
 	cp.bgColor = currentcolor
 	
 	if tool ~= none then
-		tool.bgColor = colors.secondary --sets currently selected tools background to red
+		tool.bgColor = colors.secondary --sets currently selected tools background to colors.secondary
 	end
 	
 	for i, v in pairs(tools) do
@@ -69,10 +71,9 @@ function love.update(dt)
 	if pencilSlider ~= nil then
 		pencilSize = pencilSlider.value
 	end
+	
 	if gridCheck ~= nil then
 		showgrid = gridCheck.checked
-	elseif zoomslider.value <= 0.01 then
-		showgrid = false
 	end
 end
 
@@ -88,25 +89,19 @@ function love.draw()
 	paletteCamera:attach()
 	lg.draw(paletteImage, 0, 0)
 	paletteCamera:detach()
-	drawPaletteGrid(colors.primary)
+	drawPaletteGrid(colors.black)
 	lg.setColor(colors.primary)
 	lg.rectangle("fill", 0, 0, sw, dp(44)) --top bar
-	--lg.rectangle("fill", 0, dp(46), dp(46), dp(46*6)) --toolbar back
 	gooi.draw()
-	lg.setColor(0, 0, 0, focus)
-	lg.rectangle("fill", 0, 0, sw, sh)
-		lg.setColor(255, 255, 255, a)
-		lg.rectangle("fill", sw/8 *3, sh/4, sw/4, sh/2, dp(2), dp(2))
-		gooi.draw("filemenu")
-		gooi.draw("colorpicker")
-	lg.setColor(255, 255, 255)
+	gooi.draw("filemenu")
+	gooi.draw("colorpicker")
 end
 
 function love.touchpressed(id, x, y)
 	gooi.pressed(id, x, y)
 	touchx, touchy = camera:worldCoords(x, y)
-	if y <= dp(46) or x <= dp(44) or isvis or viewWindow ~= nil then candraw = false
-	elseif y > dp(46) or x > dp(44) or not isvis then candraw = true
+	if y <= dp(46) or x <= dp(44) or viewWindow ~= nil then candraw = false
+	elseif y > dp(46) or x > dp(44) then candraw = true
 	end
 	local palx, paly = paletteCamera:worldCoords(x, y)
 	if palx >= 0 and palx <= paletteImage:getWidth() and paly >= 0 and paly <= paletteImage:getHeight() then
@@ -140,6 +135,10 @@ function love.textinput(text)
 	gooi.textinput(text)
 end
 
+function love.keypressed(key)
+	gooi.keypressed(key)
+end
+
 function drawGrid(xsize, ysize, color)
 	if showgrid then
 		love.graphics.setColor(color)
@@ -159,7 +158,7 @@ end
 
 function drawPaletteGrid(color)
 		love.graphics.setColor(color)
-		love.graphics.setLineWidth(dp(1))
+		love.graphics.setLineWidth(dp(3))
 		for i = 0, (paletteImage:getWidth()) do
 			local x, y = paletteCamera:cameraCoords(i, 0)
 			local x2, y2 = paletteCamera:cameraCoords(i, paletteImage:getHeight())
