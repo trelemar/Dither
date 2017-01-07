@@ -8,6 +8,8 @@ function toolbar.load()
 	pencilSize = 1
 	tools.pencil = gooi.newButton():setIcon(icpath.."pencil.png")
 	:onRelease(function(self)
+		gui.toast("Pencil Tool")
+		
 		tool = tools.pencil
 		if tool == tools.pencil and not showingPencilSlider then
 			showingPencilSlider = true
@@ -20,13 +22,13 @@ function toolbar.load()
 		end
 	end)
 	tools.eraser= gooi.newButton():setIcon(icpath.."eraser.png")
-	:onRelease(function() tool = tools.eraser end)
+	:onRelease(function() gui.toast("Eraser Tool") tool = tools.eraser end)
 	tools.eyedropper = gooi.newButton():setIcon(icpath.."eyedropper.png")
-	:onRelease(function() tool = tools.eyedropper end)
+	:onRelease(function() gui.toast("Eyedropper") tool = tools.eyedropper end)
 	tools.fill = gooi.newButton():setIcon(icpath.."fill.png")
-	:onRelease(function() tool = tools.fill end)
+	:onRelease(function() gui.toast("Flood Fill") tool = tools.fill end)
 	tools.pan = gooi.newButton():setIcon(icpath.."cursor_move.png")
-	:onRelease(function() tool = tools.pan end)
+	:onRelease(function() gui.toast("Pan Camera") tool = tools.pan end)
 	
 	for i, v in pairs(tools) do
 		v:onPress(function() tool = none end)

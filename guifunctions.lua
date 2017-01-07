@@ -197,3 +197,12 @@ function gui.toggleColorPicker()
 	colorpicker.enabled = not colorpicker.enabled
 	--candraw = not candraw
 end
+
+function gui.toast(message)
+	local toast = gooi.newLabel(message):setOpaque(true)
+	toast.orientation = "center"
+	toast.w = toast.w + dp(8)
+	toast.x, toast.y = sw/2 - toast.w/2, sh - toast.h - dp(4)
+	toast.round = 1
+	Timer.after(1, function() gooi.removeComponent(toast) end)
+end

@@ -12,6 +12,7 @@ Camera = require"lib.hump.camera"
 --showfilemenu = false
 showgrid = true
 showAlphaBG = true
+Timer = require"lib.hump.timer"
 require "guifunctions"
 require "colorpicker"
 require "toolbar"
@@ -42,6 +43,7 @@ function love.load()
 end
 
 function love.update(dt)
+	Timer.update(dt)
 	if zoomslider.value <= 0.01 then
 		camera:zoomTo(1)
 		alphaCamera:zoomTo(.5)
