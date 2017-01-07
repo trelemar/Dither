@@ -55,7 +55,7 @@ function drawFunctions()
 				end
 			end
 		elseif tool == tools.eraser then
-			newdata:setPixel(touchx, touchy, 255, 255, 255)
+			newdata:setPixel(touchx, touchy, 0, 0, 0, 0)
 		elseif tool == tools.eyedropper then
 			currentcolor = {newdata:getPixel(touchx, touchy)}
 		elseif tool == tools.fill then

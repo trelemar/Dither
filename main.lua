@@ -11,6 +11,7 @@ require "styles"
 Camera = require"lib.hump.camera"
 --showfilemenu = false
 showgrid = true
+showAlphaBG = true
 require "guifunctions"
 require "colorpicker"
 require "toolbar"
@@ -20,12 +21,16 @@ function love.load()
 	lg.setBackgroundColor(150, 150, 150)
 	newdata = love.image.newImageData(32, 32)
 	camera = Camera(newdata:getWidth()/2, newdata:getHeight()/2, 4)
-	newdata:mapPixel(pixelFunction.allwhite)
+	--newdata:mapPixel(pixelFunction.allwhite)
 	currentimage = love.graphics.newImage(newdata)
 	palettedata = love.image.newImageData("palettes/db32.png")
 	paletteImage = love.graphics.newImage(palettedata)
 	paletteCamera = Camera(0,0)
 	paletteCamera:zoomTo(dp(22))
+	alphaBG = love.graphics.newImage("bg.png")
+	alphaBG:setWrap("repeat")
+	updateAlphaQuad()
+	alphaCamera = Camera(newdata:getWidth(), newdata:getHeight())
 	local cx, cy = paletteCamera:worldCoords(sw - dp(4), sh)
 	local wx, wy = paletteCamera:worldCoords(0, dp(48))
 	paletteCamera:lookAt(paletteImage:getWidth() - cx, (-wy))
@@ -37,19 +42,12 @@ function love.load()
 end
 
 function love.update(dt)
---[[
-	if showfilemenu and a < 255 then
-		a = a + 15
-		focus = focus + 7.5
-	elseif a <= 255 and not showfilemenu and a >= 0 then
-		a = a - 15
-		focus = focus - 7.5
-	end
-	]]
 	if zoomslider.value <= 0.01 then
 		camera:zoomTo(1)
+		alphaCamera:zoomTo(.5)
 	else
 		camera:zoomTo(zoomslider.value *dp(50))
+		alphaCamera:zoomTo(zoomslider.value *dp(25))
 	end
 	gooi.update(dt)
 	do
@@ -75,13 +73,20 @@ function love.update(dt)
 	if gridCheck ~= nil then
 		showgrid = gridCheck.checked
 	end
+
 end
 
 function love.draw()
 	lg.setColor(255, 255, 255)
+	
+	alphaCamera:attach()
+	lg.draw(alphaBG, alphaQuad, 0, 0)
+	alphaCamera:detach()
+	
 	camera:attach()
 	lg.draw(currentimage, 0, 0)
 	camera:detach()
+	
 	drawGrid(1, 1, {0, 0, 0, 50})
 	drawGrid(8, 8, {255, 0, 0, 250})
 	drawGrid(16, 16, {0, 0, 255, 250})
@@ -126,6 +131,7 @@ function love.touchmoved(id, x, y)
 	elseif tool == tools.pan and y > dp(46) then
 		newtouchx, newtouchy = camera:worldCoords(x, y)
 		camera:move(touchx - newtouchx, touchy - newtouchy)
+		alphaCamera:move((touchx-newtouchx)*2, (touchy - newtouchy)*2)
 	end
 	 drawFunctions()
 	 currentimage:refresh()
@@ -169,4 +175,8 @@ function drawPaletteGrid(color)
 			local x2, y2 = paletteCamera:cameraCoords(paletteImage:getWidth(), i)
 			love.graphics.line(x, y, x2, y2)
 		end
+end
+
+function updateAlphaQuad()
+	alphaQuad = love.graphics.newQuad(0, 0, (newdata:getWidth() * 2), (newdata:getHeight() * 2), 2, 2)
 end
