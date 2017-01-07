@@ -25,7 +25,7 @@ function toolbar.load()
 	:onRelease(function() tool = tools.eyedropper end)
 	tools.fill = gooi.newButton():setIcon(icpath.."fill.png")
 	:onRelease(function() tool = tools.fill end)
-	tools.pan = gooi.newButton():setIcon(icpath.."cursor_pointer.png")
+	tools.pan = gooi.newButton():setIcon(icpath.."cursor_move.png")
 	:onRelease(function() tool = tools.pan end)
 	
 	for i, v in pairs(tools) do

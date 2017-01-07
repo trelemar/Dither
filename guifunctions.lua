@@ -20,7 +20,8 @@ function gui.load()
 	glo:add(zoomslider, "t-r")
 	glo:add(gooi.newLabel("ZOOM:"), "t-r")
 	gooi.setStyle(raisedbutton)
-	cp = nB({x = sw - dp(46), y = sh/2 - dp(23), w = dp(46), h = dp(46)}):onRelease(function() gui.toggleColorPicker() end)
+	cp = nB({x = sw - dp(48), y = undo.y - dp(48), w = dp(46), h = dp(46)}):onRelease(function() gui.toggleColorPicker() end)
+	cp.showBorder, cp.borderWidth, cp.borderColor = true, dp(2), colors.black
 	cp.bgColor = currentcolor
 end 
 
