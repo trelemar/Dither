@@ -54,7 +54,9 @@ function love.update(dt)
 	gooi.update(dt)
 	do
 		local c = colorpicker
-	colorpicker.colorbox.bgColor = {c.rslider.value * 255, c.gslider.value * 255, c.bslider.value * 255}
+		if colorpicker.enabled then
+			colorpicker.colorbox.bgColor = {c.rslider.value * 255, c.gslider.value * 255, c.bslider.value * 255}
+		end
 	end
 	cp.bgColor = currentcolor
 	

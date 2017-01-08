@@ -13,6 +13,16 @@ function pixelFunction.fill(x, y, r, g, b, a)
 	return x, y, r, g, b, a
 end
 
-function floodFill(x, y, tc, rc)
-	--while newdata:
+function floodFill(x, y, target_color, replacement_color)
+	if y < 0 or y > newdata:getHeight() or x < 0 or x > newdata:getWidth() then return
+	elseif targetcolor == replacement_color then return
+	elseif newdata:getPixel(x, y) ~= target_color then return
+	else
+	newdata:setPixel(x, y, replacement_color)
+	floodFill(x, y + 1, target_color, replacement_color)
+	--floodFill(x, y - 1, target_color, replacement_color)
+	floodFill(x - 1, y, target_color, replacement_color)
+	--floodFill(x + 1, y, target_color, replacement_color)
+	return 
+	end
 end

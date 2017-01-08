@@ -28,6 +28,6 @@ end
 	
 function confirmColor()
 	local c = colorpicker
-	currentcolor = {c.rslider.value * 255, c.gslider.value * 255, c.bslider.value * 255}
+	currentcolor = {c.rslider.value * 255, c.gslider.value * 255, c.bslider.value * 255, 255}
 	cp.bgColor = currentcolor
 end
