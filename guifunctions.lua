@@ -10,7 +10,7 @@ function gui.load()
 
 		if history[h - 1] ~= nil then
 		h = h - 1
-		gui.toast(tostring(h - 1))
+		--gui.toast(tostring(h - 1))
 		newdata = love.image.newImageData(history[h])
 		currentimage = love.graphics.newImage(newdata)
 		table.remove(history, h + 1)
@@ -21,7 +21,7 @@ function gui.load()
 	file = nB("FILE", 0, 0, dp(60), dp(36)):onRelease(function() gui.toggleMenu(menus.fileWindow) end):setOrientation("left")
 	options = nB("OPTIONS", 0, 0, dp(60), dp(36))
 	edit = nB("EDIT", 0, 0, dp(60), dp(36)):setOrientation("left")
-	view = nB("VIEW", 0, 0, dp(60), dp(36)):setOrientation("left"):onPress(function() gui.toggleViewMenu() end)
+	view = nB("VIEW", 0, 0, dp(60), dp(36)):setOrientation("left"):onPress(function() gui.toggleMenu(menus.viewMenu) end)
 	selection = nB("SELECTION", 0, 0, dp(60), dp(36)):setOrientation("left")
 	glo = gooi.newPanel(0, 0, sw, sh, "game")
 	--glo:add(redo, "b-r")
@@ -36,6 +36,8 @@ function gui.load()
 	cp.bgColor = currentcolor
 	gui.loadFileMenu()
 	gui.loadSaveMenu()
+	gui.loadViewMenu()
+	gui.loadNewFileMenu()
 end 
 
 function gui.loadFileMenu()
@@ -52,7 +54,7 @@ function gui.loadFileMenu()
 			clearHistory()
 			fn = nil
 			gui.toggleMenu(menus.fileWindow)
-			gui.toggleNewFileMenu()
+			gui.toggleMenu(menus.newFileMenu)
 			end)
 		end)
 		comps.openFile = gooi.newButton("OPEN FILE")
@@ -135,7 +137,7 @@ function gui.loadSaveMenu()
 		comps.TextBox = gooi.newText("")
 		comps.Cancel = gooi.newButton("CANCEL")
 		:onRelease(function()
-			gui.toggleSaveMenu()
+			gui.toggleMenu(menus.saveMenu)
 		end)
 		comps.Save = gooi.newButton("SAVE")
 		:onRelease(function()
@@ -156,40 +158,44 @@ function gui.loadSaveMenu()
 		gooi.setGroupVisible("saveMenu", false)
 end
 
-function gui.toggleViewMenu()
-	 if viewMenu == nil then
+function gui.loadViewMenu()
 			gooi.setStyle(window)
-			viewMenu = gooi.newPanel(defWindowArgs):setOpaque(true)
+			menus.viewMenu = gooi.newPanel(defWindowArgs):setOpaque(true):setGroup("viewMenu")
+			menus.viewMenu.components = {}
+			local comps = menus.viewMenu.components
 			gooi.setStyle(raisedbutton)
-			viewMenuLabel = gooi.newLabel({text = "VIEW", orientation = "center"})
-			gridCheck = gooi.newCheck({text= "Show Grid", checked = showgrid})
-			recenterImage = nB("RECENTER IMAGE")
-			:onPress(function()
-				camera:lookAt(newdata:getWidth()/2, newdata:getHeight()/2)
-				alphaCamera:lookAt(newdata:getWidth(), newdata:getHeight())
+			comps.viewMenuLabel = gooi.newLabel({text = "VIEW", orientation = "center"})
+			comps.gridCheck = gooi.newCheck({text= "Show Grid", checked = showgrid})
+			comps.recenterImage = nB("RECENTER IMAGE")
+			:onRelease(function()
+				centerImage()
 			end)
-			close = gooi.newButton("CLOSE")
-			:onPress(function()
-				gooi.removeComponent(viewMenu) viewMenu = nil 
+			comps.close = gooi.newButton("CLOSE")
+			:onRelease(function()
+				gui.toggleMenu(menus.viewMenu)
 			end)
-			viewMenu:add(viewMenuLabel, "1,1")
-			viewMenu:add(recenterImage, "3,1")
-			viewMenu:add(gridCheck, "4,1")
-			viewMenu:add(close, "6,1")
-			close.bgColor = colors.tertairy
-		else gooi.removeComponent(viewMenu) viewMenu = nil
-		end
+			
+			for i, v in pairs(comps) do
+				v:setGroup("viewMenu")
+			end
+			
+			menus.viewMenu:add(comps.viewMenuLabel, "1,1")
+			menus.viewMenu:add(comps.recenterImage, "3,1")
+			menus.viewMenu:add(comps.gridCheck, "4,1")
+			menus.viewMenu:add(comps.close, "6,1")
+			comps.close.bgColor = colors.tertairy
+			gooi.setGroupEnabled("viewMenu", false)
+			gooi.setGroupVisible("viewMenu", false)
 end
 
-function gui.toggleNewFileMenu()
+function gui.loadNewFileMenu()
 	local def = defWindowArgs
-	if newFileMenu == nil then
 		gooi.setStyle(window)
-		newFileMenu = gooi.newPanel(def.x, def.y, def.w, def.h, "grid 6x2"):setOpaque(true)
+		menus.newFileMenu = gooi.newPanel(def.x, def.y, def.w, def.h, "grid 6x2"):setOpaque(true):setGroup("newFileMenu")
 		:setColspan(1, 1, 2)
 		:setColspan(6, 1, 2)
-		newFileMenu.components = {}
-		local comp = newFileMenu.components
+		menus.newFileMenu.components = {}
+		local comp = menus.newFileMenu.components
 		gooi.setStyle(raisedbutton)
 		comp.Label = gooi.newLabel("NEW FILE"):setOrientation("center")
 		comp.wLabel = gooi.newLabel("WIDTH"):setOrientation("center")
@@ -201,18 +207,24 @@ function gui.toggleNewFileMenu()
 			newdata = love.image.newImageData(comp.wText.text, comp.hText.text)
 			currentimage = love.graphics.newImage(newdata)
 			updateAlphaQuad()
-			gui.toggleNewFileMenu()
+			gui.toggleMenu(menus.newFileMenu)
+			centerImage()
 		end)
 		comp.confirm.bgColor = colors.secondary
 		
-		newFileMenu:add(comp.Label, "1,1")
-		newFileMenu:add(comp.wLabel, "3,1")
-		newFileMenu:add(comp.wText, "3,2")
-		newFileMenu:add(comp.hLabel, "4,1")
-		newFileMenu:add(comp.hText, "4,2")
-		newFileMenu:add(comp.confirm, "6,1")
-	else gooi.removeComponent(newFileMenu) newFileMenu = nil
-	end
+		for i, v in pairs(comp) do
+			v:setGroup("newFileMenu")
+		end
+		
+		menus.newFileMenu:add(comp.Label, "1,1")
+		menus.newFileMenu:add(comp.wLabel, "3,1")
+		menus.newFileMenu:add(comp.wText, "3,2")
+		menus.newFileMenu:add(comp.hLabel, "4,1")
+		menus.newFileMenu:add(comp.hText, "4,2")
+		menus.newFileMenu:add(comp.confirm, "6,1")
+		
+		gooi.setGroupEnabled("newFileMenu", false)
+		gooi.setGroupVisible("newFileMenu", false)
 end
 
 function gui.toggleColorPicker()
@@ -241,7 +253,12 @@ end
 
 function gui.checkOpenMenus()
 	for i, v in pairs(menus) do
-		if v.enabled == true then return true
-		else return false end
+		if v.enabled then return true
+		end
 	end
+end
+
+function centerImage()
+	camera:lookAt(newdata:getWidth()/2, newdata:getHeight()/2)
+	alphaCamera:lookAt(newdata:getWidth(), newdata:getHeight())
 end

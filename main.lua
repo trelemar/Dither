@@ -76,10 +76,7 @@ function love.update(dt)
 		pencilSize = pencilSlider.value
 	end
 	
-	if gridCheck ~= nil then
-		showgrid = gridCheck.checked
-	end
-
+	showgrid = menus.viewMenu.components.gridCheck.checked
 end
 
 function love.draw()
@@ -106,13 +103,15 @@ function love.draw()
 	gooi.draw()
 	gooi.draw("fileMenu")
 	gooi.draw("saveMenu")
+	gooi.draw("viewMenu")
+	gooi.draw("newFileMenu")
 	gooi.draw("colorpicker")
 end
 
 function love.touchpressed(id, x, y)
 	gooi.pressed(id, x, y)
 	touchx, touchy = camera:worldCoords(x, y)
-	if y <= dp(46) or y >= undo.y or x <= dp(44) or gui.checkOpenMenus() then candraw = false
+	if y <= dp(46) or y >= undo.y or x <= dp(44) or gui.checkOpenMenus() or fileBrowser ~= nil or colorpicker.enabled then candraw = false
 	elseif y > dp(46) or x > dp(44) then candraw = true
 	end
 	local palx, paly = paletteCamera:worldCoords(x, y)
