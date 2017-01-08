@@ -1,11 +1,20 @@
 gui = {}
-
+local h = 1
 function gui.load()
 	gooi.desktopMode()
 	gooi.setStyle(raisedbutton)
 	zoomslider = gooi.newSlider({w = dp(122), h = dp(36), value = 0.1})
 	redo = nB({text = "REDO", w = dp(112), h = dp(36)}):setIcon("icons/white/ic_redo_variant.png"):setOrientation("right")
 	undo = nB({text = "UNDO", x = dp(112), y = dp(16), w = dp(112), h = dp(36)}):setIcon("icons/white/ic_undo_variant.png"):setOrientation("right")
+	:onRelease(function()
+
+		if h <= #history - 1 then
+		h = h + 1
+		gui.toast(tostring(h))
+		newdata = love.image.newImageData(history[h])
+		currentimage = love.graphics.newImage(newdata)
+		end
+	end)
 	undo.bgColor, redo.bgColor = colors.tertairy, colors.secondary
 	gooi.setStyle(flatbutton)
 	file = nB("FILE", 0, 0, dp(60), dp(36)):onRelease(function() gui.toggleFileMenu() end):setOrientation("left")

@@ -17,6 +17,7 @@ require "guifunctions"
 require "colorpicker"
 require "toolbar"
 function love.load()
+	history = {}
 	lg.setFont(fonts.rr)
 	love.graphics.setDefaultFilter("nearest")
 	lg.setBackgroundColor(150, 150, 150)
@@ -40,6 +41,7 @@ function love.load()
 	gui.load()
 	colorpicker.load()
 	toolbar.load()
+	table.insert(history, 1, newdata:encode("png"))
 end
 
 function love.update(dt)
@@ -109,7 +111,7 @@ end
 function love.touchpressed(id, x, y)
 	gooi.pressed(id, x, y)
 	touchx, touchy = camera:worldCoords(x, y)
-	if y <= dp(46) or x <= dp(44) or viewWindow ~= nil then candraw = false
+	if y <= dp(46) or y >= undo.y or x <= dp(44) or viewWindow ~= nil then candraw = false
 	elseif y > dp(46) or x > dp(44) then candraw = true
 	end
 	local palx, paly = paletteCamera:worldCoords(x, y)
@@ -124,6 +126,15 @@ end
 
 function love.touchreleased(id, x, y)
 	gooi.released(id, x, y)
+	if candraw and touchx >= 0 and touchx <= newdata:getWidth() and touchy >= 0 and touchy <= newdata:getHeight() and tool ~= tools.pan then
+	--history[#history + 1] = newdata:encode("png")
+	table.insert(history, 1, newdata:encode("png"))
+	--[[
+		if #history >= 10 then
+			table.remove(history, 1)
+		end
+		]]
+	end
 	touchx, touchy = nil, nil
 	currentimage:refresh()
 end
