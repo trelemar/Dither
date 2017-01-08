@@ -1,29 +1,31 @@
 gui = {}
-local h = 1
 function gui.load()
+	menus = {}
 	gooi.desktopMode()
 	gooi.setStyle(raisedbutton)
 	zoomslider = gooi.newSlider({w = dp(122), h = dp(36), value = 0.1})
-	redo = nB({text = "REDO", w = dp(112), h = dp(36)}):setIcon("icons/white/ic_redo_variant.png"):setOrientation("right")
+	--redo = nB({text = "REDO", w = dp(112), h = dp(36)}):setIcon("icons/white/ic_redo_variant.png"):setOrientation("right")
 	undo = nB({text = "UNDO", x = dp(112), y = dp(16), w = dp(112), h = dp(36)}):setIcon("icons/white/ic_undo_variant.png"):setOrientation("right")
 	:onRelease(function()
 
-		if h <= #history - 1 then
-		h = h + 1
-		gui.toast(tostring(h))
+		if history[h - 1] ~= nil then
+		h = h - 1
+		gui.toast(tostring(h - 1))
 		newdata = love.image.newImageData(history[h])
 		currentimage = love.graphics.newImage(newdata)
+		table.remove(history, h + 1)
 		end
 	end)
-	undo.bgColor, redo.bgColor = colors.tertairy, colors.secondary
+	undo.bgColor = colors.tertairy
 	gooi.setStyle(flatbutton)
-	file = nB("FILE", 0, 0, dp(60), dp(36)):onRelease(function() gui.toggleFileMenu() end):setOrientation("left")
+	file = nB("FILE", 0, 0, dp(60), dp(36)):onRelease(function() gui.toggleMenu(menus.fileWindow) end):setOrientation("left")
 	options = nB("OPTIONS", 0, 0, dp(60), dp(36))
 	edit = nB("EDIT", 0, 0, dp(60), dp(36)):setOrientation("left")
 	view = nB("VIEW", 0, 0, dp(60), dp(36)):setOrientation("left"):onPress(function() gui.toggleViewMenu() end)
 	selection = nB("SELECTION", 0, 0, dp(60), dp(36)):setOrientation("left")
 	glo = gooi.newPanel(0, 0, sw, sh, "game")
-	glo:add(redo, "b-r") glo:add(undo, "b-r") glo:add(options, "t-r")
+	--glo:add(redo, "b-r")
+	glo:add(undo, "b-r") glo:add(options, "t-r")
 	glo:add(file, "t-l") glo:add(edit, "t-l") glo:add(view, "t-l")
 	glo:add(selection, "t-l")
 	glo:add(zoomslider, "t-r")
@@ -32,45 +34,57 @@ function gui.load()
 	cp = nB({x = sw - dp(50), y = undo.y - dp(50), w = dp(46), h = dp(46)}):onRelease(function() gui.toggleColorPicker() end)
 	cp.showBorder, cp.borderWidth, cp.borderColor = true, dp(2), colors.black
 	cp.bgColor = currentcolor
+	gui.loadFileMenu()
+	gui.loadSaveMenu()
 end 
 
-function gui.toggleFileMenu()
-	if fileWindow == nil then
+function gui.loadFileMenu()
 		gooi.setStyle(window)
-		fileWindow = gooi.newPanel(defWindowArgs):setOpaque(true)
-		fileWindow.components = {}
-		local comps = fileWindow.components
+		menus.fileWindow = gooi.newPanel(defWindowArgs):setOpaque(true):setGroup("fileMenu")
+		menus.fileWindow.components = {}
+		local comps = menus.fileWindow.components
 		gooi.setStyle(raisedbutton)
 		comps.Label = gooi.newLabel("FILE"):setOpaque(false):setOrientation("center")
 		comps.newFile = nB("NEW FILE")
 		:onRelease(function()
 			gooi.confirm("Start a new file?", function()
-			--newdata:mapPixel(pixelFunction.allwhite) 
+			--newdata:mapPixel(pixelFunction.allwhite)
+			clearHistory()
 			fn = nil
-			gui.toggleFileMenu()
+			gui.toggleMenu(menus.fileWindow)
 			gui.toggleNewFileMenu()
 			end)
 		end)
 		comps.openFile = gooi.newButton("OPEN FILE")
 		:onRelease(function()
-			gui.toggleFileMenu()
+			gui.toggleMenu(menus.fileWindow)
 			gui.toggleFileBrowser()
 		end)
 		comps.saveFile = gooi.newButton("SAVE FILE")
 		:onRelease(function()
 			if fn == nil then
-				gui.toggleFileMenu()
-				gui.toggleSaveMenu()
+				gui.toggleMenu(menus.fileWindow)
+				gui.toggleMenu(menus.saveMenu)
 			else
 				newdata:encode("png", fn)
 			end
 		end)
-		fileWindow:add(comps.Label, "1,1")
-		fileWindow:add(comps.newFile, "2,1")
-		fileWindow:add(comps.openFile, "3,1")
-		fileWindow:add(comps.saveFile, "4,1")
-	else gooi.removeComponent(fileWindow) fileWindow = nil
-	end
+		for i, v in pairs(comps) do
+		v:setGroup("fileMenu")
+		end
+		menus.fileWindow:add(comps.Label, "1,1")
+		menus.fileWindow:add(comps.newFile, "2,1")
+		menus.fileWindow:add(comps.openFile, "3,1")
+		menus.fileWindow:add(comps.saveFile, "4,1")
+		
+		gooi.setGroupVisible("fileMenu", false)
+		gooi.setGroupEnabled("fileMenu", false)
+end
+function gui.toggleMenu(name)
+	local bool = name.enabled
+	local group = name.group
+	gooi.setGroupEnabled(group, not bool)
+	gooi.setGroupVisible(group, not bool)
 end
 
 function gui.toggleFileBrowser()
@@ -101,6 +115,7 @@ function gui.toggleFileBrowser()
 					updateAlphaQuad()
 					fn = filename
 					gui.toast("'"..fn.."'")
+					clearHistory()
 					gooi.removeComponent(fileBrowser) fileBrowser = nil
 				end))
 			end
@@ -109,12 +124,11 @@ function gui.toggleFileBrowser()
 	end
 end
 
-function gui.toggleSaveMenu()
-	if saveMenu == nil then
+function gui.loadSaveMenu()
 		gooi.setStyle(window)
-		saveMenu = gooi.newPanel(defWindowArgs):setOpaque(true)
-		saveMenu.components = {}
-		local comps = saveMenu.components
+		menus.saveMenu = gooi.newPanel(defWindowArgs):setOpaque(true):setGroup("saveMenu")
+		menus.saveMenu.components = {}
+		local comps = menus.saveMenu.components
 		gooi.setStyle(raisedbutton)
 		
 		comps.Label = gooi.newLabel("SAVE NEW FILE"):setOrientation("center")
@@ -127,17 +141,19 @@ function gui.toggleSaveMenu()
 		:onRelease(function()
 			fn = comps.TextBox.text
 			newdata:encode("png", fn..".png")
-			gui.toggleSaveMenu()
+			gui.toggleMenu(menus.saveMenu)
 			gooi.alert("Save Succesful!")
 		end)
+		for i, v in pairs(comps) do
+			v:setGroup("saveMenu")
+		end
+		menus.saveMenu:add(comps.Label, "1,1")
+		menus.saveMenu:add(comps.TextBox, "3,1")
+		menus.saveMenu:add(comps.Cancel, "5,1")
+		menus.saveMenu:add(comps.Save, "6,1")
 		
-		saveMenu:add(comps.Label, "1,1")
-		saveMenu:add(comps.TextBox, "3,1")
-		saveMenu:add(comps.Cancel, "5,1")
-		saveMenu:add(comps.Save, "6,1")
-		
-	else gooi.removeComponent(saveMenu) saveMenu = nil
-	end
+		gooi.setGroupEnabled("saveMenu", false)
+		gooi.setGroupVisible("saveMenu", false)
 end
 
 function gui.toggleViewMenu()
@@ -215,4 +231,17 @@ function gui.toast(message)
 	toast.x, toast.y = sw/2 - toast.w/2, sh - toast.h - dp(4)
 	toast.round = 1
 	Timer.after(1, function() gooi.removeComponent(toast) end)
+end
+
+function clearHistory()
+ for i, v in pairs(history) do
+  history[i] = nil
+ end
+end
+
+function gui.checkOpenMenus()
+	for i, v in pairs(menus) do
+		if v.enabled == true then return true
+		else return false end
+	end
 end

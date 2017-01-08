@@ -104,14 +104,15 @@ function love.draw()
 	lg.setColor(colors.primary)
 	lg.rectangle("fill", 0, 0, sw, dp(44)) --top bar
 	gooi.draw()
-	gooi.draw("filemenu")
+	gooi.draw("fileMenu")
+	gooi.draw("saveMenu")
 	gooi.draw("colorpicker")
 end
 
 function love.touchpressed(id, x, y)
 	gooi.pressed(id, x, y)
 	touchx, touchy = camera:worldCoords(x, y)
-	if y <= dp(46) or y >= undo.y or x <= dp(44) or viewWindow ~= nil then candraw = false
+	if y <= dp(46) or y >= undo.y or x <= dp(44) or gui.checkOpenMenus() then candraw = false
 	elseif y > dp(46) or x > dp(44) then candraw = true
 	end
 	local palx, paly = paletteCamera:worldCoords(x, y)
@@ -123,12 +124,14 @@ function love.touchpressed(id, x, y)
 	drawFunctions()
 	currentimage:refresh()
 end
-
+h = 0
 function love.touchreleased(id, x, y)
 	gooi.released(id, x, y)
-	if candraw and touchx >= 0 and touchx <= newdata:getWidth() and touchy >= 0 and touchy <= newdata:getHeight() and tool ~= tools.pan then
+	if candraw and touchx >= 0 and touchx <= newdata:getWidth() and touchy >= 0 and touchy <= newdata:getHeight() and tool ~= tools.pan and tool ~= none then
 	--history[#history + 1] = newdata:encode("png")
-	table.insert(history, 1, newdata:encode("png"))
+	table.insert(history, #history + 1, newdata:encode("png"))
+	if #history >= 10 then table.remove(history, 1) end
+	h = #history
 	--[[
 		if #history >= 10 then
 			table.remove(history, 1)
