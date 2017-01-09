@@ -5,12 +5,34 @@ function pixelFunction.allwhite(x,y,r,g,b,a)
 	return r, g, b, a
 end
 
+function pixelFunction.clear(x,y,r,g,b,a)
+	r, g, b, a = 255, 255, 255, 0
+	return r, g, b, a
+end
+
 function pixelFunction.fill(x, y, r, g, b, a)
 	
 	if r ~= currentcolor[1] then
 	r, g, b = currentcolor
 	end
 	return x, y, r, g, b, a
+end
+
+function Moveleft(x, y, r, g, b, a)
+	if x < 31 then
+		r, g, b, a = newdata:getPixel(x + 1, y)
+	end
+	return r, g, b, a
+end
+
+function Moveright(x, y, r, g, b, a)
+		r, g, b, a = newdata:getPixel(x - 1, y)
+	return r, g, b, a
+end
+
+
+function moveData()
+
 end
 
 function floodFill(x, y, target_color, replacement_color)

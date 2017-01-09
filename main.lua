@@ -141,14 +141,34 @@ function love.touchreleased(id, x, y)
 	currentimage:refresh()
 end
 
+local ql, qr, qu, qd = 0, 0, 0, 0
 function love.touchmoved(id, x, y)
 	gooi.moved(id, x, y)
-	if tool ~= tools.pan then
+	if tool ~= tools.pan and tool ~= tools.move then
 		touchx, touchy = camera:worldCoords(x, y)
 	elseif tool == tools.pan and y > dp(46) then
-		newtouchx, newtouchy = camera:worldCoords(x, y)
+		local newtouchx, newtouchy = camera:worldCoords(x, y)
 		camera:move(touchx - newtouchx, touchy - newtouchy)
 		alphaCamera:move((touchx-newtouchx)*2, (touchy - newtouchy)*2)
+	end
+	if tool == tools.move then
+		local newtouchx, newtouchy = camera:worldCoords(x, y)
+		
+		if touchx - newtouchx > 0 then
+			ql = ql + 1
+		elseif touchx - newtouchx < 0 then
+			qr = qr + 1
+		end
+		
+		if ql == 18 then
+			newdata:mapPixel(Moveleft)
+			ql = 0
+		elseif qr == 18 then
+			newdata:mapPixel(Moveright)
+			qr = 0
+		end
+		
+		touchx = newtouchx
 	end
 	 drawFunctions()
 	 currentimage:refresh()

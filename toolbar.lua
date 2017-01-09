@@ -29,6 +29,8 @@ function toolbar.load()
 	:onRelease(function() gui.toast("Flood Fill") tool = tools.fill end)
 	tools.pan = gooi.newButton():setIcon(icpath.."cursor_move.png")
 	:onRelease(function() gui.toast("Pan Camera") tool = tools.pan end)
+	tools.move = gooi.newButton():setIcon(icpath.."cursor_pointer.png")
+	:onRelease(function() gui.toast("Move") tool = tools.move end)
 	
 	for i, v in pairs(tools) do
 		v:onPress(function() tool = none end)
@@ -39,7 +41,8 @@ function toolbar.load()
 	tb.layout:add(tools.eraser, "2,1")
 	tb.layout:add(tools.eyedropper, "3,1")
 	tb.layout:add(tools.fill, "4,1")
-	tb.layout:add(tools.pan, "5,1")
+	tb.layout:add(tools.move, "5,1")
+	tb.layout:add(tools.pan, "6,1")
 end
 
 function drawFunctions()
@@ -61,7 +64,9 @@ function drawFunctions()
 		elseif tool == tools.eyedropper then
 			currentcolor = {newdata:getPixel(touchx, touchy)}
 		elseif tool == tools.fill then
-			--floodfill()
+			local targetcolor = newdata:getPixel(touchx, touchy)
+			floodFill(touchx, touchy, targetcolor, currentcolor)
+
 		--else
 		end
 	--elseif touchx == nil then
