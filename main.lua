@@ -46,7 +46,7 @@ function love.load()
 	imgx, imgy = 0, 0
 	xamm = 0
 	yamm = 0
-	imgQuad = love.graphics.newQuad(imgx, imgy, newdata:getWidth(), newdata:getHeight(), newdata:getWidth(), newdata:getHeight())
+	imgQuad = love.graphics.newQuad(0, 0, newdata:getWidth(), newdata:getHeight(), newdata:getWidth(), newdata:getHeight())
 end
 
 function love.update(dt)
@@ -142,7 +142,7 @@ function love.touchreleased(id, x, y)
 		end
 	h = #history
 	end
-	if tool == tools.move and x > dp(46) then
+	if tool == tools.move and x > dp(46) and candraw then
 		imgQuad:setViewport(0, 0, 32, 32)
 		newdata:mapPixel(pixelFunction.allwhite)
 		pastedata = love.image.newImageData(history[h])
@@ -164,7 +164,7 @@ function love.touchmoved(id, x, y)
 		camera:move(touchx - newtouchx, touchy - newtouchy)
 		alphaCamera:move((touchx-newtouchx)*2, (touchy - newtouchy)*2)
 	end
-	if tool == tools.move then
+	if tool == tools.move and y > dp(46) then
 		
 		local newtouchx, newtouchy = camera:worldCoords(x, y)
 		
