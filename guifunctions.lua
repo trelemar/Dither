@@ -12,6 +12,7 @@ function gui.load()
 		h = h - 1
 		--gui.toast(tostring(h - 1))
 		newdata = love.image.newImageData(history[h])
+		
 		currentimage = love.graphics.newImage(newdata)
 		table.remove(history, h + 1)
 		end
