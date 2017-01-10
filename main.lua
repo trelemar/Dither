@@ -143,10 +143,10 @@ function love.touchreleased(id, x, y)
 	h = #history
 	end
 	if tool == tools.move and x > dp(46) and candraw then
-		imgQuad:setViewport(0, 0, 32, 32)
+		imgQuad:setViewport(0, 0, newdata:getWidth(), newdata:getHeight())
 		newdata:mapPixel(pixelFunction.allwhite)
 		pastedata = love.image.newImageData(history[h])
-		newdata:paste(pastedata, xamm, yamm, 0, 0, 32, 32)
+		newdata:paste(pastedata, xamm, yamm, 0, 0, pastedata:getWidth(), pastedata:getHeight())
 		xamm, yamm = 0, 0
 	else
 	end
@@ -168,7 +168,7 @@ function love.touchmoved(id, x, y)
 		
 		local newtouchx, newtouchy = camera:worldCoords(x, y)
 		
-		imgQuad:setViewport(math.ceil(touchx - newtouchx), math.ceil(touchy - newtouchy), 32, 32)
+		imgQuad:setViewport(math.ceil(touchx - newtouchx), math.ceil(touchy - newtouchy), newdata:getWidth(), newdata:getHeight())
 		xamm = (math.ceil(touchx - newtouchx) * -1)
 		yamm = (math.ceil(touchy - newtouchy) * -1)
 		--imgQuad:setViewport(xamm * -1, yamm * - 1, 32, 32)

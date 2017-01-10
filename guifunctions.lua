@@ -51,9 +51,6 @@ function gui.loadFileMenu()
 		comps.newFile = nB("NEW FILE")
 		:onRelease(function()
 			gooi.confirm("Start a new file?", function()
-			--newdata:mapPixel(pixelFunction.allwhite)
-			clearHistory()
-			fn = nil
 			gui.toggleMenu(menus.fileWindow)
 			gui.toggleMenu(menus.newFileMenu)
 			end)
@@ -120,6 +117,8 @@ function gui.toggleFileBrowser()
 					fn = filename
 					gui.toast("'"..fn.."'")
 					clearHistory()
+					table.insert(history, newdata:encode("png"))
+					h = #history
 					gooi.removeComponent(fileBrowser) fileBrowser = nil
 				end))
 			end
@@ -211,6 +210,10 @@ function gui.loadNewFileMenu()
 			updateAlphaQuad()
 			imgQuad = love.graphics.newQuad(0, 0, newdata:getWidth(), newdata:getHeight(), newdata:getWidth(), newdata:getHeight())
 			gui.toggleMenu(menus.newFileMenu)
+			clearHistory()
+			fn = nil
+			table.insert(history, newdata:encode("png"))
+			h = #history
 			centerImage()
 		end)
 		comp.confirm.bgColor = colors.secondary
