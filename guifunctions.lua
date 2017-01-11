@@ -67,6 +67,8 @@ function gui.loadFileMenu()
 				gui.toggleMenu(menus.saveMenu)
 			else
 				newdata:encode("png", fn)
+				gui.toast(fn.." Saved!")
+				gui.toggleMenu(menus.fileWindow)
 			end
 		end)
 		for i, v in pairs(comps) do

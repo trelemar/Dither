@@ -64,9 +64,10 @@ function drawFunctions()
 		elseif tool == tools.eyedropper then
 			currentcolor = {newdata:getPixel(touchx, touchy)}
 		elseif tool == tools.fill then
-			local targetcolor = newdata:getPixel(touchx, touchy)
+			targetcolor = newdata:getPixel(touchx, touchy)
+			if newdata:getPixel(touchx, touchy) ~= currentcolor then
 			floodFill(touchx, touchy, targetcolor, currentcolor)
-
+			end
 		--else
 		end
 	--elseif touchx == nil then
