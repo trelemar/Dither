@@ -59,12 +59,7 @@ function love.update(dt)
 		alphaCamera:zoomTo(zoomslider.value *dp(25))
 	end
 	gooi.update(dt)
-	do
-		local c = colorpicker
-		if colorpicker.enabled then
-			colorpicker.colorbox.bgColor = {c.rslider.value * 255, c.gslider.value * 255, c.bslider.value * 255}
-		end
-	end
+	colorpicker.update(dt)
 	cp.bgColor = currentcolor
 	
 	if tool ~= none then

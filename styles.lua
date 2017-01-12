@@ -14,16 +14,18 @@ colors = {
 	white = {255,255,255},
 	black = {0,0,0}
 }
+
 header = {
 	font = fonts.header,
 	fgColor = colors.black
 }
+
 raisedbutton = {
-		font = fonts.rm,
-		bgColor = colors.primary,
-		fgColor = colors.white,
-		round = .2,
-	}
+	font = fonts.rm,
+	bgColor = colors.primary,
+	fgColor = colors.white,
+	round = .2,
+}
 	
 raisedbuttonlight = {
 	font = fonts.rm,
@@ -33,22 +35,20 @@ raisedbuttonlight = {
 	showBorder = true,
 	borderWidth = dp(1),
 	borderColor = colors.black,
-	}
+}
 	
-	flatbutton = {
-		font = fonts.rm,
-		bgColor = colors.primary,
-		fgColor = colors.white,
-	}
+flatbutton = {
+	font = fonts.rm,
+	bgColor = colors.primary,
+	fgColor = colors.white,
+}
 	
-	list = {
-		font = fonts.rr,
-		bgColor = {200, 200, 200, 0},
-		--showBorder = true,
-		--borderColor = {0, 0, 0},
-		fgColor = colors.black,
-		round = .2
-	}
+list = {
+	font = fonts.rr,
+	bgColor = {200, 200, 200, 0},
+	fgColor = colors.black,
+	round = .2
+}
 	
 dialog = {
 	font = fonts.rr,
@@ -59,11 +59,13 @@ dialog = {
 	borderColor = colors.black,
 	round = 0
 }
+
 window = {
 	font = fonts.rr,
 	bgColor = {120, 120, 120},
 	round = 0
 }
+
 defWindowArgs = {
 	x = sw/8 * 3, 
 	y = sh/4, 
@@ -71,6 +73,15 @@ defWindowArgs = {
 	h = sh/2, 
 	layout = "grid 6x1"
 }
+
+compactWindowArgs = {
+	x = sw/8 * 2, 
+	y = sh/4, 
+	w = sw/8 * 4, 
+	h = sh/2, 
+	layout = "grid 6x4"
+}
+
 largeWindowArgs = {
 	x = sw/8* 1,
 	y = sh/6,

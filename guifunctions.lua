@@ -32,7 +32,7 @@ function gui.load()
 	glo:add(zoomslider, "t-r")
 	glo:add(gooi.newLabel("ZOOM:"), "t-r")
 	gooi.setStyle(raisedbutton)
-	cp = nB({x = sw - dp(50), y = undo.y - dp(50), w = dp(46), h = dp(46)}):onRelease(function() gui.toggleColorPicker() end)
+	cp = nB({x = sw - dp(50), y = undo.y - dp(50), w = dp(46), h = dp(46)}):onRelease(function() gui.toggleColorPicker() colorpicker.updateSliders() end)
 	cp.showBorder, cp.borderWidth, cp.borderColor = true, dp(2), colors.black
 	cp.bgColor = currentcolor
 	gui.loadFileMenu()
