@@ -106,8 +106,15 @@ function love.touchpressed(id, x, y)
 	local palx, paly = paletteCamera:worldCoords(x, y)
 	if palx >= 0 and palx <= paletteImage:getWidth() and paly >= 0 and paly <= paletteImage:getHeight() then
 		candraw = false
+		if not colorpicker.enabled then
 		currentcolor = {palettedata:getPixel(palx, paly)}
 		colorpicker.updateSliders()
+		else
+		colorpicker.rslider.value, colorpicker.gslider.value, colorpicker.bslider.value = palettedata:getPixel(palx, paly)
+		colorpicker.rslider.value = colorpicker.rslider.value / 255
+		colorpicker.gslider.value = colorpicker.gslider.value / 255
+		colorpicker.bslider.value = colorpicker.bslider.value / 255
+		end
 	end
 	
 	drawFunctions()
