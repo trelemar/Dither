@@ -5,11 +5,8 @@ fd = love.window.fromPixels
 lg = love.graphics
 nB = gooi.newButton
 sw, sh = lg.getDimensions()
---a, focus = 0, 0
---isvis = false
 require "styles"
 Camera = require"lib.hump.camera"
---showfilemenu = false
 showgrid = true
 showAlphaBG = true
 Timer = require"lib.hump.timer"
@@ -61,20 +58,8 @@ function love.update(dt)
 	gooi.update(dt)
 	colorpicker.update(dt)
 	cp.bgColor = currentcolor
+	toolbar.update(dt)
 	
-	if tool ~= none then
-		tool.bgColor = colors.secondary --sets currently selected tools background to colors.secondary
-	end
-	
-	for i, v in pairs(tools) do
-		if tool ~= v then
-			v.bgColor = colors.primary
-		end
-	end
-	
-	if pencilSlider ~= nil then
-		pencilSize = pencilSlider.value
-	end
 	
 	showgrid = menus.viewMenu.components.gridCheck.checked
 end
@@ -82,9 +67,11 @@ end
 function love.draw()
 	lg.setColor(255, 255, 255)
 	
+	if menus.viewMenu.components.alphaBgCheck.checked then
 	alphaCamera:attach()
 	lg.draw(alphaBG, alphaQuad, 0, 0)
 	alphaCamera:detach()
+	end
 	
 	camera:attach()
 	--lg.draw(currentimage, 0, 0)
@@ -108,7 +95,6 @@ function love.draw()
 	gooi.draw("newFileMenu")
 	gooi.draw("colorpicker")
 	lg.setColor(255, 255, 255)
-	lg.print(tostring(xamm)..tostring(yamm), 0, sh - 50)
 end
 
 function love.touchpressed(id, x, y)
@@ -121,6 +107,7 @@ function love.touchpressed(id, x, y)
 	if palx >= 0 and palx <= paletteImage:getWidth() and paly >= 0 and paly <= paletteImage:getHeight() then
 		candraw = false
 		currentcolor = {palettedata:getPixel(palx, paly)}
+		colorpicker.updateSliders()
 	end
 	
 	drawFunctions()

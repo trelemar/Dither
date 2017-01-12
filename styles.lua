@@ -2,7 +2,7 @@
 fonts = {
 	rm = lg.newFont("fonts/Roboto-Medium.ttf", dp(14)),
 	rr = lg.newFont("fonts/Roboto-Regular.ttf", dp(16)),
-	header = lg.newFont("fonts/Roboto-Bold.ttf", dp(16))
+	header = lg.newFont("fonts/Roboto-Bold.ttf", dp(18))
 }
 
 colors = {

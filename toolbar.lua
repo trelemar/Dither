@@ -45,6 +45,22 @@ function toolbar.load()
 	tb.layout:add(tools.pan, "6,1")
 end
 
+function toolbar.update(dt)
+	if tool ~= none then
+		tool.bgColor = colors.secondary --sets currently selected tools background to colors.secondary
+	end
+	
+	for i, v in pairs(tools) do
+		if tool ~= v then
+			v.bgColor = colors.primary
+		end
+	end
+	
+	if pencilSlider ~= nil then
+		pencilSize = pencilSlider.value
+	end
+end
+
 function drawFunctions()
 	 if candraw and touchx ~= nil and touchx >= 0 and touchx <= currentimage:getWidth() and touchy >=0 and touchy <= currentimage:getHeight() then
 		--coordlabel.text = "x: " .. touchx
