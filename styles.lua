@@ -6,9 +6,11 @@ fonts = {
 }
 
 colors = {
-	primary = {80, 80, 80},
-	secondary = {0, 200, 0},
-	tertairy = {200, 0, 0},
+	primary = {80, 80, 100},
+	primaryl = {160, 160, 180},
+	secondary = {0, 140, 20},
+	tertairy = {140, 0, 20},
+	quadary = {0, 20, 140},
 	--"#001CB4",
 	primaryd = "#FF002C",
 	white = {255,255,255},
@@ -62,8 +64,12 @@ dialog = {
 
 window = {
 	font = fonts.rr,
-	bgColor = {120, 120, 120},
-	round = 0
+	bgColor = colors.primaryl,
+	round = 0,
+	fgColor = colors.primary,
+	showBorder = true,
+	borderWidth = dp(4),
+	borderColor = colors.primaryl
 }
 
 defWindowArgs = {

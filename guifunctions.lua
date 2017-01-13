@@ -46,8 +46,8 @@ function gui.loadFileMenu()
 		menus.fileWindow = gooi.newPanel(defWindowArgs):setOpaque(true):setGroup("fileMenu")
 		menus.fileWindow.components = {}
 		local comps = menus.fileWindow.components
-		gooi.setStyle(raisedbutton)
 		comps.Label = gooi.newLabel("FILE"):setOpaque(false):setOrientation("center")
+		gooi.setStyle(raisedbutton)
 		comps.newFile = nB("NEW FILE")
 		:onRelease(function()
 			gooi.confirm("Start a new file?", function()
@@ -94,9 +94,9 @@ function gui.toggleFileBrowser()
 		gooi.setStyle(window)
 		fileBrowser = gooi.newPanel(largeWindowArgs):setOpaque(true)
 		:setColspan(1, 1, 3)
-		gooi.setStyle(raisedbutton)
 		local dir = love.filesystem.getSaveDirectory()
 		local Label = gooi.newLabel(dir):setOrientation("center")
+		gooi.setStyle(raisedbutton)
 		local textBox = gooi.newText("test")
 		local Cancel = gooi.newButton("CANCEL")
 		:onRelease(function()
@@ -134,9 +134,9 @@ function gui.loadSaveMenu()
 		menus.saveMenu = gooi.newPanel(defWindowArgs):setOpaque(true):setGroup("saveMenu")
 		menus.saveMenu.components = {}
 		local comps = menus.saveMenu.components
-		gooi.setStyle(raisedbutton)
 		
 		comps.Label = gooi.newLabel("SAVE NEW FILE"):setOrientation("center")
+		gooi.setStyle(raisedbutton)
 		comps.TextBox = gooi.newText("")
 		comps.Cancel = gooi.newButton("CANCEL")
 		:onRelease(function()
@@ -166,8 +166,9 @@ function gui.loadViewMenu()
 			menus.viewMenu = gooi.newPanel(defWindowArgs):setOpaque(true):setGroup("viewMenu")
 			menus.viewMenu.components = {}
 			local comps = menus.viewMenu.components
-			gooi.setStyle(raisedbutton)
+			
 			comps.viewMenuLabel = gooi.newLabel({text = "VIEW", orientation = "center"})
+			 gooi.setStyle(raisedbutton)
 			comps.gridCheck = gooi.newCheck({text= "SHOW GRID", checked = showgrid, orientation = "center"})
 			comps.alphaBgCheck = gooi.newCheck({text = "SHOW ALPHA BG", checked = showAlphaBG})
 			comps.changeBgColor = gooi.newButton("SET BACKGROUND COLOR")
@@ -206,8 +207,9 @@ function gui.loadNewFileMenu()
 		:setColspan(6, 1, 2)
 		menus.newFileMenu.components = {}
 		local comp = menus.newFileMenu.components
-		gooi.setStyle(raisedbutton)
+		
 		comp.Label = gooi.newLabel("NEW FILE"):setOrientation("center")
+		gooi.setStyle(raisedbutton)
 		comp.wLabel = gooi.newLabel("WIDTH"):setOrientation("center")
 		comp.wText = gooi.newText("32")
 		comp.hLabel = gooi.newLabel("HEIGHT"):setOrientation("center")

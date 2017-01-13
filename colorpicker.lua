@@ -10,18 +10,18 @@ function colorpicker.load()
 	:setColspan(3, 1, 3)
 	:setColspan(4, 1, 3)
 	:setColspan(5, 1, 3)
-	gooi.setStyle(raisedbutton)
 	colorpicker.header = gooi.newLabel({text = "COLOR PICKER", orientation = "center"}):setGroup("colorpicker")
+	gooi.setStyle(raisedbutton)
 	colorpicker.currentcolorbox = gooi.newLabel():setGroup("colorpicker"):setOpaque(true)
 	colorpicker.colorbox = gooi.newLabel():setGroup("colorpicker"):setOpaque(true)
 	colorpicker.rslider = gooi.newSlider({text = "R", value=0}):setGroup("colorpicker")
-	colorpicker.rslider.bgColor = {200, 0, 0}
+	colorpicker.rslider.bgColor = colors.tertairy
 	colorpicker.rtext = gooi.newLabel():setGroup("colorpicker"):setOrientation("center")
 	colorpicker.gslider = gooi.newSlider({value = 0}):setGroup("colorpicker")
-	colorpicker.gslider.bgColor = {0, 200, 0}
+	colorpicker.gslider.bgColor = colors.secondary
 	colorpicker.gtext = gooi.newLabel():setGroup("colorpicker"):setOrientation("center")
 	colorpicker.bslider = gooi.newSlider({value = 0}):setGroup("colorpicker")
-	colorpicker.bslider.bgColor = {0, 0, 200}
+	colorpicker.bslider.bgColor = colors.quadary
 	colorpicker.btext = gooi.newLabel():setGroup("colorpicker"):setOrientation("center")
 	colorpicker.confirm = gooi.newButton({text = "CONFIRM"}):setGroup("colorpicker"):setGroup("colorpicker"):onRelease(function() confirmColor() gui.toggleColorPicker() end)
 
