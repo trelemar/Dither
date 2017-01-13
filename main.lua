@@ -21,7 +21,6 @@ function love.load()
 	lg.setBackgroundColor(120, 120, 140)
 	newdata = love.image.newImageData(32, 32)
 	camera = Camera(newdata:getWidth()/2, newdata:getHeight()/2, 4)
-	--newdata:mapPixel(pixelFunction.allwhite)
 	currentimage = love.graphics.newImage(newdata)
 	palettedata = love.image.newImageData("palettes/todayland.png")
 	paletteImage = love.graphics.newImage(palettedata)
@@ -40,7 +39,6 @@ function love.load()
 	colorpicker.load()
 	toolbar.load()
 	table.insert(history, 1, newdata:encode("png"))
-	--currentimage:setWrap("repeat")
 	imgx, imgy = 0, 0
 	xamm = 0
 	yamm = 0
@@ -75,7 +73,6 @@ function love.draw()
 	end
 	
 	camera:attach()
-	--lg.draw(currentimage, 0, 0)
 	lg.draw(currentimage, imgQuad, 0, 0)
 	camera:detach()
 	
@@ -88,7 +85,7 @@ function love.draw()
 	paletteCamera:detach()
 	drawPaletteGrid(colors.primary)
 	lg.setColor(colors.primary)
-	lg.rectangle("fill", 0, 0, sw, dp(44)) --top bar
+	lg.rectangle("fill", 0, 0, sw, dp(44))
 	gooi.draw()
 	gooi.draw("fileMenu")
 	gooi.draw("saveMenu")
@@ -96,12 +93,6 @@ function love.draw()
 	gooi.draw("newFileMenu")
 	gooi.draw("colorpicker")
 	lg.setColor(255, 255, 255)
-	do local y = sh - 120
-		for i, v in pairs(touches) do
-			lg.print(i..". "..tostring(v), 0, y)
-			y = y + 35
-		end
-	end
 end
 
 function love.touchpressed(id, x, y)
@@ -135,15 +126,15 @@ function love.touchreleased(id, x, y)
 	
 	gooi.released(id, x, y)
 	if touchx ~= nil and touchy ~= nil then
-	if candraw and touchx >= 0 and touchx <= newdata:getWidth() and touchy >= 0 and touchy <= newdata:getHeight() and tool ~= tools.pan and tool ~= none or tool == tools.move then
-	--history[#history + 1] = newdata:encode("png")
-	table.insert(history, #history + 1, newdata:encode("png"))
-		if #history >= 10 then 
-			table.remove(history, 1) 
+		if candraw and touchx >= 0 and touchx <= newdata:getWidth() and touchy >= 0 and touchy <= newdata:getHeight() and tool ~= tools.pan and tool ~= none or tool == tools.move then
+			table.insert(history, #history + 1, newdata:encode("png"))
+			if #history >= 10 then 
+				table.remove(history, 1) 
+			end
+		h = #history
 		end
-	h = #history
 	end
-	end
+	
 	if tool == tools.move and candraw then
 		imgQuad:setViewport(0, 0, newdata:getWidth(), newdata:getHeight())
 		newdata:mapPixel(pixelFunction.allwhite)
@@ -152,6 +143,7 @@ function love.touchreleased(id, x, y)
 		xamm, yamm = 0, 0
 	else
 	end
+	
 	if touches[1] == id then
 	touchx, touchy = nil, nil
 	end
@@ -175,16 +167,11 @@ function love.touchmoved(id, x, y)
 	if tool == tools.move and y > dp(46) and id == touches[1] then
 		
 		local newtouchx, newtouchy = camera:worldCoords(x, y)
-		
-		--imgQuad:setViewport(math.ceil(touchx - newtouchx), math.ceil(touchy - newtouchy), newdata:getWidth(), newdata:getHeight())
 		xamm = (math.ceil(touchx - newtouchx) * -1)
 		yamm = (math.ceil(touchy - newtouchy) * -1)
 		imgQuad:setViewport(xamm * -1, yamm * - 1, newdata:getWidth(), newdata:getHeight())
-		--gui.toast("x: "..tostring(xamm).." y: "..tostring(yamm))
-		--touchx = touchx - newtouchx
-		
-		
 	end
+	
 	 drawFunctions()
 	 currentimage:refresh()
 end
@@ -206,6 +193,7 @@ function drawGrid(xsize, ysize, color)
 			local x2, y2 = camera:cameraCoords(i, currentimage:getHeight())
 			love.graphics.line(x, y, x2, y2)
 		end
+		
 		for i = ysize, (currentimage:getHeight() - 1), ysize do
 			local x, y = camera:cameraCoords(0, i)
 			local x2, y2 = camera:cameraCoords(currentimage:getWidth(), i)
@@ -227,7 +215,6 @@ function drawPaletteGrid(color)
 			local x2, y2 = paletteCamera:cameraCoords(paletteImage:getWidth(), i)
 			love.graphics.line(x, y, x2, y2)
 		end
-		
 end
 
 function updateAlphaQuad()
