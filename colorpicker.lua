@@ -10,19 +10,19 @@ function colorpicker.load()
 	:setColspan(3, 1, 3)
 	:setColspan(4, 1, 3)
 	:setColspan(5, 1, 3)
-	colorpicker.header = gooi.newLabel({text = "COLOR PICKER", orientation = "center"}):setGroup("colorpicker")
+	colorpicker.header = gooi.newLabel({text = "COLOR PICKER", align = "center"}):setGroup("colorpicker")
 	gooi.setStyle(raisedbutton)
 	colorpicker.currentcolorbox = gooi.newLabel():setGroup("colorpicker"):setOpaque(true)
 	colorpicker.colorbox = gooi.newLabel():setGroup("colorpicker"):setOpaque(true)
 	colorpicker.rslider = gooi.newSlider({text = "R", value=0}):setGroup("colorpicker")
 	colorpicker.rslider.bgColor = colors.tertairy
-	colorpicker.rtext = gooi.newLabel():setGroup("colorpicker"):setOrientation("center")
+	colorpicker.rtext = gooi.newLabel():setGroup("colorpicker"):setAlign("center")
 	colorpicker.gslider = gooi.newSlider({value = 0}):setGroup("colorpicker")
 	colorpicker.gslider.bgColor = colors.secondary
-	colorpicker.gtext = gooi.newLabel():setGroup("colorpicker"):setOrientation("center")
+	colorpicker.gtext = gooi.newLabel():setGroup("colorpicker"):setAlign("center")
 	colorpicker.bslider = gooi.newSlider({value = 0}):setGroup("colorpicker")
 	colorpicker.bslider.bgColor = colors.quadary
-	colorpicker.btext = gooi.newLabel():setGroup("colorpicker"):setOrientation("center")
+	colorpicker.btext = gooi.newLabel():setGroup("colorpicker"):setAlign("center")
 	colorpicker.confirm = gooi.newButton({text = "CONFIRM"}):setGroup("colorpicker"):setGroup("colorpicker"):onRelease(function() confirmColor() gui.toggleColorPicker() end)
 
 	colorpicker.layout:add(colorpicker.header, "1,1")

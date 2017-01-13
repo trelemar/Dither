@@ -48,7 +48,7 @@ end
 
 function toolbar.update(dt)
 	if tool ~= none then
-		tool.bgColor = colors.secondary --sets currently selected tools background to colors.secondary
+		tool.bgColor = colors.secondary --sets currently selected tools backround to colors.secondary
 	end
 	
 	for i, v in pairs(tools) do

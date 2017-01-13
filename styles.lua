@@ -2,7 +2,7 @@
 fonts = {
 	rm = lg.newFont("fonts/Roboto-Medium.ttf", dp(14)),
 	rr = lg.newFont("fonts/Roboto-Regular.ttf", dp(16)),
-	header = lg.newFont("fonts/Roboto-Bold.ttf", dp(18))
+	header = lg.newFont("fonts/Roboto-Bold.ttf", dp(16))
 }
 
 colors = {
@@ -26,14 +26,16 @@ raisedbutton = {
 	font = fonts.rm,
 	bgColor = colors.primary,
 	fgColor = colors.white,
-	round = .2,
+	radius = dp(2),
+	innerRadius = dp(2)
 }
 	
 raisedbuttonlight = {
 	font = fonts.rm,
 	bgColor = colors.white,
 	fgColor = colors.black,
-	round = .2,
+	radius = dp(2),
+	innerRadius = dp(2),
 	showBorder = true,
 	borderWidth = dp(1),
 	borderColor = colors.black,
@@ -49,7 +51,7 @@ list = {
 	font = fonts.rr,
 	bgColor = {200, 200, 200, 0},
 	fgColor = colors.black,
-	round = .2
+	radius = dp(2)
 }
 	
 dialog = {
@@ -59,13 +61,13 @@ dialog = {
 	showBorder = true,
 	borderWidth = dp(2),
 	borderColor = colors.black,
-	round = 0
+	radius = 0
 }
 
 window = {
 	font = fonts.header,
 	bgColor = colors.primaryl,
-	round = 0,
+	radius = dp(2),
 	fgColor = colors.primary,
 	showBorder = true,
 	borderWidth = dp(4),

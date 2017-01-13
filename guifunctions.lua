@@ -4,8 +4,8 @@ function gui.load()
 	gooi.desktopMode()
 	gooi.setStyle(raisedbutton)
 	zoomslider = gooi.newSlider({w = dp(122), h = dp(36), value = 0.1})
-	--redo = nB({text = "REDO", w = dp(112), h = dp(36)}):setIcon("icons/white/ic_redo_variant.png"):setOrientation("right")
-	undo = nB({text = "UNDO", x = dp(112), y = dp(16), w = dp(112), h = dp(36)}):setIcon("icons/white/ic_undo_variant.png"):setOrientation("right")
+	--redo = nB({text = "REDO", w = dp(112), h = dp(36)}):setIcon("icons/white/ic_redo_variant.png"):setAlign("right")
+	undo = nB({text = "UNDO", x = dp(112), y = dp(16), w = dp(112), h = dp(36)}):setIcon("icons/white/ic_undo_variant.png"):setAlign("right")
 	:onRelease(function()
 
 		if history[h - 1] ~= nil then
@@ -19,11 +19,11 @@ function gui.load()
 	end)
 	undo.bgColor = colors.tertairy
 	gooi.setStyle(flatbutton)
-	file = nB("FILE", 0, 0, dp(60), dp(36)):onRelease(function() gui.toggleMenu(menus.fileWindow) end):setOrientation("left")
+	file = nB("FILE", 0, 0, dp(60), dp(36)):onRelease(function() gui.toggleMenu(menus.fileWindow) end):setAlign("left")
 	options = nB("OPTIONS", 0, 0, dp(60), dp(36))
-	edit = nB("EDIT", 0, 0, dp(60), dp(36)):setOrientation("left")
-	view = nB("VIEW", 0, 0, dp(60), dp(36)):setOrientation("left"):onPress(function() gui.toggleMenu(menus.viewMenu) end)
-	selection = nB("SELECTION", 0, 0, dp(60), dp(36)):setOrientation("left")
+	edit = nB("EDIT", 0, 0, dp(60), dp(36)):setAlign("left")
+	view = nB("VIEW", 0, 0, dp(60), dp(36)):setAlign("left"):onPress(function() gui.toggleMenu(menus.viewMenu) end)
+	selection = nB("SELECTION", 0, 0, dp(60), dp(36)):setAlign("left")
 	glo = gooi.newPanel(0, 0, sw, sh, "game")
 	--glo:add(redo, "b-r")
 	glo:add(undo, "b-r") glo:add(options, "t-r")
@@ -46,7 +46,7 @@ function gui.loadFileMenu()
 		menus.fileWindow = gooi.newPanel(defWindowArgs):setOpaque(true):setGroup("fileMenu")
 		menus.fileWindow.components = {}
 		local comps = menus.fileWindow.components
-		comps.Label = gooi.newLabel("FILE"):setOpaque(false):setOrientation("center")
+		comps.Label = gooi.newLabel("FILE"):setOpaque(false):setAlign("center")
 		gooi.setStyle(raisedbutton)
 		comps.newFile = nB("NEW FILE")
 		:onRelease(function()
@@ -95,7 +95,7 @@ function gui.toggleFileBrowser()
 		fileBrowser = gooi.newPanel(largeWindowArgs):setOpaque(true)
 		:setColspan(1, 1, 3)
 		local dir = love.filesystem.getSaveDirectory()
-		local Label = gooi.newLabel(dir):setOrientation("center")
+		local Label = gooi.newLabel(dir):setAlign("center")
 		gooi.setStyle(raisedbutton)
 		local textBox = gooi.newText("test")
 		local Cancel = gooi.newButton("CANCEL")
@@ -110,7 +110,7 @@ function gui.toggleFileBrowser()
 		local items = love.filesystem.getDirectoryItems("")
 		for i,filename in pairs(items) do
 			if string.find(filename, ".png") then
-				fileBrowser:add(gooi.newButton({text = filename, orientation = "right"})
+				fileBrowser:add(gooi.newButton({text = filename, align = "right"})
 				:onRelease(function()
 					newdata = love.image.newImageData(filename)
 					currentimage = love.graphics.newImage(newdata)
@@ -136,7 +136,7 @@ function gui.loadSaveMenu()
 		menus.saveMenu.components = {}
 		local comps = menus.saveMenu.components
 		
-		comps.Label = gooi.newLabel("SAVE NEW FILE"):setOrientation("center")
+		comps.Label = gooi.newLabel("SAVE NEW FILE"):setAlign("center")
 		gooi.setStyle(raisedbutton)
 		comps.TextBox = gooi.newText("")
 		comps.Cancel = gooi.newButton("CANCEL")
@@ -168,9 +168,9 @@ function gui.loadViewMenu()
 			menus.viewMenu.components = {}
 			local comps = menus.viewMenu.components
 			
-			comps.viewMenuLabel = gooi.newLabel({text = "VIEW", orientation = "center"})
+			comps.viewMenuLabel = gooi.newLabel({text = "VIEW", align = "center"})
 			 gooi.setStyle(raisedbutton)
-			comps.gridCheck = gooi.newCheck({text= "SHOW GRID", checked = showgrid, orientation = "center"})
+			comps.gridCheck = gooi.newCheck({text= "SHOW GRID", checked = showgrid, align = "center"})
 			comps.alphaBgCheck = gooi.newCheck({text = "SHOW ALPHA BG", checked = showAlphaBG})
 			comps.changeBgColor = gooi.newButton("SET BACKGROUND COLOR")
 			:onRelease(function()
@@ -209,11 +209,11 @@ function gui.loadNewFileMenu()
 		menus.newFileMenu.components = {}
 		local comp = menus.newFileMenu.components
 		
-		comp.Label = gooi.newLabel("NEW FILE"):setOrientation("center")
+		comp.Label = gooi.newLabel("NEW FILE"):setAlign("center")
 		gooi.setStyle(raisedbutton)
-		comp.wLabel = gooi.newLabel("WIDTH"):setOrientation("center")
+		comp.wLabel = gooi.newLabel("WIDTH"):setAlign("center")
 		comp.wText = gooi.newText("32")
-		comp.hLabel = gooi.newLabel("HEIGHT"):setOrientation("center")
+		comp.hLabel = gooi.newLabel("HEIGHT"):setAlign("center")
 		comp.hText = gooi.newText("32")
 		comp.confirm = gooi.newButton("CONFIRM")
 		:onRelease(function()
@@ -262,10 +262,10 @@ end
 
 function gui.toast(message)
 	local toast = gooi.newLabel(message):setOpaque(true)
-	toast.orientation = "center"
+	toast.align = "center"
 	toast.w = toast.w + dp(8)
 	toast.x, toast.y = sw/2 - toast.w/2, sh - toast.h - dp(4)
-	toast.round = 1
+	toast.radius = toast.h / 2
 	Timer.after(1, function() gooi.removeComponent(toast) end)
 end
 
