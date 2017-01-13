@@ -122,6 +122,7 @@ function gui.toggleFileBrowser()
 					table.insert(history, newdata:encode("png"))
 					h = #history
 					gooi.removeComponent(fileBrowser) fileBrowser = nil
+					centerImage()
 				end))
 			end
 		end
@@ -216,6 +217,11 @@ function gui.loadNewFileMenu()
 		comp.hText = gooi.newText("32")
 		comp.confirm = gooi.newButton("CONFIRM")
 		:onRelease(function()
+			if tonumber(comp.wText.text) == nil or tonumber(comp.hText.text) == nil then
+				gooi.alert(comp.wText.text.."x"..comp.hText.text.."\nIS NOT A VALID SIZE")
+			elseif tonumber(comp.wText.text) <= 0 or tonumber(comp.hText.text) <= 0 then
+				gooi.alert("SIZE MUST BE\nGREATER THAN 0!")
+			else
 			newdata = love.image.newImageData(comp.wText.text, comp.hText.text)
 			currentimage = love.graphics.newImage(newdata)
 			updateAlphaQuad()
@@ -226,6 +232,7 @@ function gui.loadNewFileMenu()
 			table.insert(history, newdata:encode("png"))
 			h = #history
 			centerImage()
+			end
 		end)
 		comp.confirm.bgColor = colors.secondary
 		
