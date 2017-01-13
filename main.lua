@@ -17,7 +17,7 @@ function love.load()
 	history = {}
 	lg.setFont(fonts.rr)
 	love.graphics.setDefaultFilter("nearest")
-	lg.setBackgroundColor(140, 140, 160)
+	lg.setBackgroundColor(120, 120, 140)
 	newdata = love.image.newImageData(32, 32)
 	camera = Camera(newdata:getWidth()/2, newdata:getHeight()/2, 4)
 	--newdata:mapPixel(pixelFunction.allwhite)

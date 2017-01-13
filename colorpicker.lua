@@ -34,7 +34,7 @@ function colorpicker.load()
 	colorpicker.layout:add(colorpicker.gtext, "4,4")
 	colorpicker.layout:add(colorpicker.bslider, "5,1")
 	colorpicker.layout:add(colorpicker.btext, "5,4")
-	colorpicker.layout:add(colorpicker.confirm, "6,1")
+	colorpicker.layout:add(colorpicker.confirm, "6,4")
 	
 	gooi.setGroupVisible("colorpicker", false)
 	gooi.setGroupEnabled("colorpicker", false)

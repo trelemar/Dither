@@ -63,7 +63,7 @@ dialog = {
 }
 
 window = {
-	font = fonts.rr,
+	font = fonts.header,
 	bgColor = colors.primaryl,
 	round = 0,
 	fgColor = colors.primary,
