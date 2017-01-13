@@ -14,6 +14,7 @@ require "guifunctions"
 require "colorpicker"
 require "toolbar"
 function love.load()
+	touches = {}
 	history = {}
 	lg.setFont(fonts.rr)
 	love.graphics.setDefaultFilter("nearest")
@@ -95,11 +96,20 @@ function love.draw()
 	gooi.draw("newFileMenu")
 	gooi.draw("colorpicker")
 	lg.setColor(255, 255, 255)
+	do local y = sh - 120
+		for i, v in pairs(touches) do
+			lg.print(i..". "..tostring(v), 0, y)
+			y = y + 35
+		end
+	end
 end
 
 function love.touchpressed(id, x, y)
+	table.insert(touches, #touches + 1, id)
 	gooi.pressed(id, x, y)
+	if id == touches[1] then
 	touchx, touchy = camera:worldCoords(x, y)
+	end
 	if y <= dp(46) or y >= undo.y or x <= dp(44) or gui.checkOpenMenus() or fileBrowser ~= nil or colorpicker.enabled then candraw = false
 	elseif y > dp(46) or x > dp(44) then candraw = true
 	end
@@ -122,7 +132,9 @@ function love.touchpressed(id, x, y)
 end
 h = 0
 function love.touchreleased(id, x, y)
+	
 	gooi.released(id, x, y)
+	if touchx ~= nil and touchy ~= nil then
 	if candraw and touchx >= 0 and touchx <= newdata:getWidth() and touchy >= 0 and touchy <= newdata:getHeight() and tool ~= tools.pan and tool ~= none or tool == tools.move then
 	--history[#history + 1] = newdata:encode("png")
 	table.insert(history, #history + 1, newdata:encode("png"))
@@ -130,6 +142,7 @@ function love.touchreleased(id, x, y)
 			table.remove(history, 1) 
 		end
 	h = #history
+	end
 	end
 	if tool == tools.move and candraw then
 		imgQuad:setViewport(0, 0, newdata:getWidth(), newdata:getHeight())
@@ -139,21 +152,27 @@ function love.touchreleased(id, x, y)
 		xamm, yamm = 0, 0
 	else
 	end
+	if touches[1] == id then
 	touchx, touchy = nil, nil
+	end
+	
+	for i, v in pairs(touches) do
+		if id == v then touches[i] = nil end
+	end
 	currentimage:refresh()
 end
 
 local ql, qr, qu, qd = 0, 0, 0, 0
 function love.touchmoved(id, x, y)
 	gooi.moved(id, x, y)
-	if tool ~= tools.pan and tool ~= tools.move then
+	if tool ~= tools.pan and tool ~= tools.move and id == touches[1] then
 		touchx, touchy = camera:worldCoords(x, y)
-	elseif tool == tools.pan and y > dp(46) then
+	elseif tool == tools.pan and y > dp(46) and id == touches[1] then
 		local newtouchx, newtouchy = camera:worldCoords(x, y)
 		camera:move(touchx - newtouchx, touchy - newtouchy)
 		alphaCamera:move((touchx-newtouchx)*2, (touchy - newtouchy)*2)
 	end
-	if tool == tools.move and y > dp(46) then
+	if tool == tools.move and y > dp(46) and id == touches[1] then
 		
 		local newtouchx, newtouchy = camera:worldCoords(x, y)
 		
