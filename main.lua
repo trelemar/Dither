@@ -22,17 +22,12 @@ function love.load()
 	newdata = love.image.newImageData(32, 32)
 	camera = Camera(newdata:getWidth()/2, newdata:getHeight()/2, 4)
 	currentimage = love.graphics.newImage(newdata)
-	palettedata = love.image.newImageData("palettes/todayland.png")
-	paletteImage = love.graphics.newImage(palettedata)
-	paletteCamera = Camera(0,0)
-	paletteCamera:zoomTo(dp(22))
+	loadPalette("palettes/todayland.png")
 	alphaBG = love.graphics.newImage("bg.png")
 	alphaBG:setWrap("repeat")
 	updateAlphaQuad()
 	alphaCamera = Camera(newdata:getWidth(), newdata:getHeight())
-	local cx, cy = paletteCamera:worldCoords(sw - dp(4), sh)
-	local wx, wy = paletteCamera:worldCoords(0, dp(48))
-	paletteCamera:lookAt(paletteImage:getWidth() - cx, (-wy))
+
 	candraw = true
 	currentcolor = {0, 0, 0, 255}
 	gui.load()
@@ -101,6 +96,7 @@ function love.draw()
 	gooi.draw("viewMenu")
 	gooi.draw("newFileMenu")
 	gooi.draw("colorpicker")
+	gooi.draw("paletteManager")
 	lg.setColor(255, 255, 255)
 	--love.graphics.print("Current FPS: "..tostring(love.timer.getFPS( )), 10, 10)
 end
@@ -208,6 +204,16 @@ function drawGrid(xsize, ysize, color)
 			local x2, y2 = camera:cameraCoords(currentimage:getWidth(), i)
 			love.graphics.line(x, y, x2, y2)
 		end
+end
+
+function loadPalette(path)
+	palettedata = love.image.newImageData(path)
+	paletteImage = love.graphics.newImage(palettedata)
+	paletteCamera = Camera(0,0)
+	paletteCamera:zoomTo(dp(22))
+	local cx, cy = paletteCamera:worldCoords(sw - dp(4), sh)
+	local wx, wy = paletteCamera:worldCoords(0, dp(48))
+	paletteCamera:lookAt(paletteImage:getWidth() - cx, (-wy))
 end
 
 function drawPaletteGrid(color)

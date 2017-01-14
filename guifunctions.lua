@@ -39,6 +39,7 @@ function gui.load()
 	gui.loadSaveMenu()
 	gui.loadViewMenu()
 	gui.loadNewFileMenu()
+	gui.loadPaletteManager()
 end 
 
 function gui.loadFileMenu()
@@ -128,6 +129,28 @@ function gui.toggleFileBrowser()
 		end
 	else gooi.removeComponent(fileBrowser) fileBrowser = nil
 	end
+end
+
+function gui.loadPaletteManager()
+	gooi.setStyle(window)
+	menus.paletteManager = gooi.newPanel(compactWindowArgs):setGroup("paletteManager"):setOpaque(true)
+	:setColspan(1, 1, 4)
+	menus.paletteManager.components = {}; local comps = menus.paletteManager.components
+	local layout = menus.paletteManager
+	comps.Label = gooi.newLabel("SELECT PALETTE"):setAlign("center"):setGroup("paletteManager")
+	layout:add(comps.Label, "1,1")
+	gooi.setStyle(raisedbutton)
+	local palettes = love.filesystem.getDirectoryItems("palettes/")
+	for i, v in pairs(palettes) do
+		layout:add(gooi.newButton({text = v, align = "left"}):setGroup("paletteManager")
+			:onRelease(function()
+				loadPalette("palettes/"..v)
+				gui.toggleMenu(menus.paletteManager)
+				gui.toggleColorPicker()
+			end))
+	end
+	
+	gui.toggleMenu(menus.paletteManager)
 end
 
 function gui.loadSaveMenu()
