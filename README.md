@@ -1,6 +1,6 @@
 #Dither
 An Android pixel art editor made with [LÖVE](love2d.org).
-![Screenshot(https://goo.gl/photos/KSbK2WDbvrqnsgNF9)
+![Screenshot](https://goo.gl/photos/KSbK2WDbvrqnsgNF9)
 ##Install
 1. **Download** and install [**LÖVE** For Android](https://play.google.com/store/apps/details?id=org.love2d.android).
 
