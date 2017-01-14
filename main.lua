@@ -53,8 +53,8 @@ function love.update(dt)
 		camera:zoomTo(1)
 		alphaCamera:zoomTo(.5)
 	else
-		camera:zoomTo(zoomslider.value *dp(50))
-		alphaCamera:zoomTo(zoomslider.value *dp(25))
+		camera:zoomTo(zoomslider.value *80)
+		alphaCamera:zoomTo(zoomslider.value *40)
 	end
 	
 	if menus.viewMenu.components.gridCheck.checked then
@@ -102,7 +102,7 @@ function love.draw()
 	gooi.draw("newFileMenu")
 	gooi.draw("colorpicker")
 	lg.setColor(255, 255, 255)
-	love.graphics.print("Current FPS: "..tostring(love.timer.getFPS( )), 10, 10)
+	--love.graphics.print("Current FPS: "..tostring(love.timer.getFPS( )), 10, 10)
 end
 
 function love.touchpressed(id, x, y)
