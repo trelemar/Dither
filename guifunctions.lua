@@ -72,6 +72,11 @@ function gui.loadFileMenu()
 				gui.toggleMenu(menus.fileWindow)
 			end
 		end)
+		comps.saveFileAs = gooi.newButton("SAVE AS"):
+		onRelease(function()
+			gui.toggleMenu(menus.fileWindow)
+			gui.toggleMenu(menus.saveMenu)
+		end)
 		for i, v in pairs(comps) do
 		v:setGroup("fileMenu")
 		end
@@ -79,6 +84,7 @@ function gui.loadFileMenu()
 		menus.fileWindow:add(comps.newFile, "2,1")
 		menus.fileWindow:add(comps.openFile, "3,1")
 		menus.fileWindow:add(comps.saveFile, "4,1")
+		menus.fileWindow:add(comps.saveFileAs, "5,1")
 		
 		gooi.setGroupVisible("fileMenu", false)
 		gooi.setGroupEnabled("fileMenu", false)

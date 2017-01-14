@@ -14,6 +14,7 @@ require "guifunctions"
 require "colorpicker"
 require "toolbar"
 function love.load()
+	love.filesystem.createDirectory("palettes/")
 	touches = {}
 	history = {}
 	lg.setFont(fonts.rr)
@@ -27,7 +28,6 @@ function love.load()
 	alphaBG:setWrap("repeat")
 	updateAlphaQuad()
 	alphaCamera = Camera(newdata:getWidth(), newdata:getHeight())
-
 	candraw = true
 	currentcolor = {0, 0, 0, 255}
 	gui.load()
