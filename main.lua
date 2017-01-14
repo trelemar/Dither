@@ -43,9 +43,11 @@ function love.load()
 	xamm = 0
 	yamm = 0
 	imgQuad = love.graphics.newQuad(0, 0, newdata:getWidth(), newdata:getHeight(), newdata:getWidth(), newdata:getHeight())
+	gridCanvas = love.graphics.newCanvas()
 end
 
 function love.update(dt)
+	
 	Timer.update(dt)
 	if zoomslider.value <= 0.01 then
 		camera:zoomTo(1)
@@ -54,12 +56,20 @@ function love.update(dt)
 		camera:zoomTo(zoomslider.value *dp(50))
 		alphaCamera:zoomTo(zoomslider.value *dp(25))
 	end
+	
+	if menus.viewMenu.components.gridCheck.checked then
+		lg.setCanvas(gridCanvas)
+		lg.clear()
+		drawGrid(1, 1, {0, 0, 0, 50})
+		drawGrid(8, 8, {255, 0, 0, 200})
+		drawGrid(16, 16, {0, 0, 255, 200})
+		lg.setCanvas()
+	end
+	
 	gooi.update(dt)
 	colorpicker.update(dt)
 	cp.bgColor = currentcolor
 	toolbar.update(dt)
-	
-	
 	showgrid = menus.viewMenu.components.gridCheck.checked
 end
 
@@ -75,10 +85,9 @@ function love.draw()
 	camera:attach()
 	lg.draw(currentimage, imgQuad, 0, 0)
 	camera:detach()
-	
-	drawGrid(1, 1, {0, 0, 0, 50})
-	drawGrid(8, 8, {255, 0, 0, 250})
-	drawGrid(16, 16, {0, 0, 255, 250})
+	if showgrid then
+	lg.draw(gridCanvas)
+	end
 	lg.setColor(255, 255, 255)
 	paletteCamera:attach()
 	lg.draw(paletteImage, 0, 0)
@@ -93,6 +102,7 @@ function love.draw()
 	gooi.draw("newFileMenu")
 	gooi.draw("colorpicker")
 	lg.setColor(255, 255, 255)
+	love.graphics.print("Current FPS: "..tostring(love.timer.getFPS( )), 10, 10)
 end
 
 function love.touchpressed(id, x, y)
@@ -185,7 +195,6 @@ function love.keypressed(key)
 end
 
 function drawGrid(xsize, ysize, color)
-	if showgrid then
 		love.graphics.setColor(color)
 		love.graphics.setLineWidth(dp(1))
 		for i = xsize, (currentimage:getWidth() - 1), xsize do
@@ -199,7 +208,6 @@ function drawGrid(xsize, ysize, color)
 			local x2, y2 = camera:cameraCoords(currentimage:getWidth(), i)
 			love.graphics.line(x, y, x2, y2)
 		end
-	end
 end
 
 function drawPaletteGrid(color)
