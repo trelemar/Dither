@@ -2,7 +2,8 @@
 fonts = {
 	rm = lg.newFont("fonts/Roboto-Medium.ttf", dp(14)),
 	rr = lg.newFont("fonts/Roboto-Regular.ttf", dp(16)),
-	header = lg.newFont("fonts/Roboto-Bold.ttf", dp(16))
+	header = lg.newFont("fonts/Roboto-Bold.ttf", dp(16)),
+	rn = lg.newFont("fonts/RobotoCondensed-Regular.ttf", dp(14)),
 }
 
 colors = {
@@ -27,7 +28,7 @@ raisedbutton = {
 	bgColor = colors.primary,
 	fgColor = colors.white,
 	radius = dp(2),
-	innerRadius = dp(2)
+	innerRadius = dp(2),
 }
 	
 raisedbuttonlight = {
@@ -48,10 +49,11 @@ flatbutton = {
 }
 	
 list = {
-	font = fonts.rr,
-	bgColor = {200, 200, 200, 0},
-	fgColor = colors.black,
-	radius = dp(2)
+	font = fonts.rn,
+	bgColor = {205, 205, 225},
+	fgColor = colors.primary,
+	radius = dp(2),
+	innerRadius = dp(2),
 }
 	
 dialog = {
@@ -70,8 +72,8 @@ window = {
 	radius = dp(2),
 	fgColor = colors.primary,
 	showBorder = true,
-	borderWidth = dp(4),
-	borderColor = colors.primaryl
+	borderWidth = dp(6),
+	borderColor = colors.primaryl,
 }
 
 defWindowArgs = {

@@ -94,6 +94,7 @@ function love.draw()
 	gooi.draw("fileMenu")
 	gooi.draw("saveMenu")
 	gooi.draw("viewMenu")
+	gooi.draw("optionsMenu")
 	gooi.draw("newFileMenu")
 	gooi.draw("colorpicker")
 	gooi.draw("paletteManager")
@@ -165,12 +166,12 @@ function love.touchmoved(id, x, y)
 	gooi.moved(id, x, y)
 	if tool ~= tools.pan and tool ~= tools.move and id == touches[1] then
 		touchx, touchy = camera:worldCoords(x, y)
-	elseif tool == tools.pan and y > dp(46) and id == touches[1] then
+	elseif candraw and tool == tools.pan and y > dp(46) and id == touches[1] then
 		local newtouchx, newtouchy = camera:worldCoords(x, y)
 		camera:move(touchx - newtouchx, touchy - newtouchy)
 		alphaCamera:move((touchx-newtouchx)*2, (touchy - newtouchy)*2)
 	end
-	if tool == tools.move and y > dp(46) and id == touches[1] then
+	if candraw and tool == tools.move and y > dp(46) and id == touches[1] then
 		
 		local newtouchx, newtouchy = camera:worldCoords(x, y)
 		xamm = (math.ceil(touchx - newtouchx) * -1)
