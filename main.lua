@@ -14,6 +14,10 @@ require "guifunctions"
 require "colorpicker"
 require "toolbar"
 function love.load()
+	grids = {}
+	table.insert(grids, {1, 1, gridcolors.black, true, 1})
+	table.insert(grids, {8, 8, gridcolors.red, true, .1})
+	table.insert(grids, {16, 16, gridcolors.blue, true, 1})
 	love.filesystem.createDirectory("palettes/")
 	touches = {}
 	history = {}
@@ -55,9 +59,9 @@ function love.update(dt)
 	if menus.viewMenu.components.gridCheck.checked then
 		lg.setCanvas(gridCanvas)
 		lg.clear()
-		drawGrid(1, 1, {0, 0, 0, 50})
-		drawGrid(8, 8, {255, 0, 0, 200})
-		drawGrid(16, 16, {0, 0, 255, 200})
+		for i, v in pairs(grids) do
+			drawGrid(grids[i][1], grids[i][2], grids[i][3], grids[i][4], grids[i][5])
+		end
 		lg.setCanvas()
 	end
 	
@@ -98,6 +102,7 @@ function love.draw()
 	gooi.draw("newFileMenu")
 	gooi.draw("colorpicker")
 	gooi.draw("paletteManager")
+	gooi.draw("gridManager")
 	lg.setColor(255, 255, 255)
 	--love.graphics.print("Current FPS: "..tostring(love.timer.getFPS( )), 10, 10)
 end
@@ -191,19 +196,23 @@ function love.keypressed(key)
 	gooi.keypressed(key)
 end
 
-function drawGrid(xsize, ysize, color)
+function drawGrid(xsize, ysize, color, enabled, thickness)
 		love.graphics.setColor(color)
-		love.graphics.setLineWidth(dp(1))
+		love.graphics.setLineWidth(thickness)
 		for i = xsize, (currentimage:getWidth() - 1), xsize do
+			if enabled then
 			local x, y = camera:cameraCoords(i, 0)
 			local x2, y2 = camera:cameraCoords(i, currentimage:getHeight())
 			love.graphics.line(x, y, x2, y2)
+			end
 		end
 		
 		for i = ysize, (currentimage:getHeight() - 1), ysize do
+			if enabled then
 			local x, y = camera:cameraCoords(0, i)
 			local x2, y2 = camera:cameraCoords(currentimage:getWidth(), i)
 			love.graphics.line(x, y, x2, y2)
+			end
 		end
 end
 

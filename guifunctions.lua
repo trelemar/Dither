@@ -41,6 +41,7 @@ function gui.load()
 	gui.loadOptionsMenu()
 	gui.loadNewFileMenu()
 	gui.loadPaletteManager()
+	gui.loadGridManager()
 end 
 
 function gui.loadFileMenu()
@@ -101,7 +102,7 @@ function gui.toggleFileBrowser()
 	if fileBrowser == nil then
 		gooi.setStyle(window)
 		fileBrowser = gooi.newPanel(largeWindowArgs):setOpaque(true)
-		:setColspan(1, 1, 3)
+		:setColspan(1, 1, 5)
 		local dir = love.filesystem.getSaveDirectory()
 		local Label = gooi.newLabel(dir):setAlign("left")
 		Label.font = fonts.rn
@@ -119,7 +120,7 @@ function gui.toggleFileBrowser()
 		local items = love.filesystem.getDirectoryItems("")
 		for i,filename in pairs(items) do
 			if string.find(filename, ".png") then
-				fileBrowser:add(gooi.newButton({text = filename, align = "right"})
+				fileBrowser:add(gooi.newButton({text = string.sub(filename, 1, 8).."...", align = "right"})
 				:onRelease(function()
 					newdata = love.image.newImageData(filename)
 					currentimage = love.graphics.newImage(newdata)
@@ -135,6 +136,7 @@ function gui.toggleFileBrowser()
 				end))
 			end
 		end
+		gooi.setStyle(raisedbutton)
 	else gooi.removeComponent(fileBrowser) fileBrowser = nil
 	end
 end
@@ -204,16 +206,105 @@ function gui.loadOptionsMenu()
 	gooi.setStyle(window)
 	menus.optionsMenu = gooi.newPanel(compactWindowArgs):setOpaque(true):setGroup("optionsMenu")
 	:setColspan(1, 1, 4)
+	:setColspan(2, 1, 2)
 	menus.optionsMenu.components = {}
 	local comps = menus.optionsMenu.components
 	comps.Label = gooi.newLabel("OPTIONS"):setAlign("center")
 	gooi.setStyle(raisedbutton)
+	comps.gridcfg = gooi.newButton("CONFIGURE GRIDS"):setAlign("center")
+	:onRelease(function()
+		gui.toggleMenu(menus.optionsMenu)
+		gui.toggleMenu(menus.gridManager)
+	end)
 	
 	for i, v in pairs(comps) do
 		v:setGroup("optionsMenu")
-		menus.optionsMenu:add(v)
 	end
+	menus.optionsMenu:add(comps.Label, "1,1")
+	:add(comps.gridcfg, "2,1")
 	gui.toggleMenu(menus.optionsMenu)
+end
+
+function gui.loadGridManager()
+	gooi.setStyle(window)
+	menus.gridManager = gooi.newPanel(largeWindowArgs):setGroup("gridManager"):setOpaque(true)
+	:setColspan(1,1,5)
+	:setColspan(8,1,2)
+	:setColspan(8,4,2)
+	menus.gridManager.components = {}
+	local comps = menus.gridManager.components
+	comps.Label = gooi.newLabel("CONFIGURE GRIDS"):setGroup("gridManager"):setAlign("center")
+	gooi.setStyle(list)
+	comps.eLabel = gooi.newLabel("ENABLED"):setGroup("gridManager"):setAlign("center")
+	comps.sxLabel = gooi.newLabel("WIDTH"):setGroup("gridManager"):setAlign("center")
+	comps.syLabel = gooi.newLabel("HEIGHT"):setGroup("gridManager"):setAlign("center")
+	comps.tLabel = gooi.newLabel("THICKNESS"):setGroup("gridManager"):setAlign("center")
+	comps.cLabel = gooi.newLabel("COLOR"):setGroup("gridManager"):setAlign("center")
+	gooi.setStyle(raisedbutton)
+	comps.apply = gooi.newButton("APPLY"):setGroup("gridManager"):onRelease(function()
+		gui.toggleMenu(menus.gridManager)
+		grids[1][1] = comps.g1sx:getText()
+		grids[2][1] = comps.g2sx:getText()
+		grids[3][1] = comps.g3sx:getText()
+		grids[1][2] = comps.g1sy:getText()
+		grids[2][2] = comps.g2sy:getText()
+		grids[3][2] = comps.g3sy:getText()
+		grids[1][4] = comps.g1e.checked
+		grids[2][4] = comps.g2e.checked
+		grids[3][4] = comps.g3e.checked
+		grids[1][5] = comps.g1thickness.value
+		grids[2][5] = comps.g2thickness.value
+		grids[3][5] = comps.g3thickness.value
+		grids[1][3] = comps.g1color.bgColor
+		grids[2][3] = comps.g1color.bgColor
+		grids[3][3] = comps.g1color.bgColor
+	end)
+	comps.apply.bgColor = colors.secondary
+	comps.cancel = gooi.newButton("CANCEL"):setGroup("gridManager"):onRelease(function()
+		gui.toggleMenu(menus.gridManager)
+	end)
+	comps.cancel.bgColor = colors.tertairy
+	
+	comps.g1sx = gooi.newText(tostring(grids[1][1])):setGroup("gridManager")
+	comps.g1sy = gooi.newText(tostring(grids[1][2])):setGroup("gridManager")
+	comps.g1e = gooi.newCheck({text = "", checked = grids[1][4]}):setGroup("gridManager"):setOpaque(false)
+	comps.g1thickness = gooi.newSpinner({min = 1, max = 8, value = 1, group = "gridManager"})
+	comps.g1color = gooi.newButton(""):setGroup("gridManager"):onPress(function(self) self.bgColor = currentcolor end); comps.g1color.bgColor = gridcolors.black
+	comps.g2sx = gooi.newText(tostring(grids[2][1])):setGroup("gridManager")
+	comps.g2sy = gooi.newText(tostring(grids[2][2])):setGroup("gridManager")
+	comps.g2e = gooi.newCheck({text = "", checked = grids[2][4]}):setGroup("gridManager"):setOpaque(false)
+	comps.g2thickness = gooi.newSpinner({min = 1, max = 8, value = 1, group = "gridManager"})
+	comps.g2color = gooi.newButton(""):setGroup("gridManager"):onPress(function(self) self.bgColor = currentcolor end); comps.g2color.bgColor = gridcolors.red
+	comps.g3sx = gooi.newText(tostring(grids[3][1])):setGroup("gridManager")
+	comps.g3sy = gooi.newText(tostring(grids[3][2])):setGroup("gridManager")
+	comps.g3e = gooi.newCheck({text = "", checked = grids[3][4]}):setGroup("gridManager"):setOpaque(false)
+	comps.g3thickness = gooi.newSpinner({min = 1, max = 8, value = 1, group = "gridManager"})
+	comps.g3color = gooi.newButton(""):setGroup("gridManager"):onPress(function(self) self.bgColor = currentcolor end); comps.g3color.bgColor = gridcolors.blue
+	menus.gridManager:add(comps.Label, "1,1")
+	:add(comps.eLabel, "2,1")
+	:add(comps.sxLabel, "2,2")
+	:add(comps.syLabel, "2,3")
+	:add(comps.tLabel, "2,4")
+	:add(comps.cLabel, "2,5")
+	menus.gridManager:add(comps.g1sx, "3,2")
+	:add(comps.g2sx, "4,2")
+	:add(comps.g3sx, "5,2")
+	:add(comps.g1sy, "3,3")
+	:add(comps.g2sy, "4,3")
+	:add(comps.g3sy, "5,3")
+	:add(comps.g1e, "3,1")
+	:add(comps.g2e, "4,1")
+	:add(comps.g3e, "5,1")
+	:add(comps.g1thickness, "3,4")
+	:add(comps.g2thickness, "4,4")
+	:add(comps.g3thickness, "5,4")
+	:add(comps.g1color, "3,5")
+	:add(comps.g2color, "4,5")
+	:add(comps.g3color, "5,5")
+	menus.gridManager:add(comps.apply, "8,4")
+	:add(comps.cancel, "8,1")
+	
+	gui.toggleMenu(menus.gridManager)
 end
 
 function gui.loadViewMenu()

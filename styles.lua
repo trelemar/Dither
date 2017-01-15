@@ -17,6 +17,11 @@ colors = {
 	white = {255,255,255},
 	black = {0,0,0}
 }
+gridcolors = {
+	black = {0, 0, 0},
+	red = {255, 0, 0},
+	blue = {0, 0, 255}
+}
 
 header = {
 	font = fonts.header,
@@ -97,5 +102,5 @@ largeWindowArgs = {
 	y = sh/6,
 	w = sw/8 * 6,
 	h = sh/6 * 4,
-	layout = "grid 8x3"
+	layout = "grid 8x5"
 }
