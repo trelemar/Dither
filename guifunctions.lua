@@ -21,13 +21,13 @@ function gui.load()
 	gooi.setStyle(flatbutton)
 	file = nB("FILE", 0, 0, dp(60), dp(36)):onRelease(function() gui.toggleMenu(menus.fileWindow) end):setAlign("left")
 	options = nB("OPTIONS", 0, 0, dp(60), dp(36)):onRelease(function() gui.toggleMenu(menus.optionsMenu) end)
-	edit = nB("EDIT", 0, 0, dp(60), dp(36)):setAlign("left")
+	image = nB("IMAGE", 0, 0, dp(60), dp(36)):setAlign("left")
 	view = nB("VIEW", 0, 0, dp(60), dp(36)):setAlign("left"):onPress(function() gui.toggleMenu(menus.viewMenu) end)
 	selection = nB("SELECTION", 0, 0, dp(60), dp(36)):setAlign("left")
 	glo = gooi.newPanel(0, 0, sw, sh, "game")
 	--glo:add(redo, "b-r")
 	glo:add(undo, "b-r") glo:add(options, "t-r")
-	glo:add(file, "t-l") glo:add(edit, "t-l") glo:add(view, "t-l")
+	glo:add(file, "t-l") glo:add(image, "t-l") glo:add(view, "t-l")
 	glo:add(selection, "t-l")
 	glo:add(zoomslider, "t-r")
 	glo:add(gooi.newLabel("ZOOM:"), "t-r")
@@ -191,6 +191,13 @@ function gui.loadSaveMenu()
 		
 		gooi.setGroupEnabled("saveMenu", false)
 		gooi.setGroupVisible("saveMenu", false)
+end
+
+function gui.loadImageMenu()
+	gooi.setStyle(window)
+	menus.imageMenu = gooi.newPanel(compactWindowArgs):setOpaque(true):setGroup("imageMenu")
+	menus.imageMenu.components = {}
+	local comps = menus.imageMenu.components
 end
 
 function gui.loadOptionsMenu()
