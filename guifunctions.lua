@@ -256,8 +256,8 @@ function gui.loadGridManager()
 		grids[2][5] = comps.g2thickness.value
 		grids[3][5] = comps.g3thickness.value
 		grids[1][3] = comps.g1color.bgColor
-		grids[2][3] = comps.g1color.bgColor
-		grids[3][3] = comps.g1color.bgColor
+		grids[2][3] = comps.g2color.bgColor
+		grids[3][3] = comps.g3color.bgColor
 	end)
 	comps.apply.bgColor = colors.secondary
 	comps.cancel = gooi.newButton("CANCEL"):setGroup("gridManager"):onRelease(function()
