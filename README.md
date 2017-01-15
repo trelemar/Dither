@@ -15,6 +15,7 @@ An Android pixel art editor made with [LÖVE](love2d.org).
 - Pan and Scale Viewport.
 - **Editing Tools:** Pencil, Eraser, Floodfill, Move, Eyedropper.
 - Custom color palettes.
+- Customizable grids.
 - Colorpicker with RGB slider
 - Density independent GUI.
 - **File Operations:**
