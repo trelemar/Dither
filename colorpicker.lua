@@ -36,8 +36,8 @@ function colorpicker.load()
 	end)
 	colorpicker.aslider = gooi.newSlider({value = 1, group = "colorpicker"}):vertical()
 	colorpicker.aslider.bgColor = colors.primaryl
-	colorpicker.aslider:setBounds(colorpicker.layout.x + colorpicker.layout.w + dp(10), colorpicker.layout.y, dp(46), colorpicker.layout.h - dp(52))
-	colorpicker.atext = gooi.newLabel(255):setOpaque(true):setGroup("colorpicker"):setBounds(colorpicker.aslider.x, colorpicker.aslider.y + colorpicker.aslider.h + dp(4), dp(46), dp(46)):setAlign("center")
+	colorpicker.aslider:setBounds(colorpicker.layout.x + colorpicker.layout.w + dp(6), colorpicker.layout.y, colorpicker.layout.h/6, (colorpicker.layout.h/6) *5)
+	colorpicker.atext = gooi.newLabel(255):setOpaque(true):setGroup("colorpicker"):setBounds(colorpicker.aslider.x, colorpicker.aslider.y + colorpicker.aslider.h + dp(2), colorpicker.aslider.w, colorpicker.aslider.w):setAlign("center")
 
 	
 	colorpicker.layout:add(colorpicker.header, "1,1")

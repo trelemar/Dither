@@ -69,12 +69,7 @@ function drawFunctions()
 			if pencilSize == 1 then
 				newdata:setPixel(touchx, touchy, currentcolor)
 			elseif pencilSize ~= 1 then
-				for i = 0, pencilSize do
-					newdata:setPixel(touchx + i/2, touchy, currentcolor)
-					newdata:setPixel(touchx - i/2, touchy, currentcolor)
-					--newdata:setPixel(touchx, touchy + i/2, currentcolor)
-					--newdata:setPixel(touchx, touchy - i/2, curremtcolor)
-				end
+				--biggerPencil()
 			end
 		elseif tool == tools.eraser then
 			newdata:setPixel(touchx, touchy, 0, 0, 0, 0)

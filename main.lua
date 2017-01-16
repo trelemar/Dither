@@ -43,6 +43,7 @@ function love.load()
 	yamm = 0
 	imgQuad = love.graphics.newQuad(0, 0, newdata:getWidth(), newdata:getHeight(), newdata:getWidth(), newdata:getHeight())
 	gridCanvas = love.graphics.newCanvas()
+	shapeCanvas = love.graphics.newCanvas(newdata:getWidth(), newdata:getHeight())
 end
 
 function love.update(dt)
@@ -83,6 +84,7 @@ function love.draw()
 	
 	camera:attach()
 	lg.draw(currentimage, imgQuad, 0, 0)
+	lg.draw(shapeCanvas, 0, 0)
 	camera:detach()
 	if showgrid then
 	lg.draw(gridCanvas)
