@@ -34,6 +34,12 @@ function colorpicker.load()
 		gui.toggleColorPicker()
 		gui.toggleMenu(menus.paletteManager)
 	end)
+	colorpicker.aslider = gooi.newSlider({value = 1, group = "colorpicker"}):vertical()
+	colorpicker.aslider.bgColor = colors.primaryl
+	colorpicker.aslider:setBounds(colorpicker.layout.x + colorpicker.layout.w + dp(10), colorpicker.layout.y, dp(46), colorpicker.layout.h - dp(52))
+	colorpicker.atext = gooi.newLabel(255):setOpaque(true):setGroup("colorpicker"):setBounds(colorpicker.aslider.x, colorpicker.aslider.y + colorpicker.aslider.h + dp(4), dp(46), dp(46)):setAlign("center")
+
+	
 	colorpicker.layout:add(colorpicker.header, "1,1")
 	colorpicker.layout:add(colorpicker.currentcolorbox, "2,1")
 	colorpicker.layout:add(colorpicker.colorbox, "2,3")
@@ -54,16 +60,17 @@ end
 local c = colorpicker
 
 function confirmColor()
-	currentcolor = {c.rslider.value * 255, c.gslider.value * 255, c.bslider.value * 255, 255}
+	currentcolor = {c.rslider.value * 255, c.gslider.value * 255, c.bslider.value * 255, c.aslider.value * 255}
 	cp.bgColor = currentcolor
 end
 
 function colorpicker.update(dt)
 	if colorpicker.enabled then
-		colorpicker.colorbox.bgColor = {c.rslider.value * 255, c.gslider.value * 255, c.bslider.value * 255}
+		colorpicker.colorbox.bgColor = {c.rslider.value * 255, c.gslider.value * 255, c.bslider.value * 255, c.aslider.value * 255}
 		c.rtext.text = math.ceil(c.rslider.value * 255)
 		c.gtext.text = math.ceil(c.gslider.value * 255)
 		c.btext.text = math.ceil(c.bslider.value * 255)
+		c.atext.text = math.ceil(c.aslider.value * 100).."%"
 	end
 end
 
