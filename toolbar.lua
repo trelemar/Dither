@@ -61,17 +61,30 @@ function toolbar.update(dt)
 		pencilSize = pencilSlider.value
 	end
 end
-
 function drawFunctions()
 	 if candraw and touchx ~= nil and touchx >= 0 and touchx <= currentimage:getWidth() and touchy >=0 and touchy <= currentimage:getHeight() then
 		--coordlabel.text = "x: " .. touchx
 		if tool == tools.pencil then
 			if pencilSize == 1 then
+				if menus.optionsMenu.components.xmirror.checked then
+					local w = newdata:getWidth()
+					local c = w/2
+					local p = tmath.distanceFromCenter(touchx, w)
+					newdata:setPixel(p + c, touchy, currentcolor)
+					newdata:setPixel(c - p, touchy, currentcolor)
+				end
 				newdata:setPixel(touchx, touchy, currentcolor)
 			elseif pencilSize ~= 1 then
 				--biggerPencil()
 			end
 		elseif tool == tools.eraser then
+			if menus.optionsMenu.components.xmirror.checked then
+					local w = newdata:getWidth()
+					local c = w/2
+					local p = tmath.distanceFromCenter(touchx, w)
+					newdata:setPixel(p + c, touchy, 0, 0, 0, 0)
+					newdata:setPixel(c - p, touchy, 0, 0, 0, 0)
+				end
 			newdata:setPixel(touchx, touchy, 0, 0, 0, 0)
 		elseif tool == tools.eyedropper then
 			currentcolor = {newdata:getPixel(touchx, touchy)}

@@ -207,6 +207,7 @@ function gui.loadOptionsMenu()
 	menus.optionsMenu = gooi.newPanel(compactWindowArgs):setOpaque(true):setGroup("optionsMenu")
 	:setColspan(1, 1, 4)
 	:setColspan(2, 1, 2)
+	:setColspan(3, 1, 2)
 	menus.optionsMenu.components = {}
 	local comps = menus.optionsMenu.components
 	comps.Label = gooi.newLabel("OPTIONS"):setAlign("center")
@@ -216,12 +217,14 @@ function gui.loadOptionsMenu()
 		gui.toggleMenu(menus.optionsMenu)
 		gui.toggleMenu(menus.gridManager)
 	end)
+	comps.xmirror = gooi.newCheck("MIRROR X")
 	
 	for i, v in pairs(comps) do
 		v:setGroup("optionsMenu")
 	end
 	menus.optionsMenu:add(comps.Label, "1,1")
 	:add(comps.gridcfg, "2,1")
+	:add(comps.xmirror, "3,1")
 	gui.toggleMenu(menus.optionsMenu)
 end
 
