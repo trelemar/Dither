@@ -42,6 +42,11 @@ function gui.load()
 	gui.loadNewFileMenu()
 	gui.loadPaletteManager()
 	gui.loadGridManager()
+	do local tbs = gooi.getByType("text")
+		for i, v in pairs(tbs) do
+		v:setStyle(tb)
+		end
+	end
 end 
 
 function gui.loadFileMenu()
@@ -208,6 +213,7 @@ function gui.loadOptionsMenu()
 	:setColspan(1, 1, 4)
 	:setColspan(2, 1, 2)
 	:setColspan(3, 1, 2)
+	:setColspan(3, 3, 2)
 	menus.optionsMenu.components = {}
 	local comps = menus.optionsMenu.components
 	comps.Label = gooi.newLabel("OPTIONS"):setAlign("center")
@@ -218,6 +224,7 @@ function gui.loadOptionsMenu()
 		gui.toggleMenu(menus.gridManager)
 	end)
 	comps.xmirror = gooi.newCheck("MIRROR X")
+	comps.ymirror = gooi.newCheck("MIRROR Y")
 	
 	for i, v in pairs(comps) do
 		v:setGroup("optionsMenu")
@@ -225,6 +232,7 @@ function gui.loadOptionsMenu()
 	menus.optionsMenu:add(comps.Label, "1,1")
 	:add(comps.gridcfg, "2,1")
 	:add(comps.xmirror, "3,1")
+	:add(comps.ymirror, "3,3")
 	gui.toggleMenu(menus.optionsMenu)
 end
 
@@ -306,7 +314,6 @@ function gui.loadGridManager()
 	:add(comps.g3color, "5,5")
 	menus.gridManager:add(comps.apply, "8,4")
 	:add(comps.cancel, "8,1")
-	
 	gui.toggleMenu(menus.gridManager)
 end
 

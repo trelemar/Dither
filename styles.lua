@@ -35,6 +35,14 @@ raisedbutton = {
 	radius = dp(2),
 	innerRadius = dp(2),
 }
+
+tb = {
+	font = fonts.rm,
+	bgColor = colors.black,
+	fgColor = colors.primaryl,
+	radius = dp(2),
+	innerRadius = dp(2)
+}
 	
 raisedbuttonlight = {
 	font = fonts.rm,
@@ -79,6 +87,14 @@ window = {
 	showBorder = true,
 	borderWidth = dp(6),
 	borderColor = colors.primaryl,
+}
+
+toast = {
+	font = fonts.rr,
+	bgColor = colors.primary,
+	fgColor = colors.white,
+	radius = dp(21),
+	align = "center"
 }
 
 defWindowArgs = {
