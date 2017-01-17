@@ -67,6 +67,7 @@ function love.update(dt)
 		lg.setCanvas()
 	end
 	
+	
 	gooi.update(dt)
 	colorpicker.update(dt)
 	cp.bgColor = currentcolor
@@ -98,6 +99,7 @@ function love.draw()
 	lg.setColor(colors.primary)
 	lg.rectangle("fill", 0, 0, sw, dp(44))
 	gooi.draw()
+	gooi.draw("toolbar")
 	gooi.draw("fileMenu")
 	gooi.draw("saveMenu")
 	gooi.draw("viewMenu")

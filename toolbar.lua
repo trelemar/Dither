@@ -34,6 +34,7 @@ function toolbar.load()
 	:onRelease(function() gui.toast("Move") tool = tools.move end)
 	
 	for i, v in pairs(tools) do
+		v:setGroup("toolbar")
 		v:onPress(function() tool = none end)
 	end
 	
