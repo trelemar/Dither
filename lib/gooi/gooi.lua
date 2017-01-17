@@ -126,7 +126,7 @@ function gooi.newLabel(text, x, y, w, h)
 		if self.icon then
 			local xImg = math.floor(self.x + self.h / 2)
 			love.graphics.setColor(255, 255, 255)
-			if not self.enabled then love.graphics.setColor(63, 63, 63) end
+			if not self.enabled then love.graphics.setColor(0, 0, 0) end
 
 			if t:len() == 0 then
 				xImg = math.floor(self.x + self.w / 2)
@@ -244,7 +244,7 @@ function gooi.newButton(text, x, y, w, h)
 				xImg = math.floor(self.x + self.w / 2)
 			end
 			love.graphics.setColor(255, 255, 255)
-			if not self.enabled then love.graphics.setColor(63, 63, 63) end
+			if not self.enabled then love.graphics.setColor(0, 0, 0) end
 			love.graphics.draw(self.icon, xImg, math.floor(self.y + self.h / 2 + self.pressedMove), 0, 1, 1,
 				math.floor(self.icon:getWidth() / 2),
 				math.floor(self.icon:getHeight() / 2))

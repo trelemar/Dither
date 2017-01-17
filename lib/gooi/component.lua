@@ -238,7 +238,7 @@ function component:draw()-- Every component has the same base:
 		love.graphics.setColor(newColor)
 
 		if not self.enabled then
-			love.graphics.setColor(63, 63, 63, self.bgColor[4])
+			love.graphics.setColor(63, 63, 83, self.bgColor[4])
 		end
 
 		local radiusCorner = self.radius
