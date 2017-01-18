@@ -3,7 +3,6 @@ function gui.load()
 	menus = {}
 	gooi.desktopMode()
 	gooi.setStyle(raisedbutton)
-	zoomslider = gooi.newSlider({w = dp(122), h = dp(36), value = 0.1})
 	--redo = nB({text = "REDO", w = dp(112), h = dp(36)}):setIcon("icons/white/ic_redo_variant.png"):setAlign("right")
 	undo = nB({text = "UNDO", x = dp(112), y = dp(16), w = dp(112), h = dp(36)}):setIcon("icons/white/ic_undo_variant.png"):setAlign("right")
 	:onRelease(function()
@@ -19,18 +18,29 @@ function gui.load()
 	end)
 	undo.bgColor = colors.tertairy
 	gooi.setStyle(flatbutton)
-	file = nB("FILE", 0, 0, dp(60), dp(36)):onRelease(function() gui.toggleMenu(menus.fileWindow) end):setAlign("left")
-	options = nB("OPTIONS", 0, 0, dp(60), dp(36)):onRelease(function() gui.toggleMenu(menus.optionsMenu) end)
-	image = nB("IMAGE", 0, 0, dp(60), dp(36)):setAlign("left")
-	view = nB("VIEW", 0, 0, dp(60), dp(36)):setAlign("left"):onPress(function() gui.toggleMenu(menus.viewMenu) end)
-	selection = nB("SELECTION", 0, 0, dp(60), dp(36)):setAlign("left")
+	menuBar = gooi.newPanel(0, 0, sw, dp(36), "grid 1x8"):setOpaque(true)
+	:setColspan(1, 6, 2)
+	menuBar.components = {
+	file = nB("FILE"):onRelease(function() gui.toggleMenu(menus.fileWindow) end),
+	options = nB("OPTIONS"):onRelease(function() gui.toggleMenu(menus.optionsMenu) end),
+	image = nB("IMAGE"),
+	view = nB("VIEW"):onPress(function() gui.toggleMenu(menus.viewMenu) end),
+	zoomslider = gooi.newSlider({w = dp(122), h = dp(36), value = 0.1}),
+	selection = nB("SELECT")
+	}
+	do local comps = menuBar.components
+	comps.zoomslider.fgColor = colors.primaryl
+	menuBar:add(comps.file, "1,1")
+	:add(comps.image, "1,2")
+	:add(comps.view, "1,3")
+	:add(comps.selection, "1,4")
+	:add(comps.zoomslider, "1,6")
+	:add(gooi.newLabel("ZOOM"):setAlign("center"), "1,6")
+	:add(comps.options, "1,8")
+	end
 	glo = gooi.newPanel(0, 0, sw, sh, "game")
 	--glo:add(redo, "b-r")
-	glo:add(undo, "b-r") glo:add(options, "t-r")
-	glo:add(file, "t-l") glo:add(image, "t-l") glo:add(view, "t-l")
-	glo:add(selection, "t-l")
-	glo:add(zoomslider, "t-r")
-	glo:add(gooi.newLabel("ZOOM:"), "t-r")
+	glo:add(undo, "b-r")
 	gooi.setStyle(raisedbutton)
 	cp = nB({x = sw - dp(50), y = undo.y - dp(50), w = dp(46), h = dp(46)}):onRelease(function() gui.toggleColorPicker() colorpicker.updateSliders() end)
 	cp.showBorder, cp.borderWidth, cp.borderColor = true, dp(2), colors.black

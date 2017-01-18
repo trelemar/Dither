@@ -50,12 +50,12 @@ end
 function love.update(dt)
 	
 	Timer.update(dt)
-	if zoomslider.value <= 0.01 then
+	if menuBar.components.zoomslider.value <= 0.01 then
 		camera:zoomTo(1)
 		alphaCamera:zoomTo(.5)
 	else
-		camera:zoomTo(zoomslider.value *80)
-		alphaCamera:zoomTo(zoomslider.value *40)
+		camera:zoomTo(menuBar.components.zoomslider.value *80)
+		alphaCamera:zoomTo(menuBar.components.zoomslider.value *40)
 	end
 	
 	if menus.viewMenu.components.gridCheck.checked then
@@ -96,9 +96,15 @@ function love.draw()
 	lg.draw(paletteImage, 0, 0)
 	paletteCamera:detach()
 	drawPaletteGrid(colors.primary)
-	lg.setColor(colors.primary)
-	lg.rectangle("fill", 0, 0, sw, dp(44))
+	--lg.setColor(colors.primary)
+	--lg.rectangle("fill", 0, 0, sw, dp(44))
 	gooi.draw()
+	do local zs = menuBar.components.zoomslider
+	lg.setColor(colors.white)
+	lg.setLineWidth(2)
+	lg.line(zs.x, zs.y + 14, zs.x, zs.h - 14)
+	lg.line(zs.x + zs.w, zs.y + 14, zs.x + zs.w, zs.h - 14)
+	end
 	gooi.draw("toolbar")
 	gooi.draw("fileMenu")
 	gooi.draw("saveMenu")
@@ -109,11 +115,13 @@ function love.draw()
 	gooi.draw("paletteManager")
 	gooi.draw("gridManager")
 	lg.setColor(0, 0, 0, 255)
+	--[[
 	if touchx and touchy then
 	lg.setFont(fonts.rr)
 	lg.print(touchx.."\n"..touchy, sw/2, sh/2)
 	end
 	lg.setColor(255, 255, 255)
+	--]]
 	--love.graphics.print("Current FPS: "..tostring(love.timer.getFPS( )), 10, 10)
 end
 
@@ -232,7 +240,7 @@ function loadPalette(path)
 	paletteCamera = Camera(0,0)
 	paletteCamera:zoomTo(dp(22))
 	local cx, cy = paletteCamera:worldCoords(sw - dp(4), sh)
-	local wx, wy = paletteCamera:worldCoords(0, dp(48))
+	local wx, wy = paletteCamera:worldCoords(0, dp(40))
 	paletteCamera:lookAt(paletteImage:getWidth() - cx, (-wy))
 end
 

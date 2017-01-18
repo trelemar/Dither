@@ -37,7 +37,7 @@ function toolbar.load()
 		v:onPress(function() tool = none end)
 	end
 	
-	toolbar.layout = gooi.newPanel(dp(2), dp(46), dp(46), dp(46*6), "grid 6x1")
+	toolbar.layout = gooi.newPanel(dp(2), dp(38), dp(46), dp(46*6), "grid 6x1")
 	tb.layout:add(tools.pencil, "1,1")
 	tb.layout:add(tools.eraser, "2,1")
 	tb.layout:add(tools.eyedropper, "3,1")
