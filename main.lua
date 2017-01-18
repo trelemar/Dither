@@ -108,6 +108,11 @@ function love.draw()
 	gooi.draw("colorpicker")
 	gooi.draw("paletteManager")
 	gooi.draw("gridManager")
+	lg.setColor(0, 0, 0, 255)
+	if touchx and touchy then
+	lg.setFont(fonts.rr)
+	lg.print(touchx.."\n"..touchy, sw/2, sh/2)
+	end
 	lg.setColor(255, 255, 255)
 	--love.graphics.print("Current FPS: "..tostring(love.timer.getFPS( )), 10, 10)
 end
@@ -116,7 +121,7 @@ function love.touchpressed(id, x, y)
 	table.insert(touches, #touches + 1, id)
 	gooi.pressed(id, x, y)
 	if id == touches[1] then
-	touchx, touchy = camera:worldCoords(x, y)
+	touchx, touchy = camera:worldCoords(math.ceil(x), math.ceil(y))
 	end
 	if y <= dp(46) or y >= undo.y or x <= dp(44) or gui.checkOpenMenus() or fileBrowser ~= nil or colorpicker.enabled then candraw = false
 	elseif y > dp(46) or x > dp(44) then candraw = true
@@ -175,15 +180,15 @@ local ql, qr, qu, qd = 0, 0, 0, 0
 function love.touchmoved(id, x, y)
 	gooi.moved(id, x, y)
 	if tool ~= tools.pan and tool ~= tools.move and id == touches[1] then
-		touchx, touchy = camera:worldCoords(x, y)
+		touchx, touchy = camera:worldCoords(math.ceil(x), math.ceil(y))
 	elseif candraw and tool == tools.pan and y > dp(46) and id == touches[1] then
-		local newtouchx, newtouchy = camera:worldCoords(x, y)
+		local newtouchx, newtouchy = camera:worldCoords(math.ceil(x), math.ceil(y))
 		camera:move(touchx - newtouchx, touchy - newtouchy)
 		alphaCamera:move((touchx-newtouchx)*2, (touchy - newtouchy)*2)
 	end
 	if candraw and tool == tools.move and y > dp(46) and id == touches[1] then
 		
-		local newtouchx, newtouchy = camera:worldCoords(x, y)
+		local newtouchx, newtouchy = camera:worldCoords(math.ceil(x), math.ceil(y))
 		xamm = (math.ceil(touchx - newtouchx) * -1)
 		yamm = (math.ceil(touchy - newtouchy) * -1)
 		imgQuad:setViewport(xamm * -1, yamm * - 1, newdata:getWidth(), newdata:getHeight())
@@ -245,6 +250,7 @@ function drawPaletteGrid(color)
 			love.graphics.line(x, y, x2, y2)
 		end
 end
+
 
 function updateAlphaQuad()
 	alphaQuad = love.graphics.newQuad(0, 0, (newdata:getWidth() * 2), (newdata:getHeight() * 2), 2, 2)

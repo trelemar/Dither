@@ -27,8 +27,6 @@ function toolbar.load()
 	:onRelease(function() gui.toast("Eyedropper") tool = tools.eyedropper end)
 	tools.fill = gooi.newButton():setIcon(icpath.."fill.png")
 	:onRelease(function() gui.toast("Flood Fill") tool = tools.fill end)
-	--tools.fill.enabled = false
-	tools.fill.enabled = false
 	tools.pan = gooi.newButton():setIcon(icpath.."cursor_move.png")
 	:onRelease(function() gui.toast("Pan Camera") tool = tools.pan end)
 	tools.move = gooi.newButton():setIcon(icpath.."cursor_pointer.png")
@@ -91,7 +89,7 @@ function drawFunctions()
 				newdata:setPixel(touchx, touchy, color)
 				end
 			elseif pencilSize ~= 1 then
-				--biggerPencil()
+				biggerPencil(touchx, touchy, pencilSize, currentcolor)
 			end
 		elseif tool == tools.eraser then
 			local color = {0, 0, 0, 0}
