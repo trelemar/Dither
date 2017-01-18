@@ -18,8 +18,8 @@ function gui.load()
 	end)
 	undo.bgColor = colors.tertairy
 	gooi.setStyle(flatbutton)
-	menuBar = gooi.newPanel(0, 0, sw, dp(36), "grid 1x8"):setOpaque(true)
-	:setColspan(1, 6, 2)
+	menuBar = gooi.newPanel(0, 0, sw, dp(34), "grid 1x10"):setOpaque(true)
+	:setColspan(1, 8, 2)
 	menuBar.components = {
 	file = nB("FILE"):onRelease(function() gui.toggleMenu(menus.fileWindow) end),
 	options = nB("OPTIONS"):onRelease(function() gui.toggleMenu(menus.optionsMenu) end),
@@ -30,13 +30,14 @@ function gui.load()
 	}
 	do local comps = menuBar.components
 	comps.zoomslider.fgColor = colors.primaryl
+	menuBar.radius = 0
 	menuBar:add(comps.file, "1,1")
 	:add(comps.image, "1,2")
 	:add(comps.view, "1,3")
 	:add(comps.selection, "1,4")
-	:add(comps.zoomslider, "1,6")
-	:add(gooi.newLabel("ZOOM"):setAlign("center"), "1,6")
-	:add(comps.options, "1,8")
+	:add(comps.zoomslider, "1,8")
+	:add(gooi.newLabel("ZOOM"):setAlign("center"), "1,8")
+	:add(comps.options, "1,10")
 	end
 	glo = gooi.newPanel(0, 0, sw, sh, "game")
 	--glo:add(redo, "b-r")

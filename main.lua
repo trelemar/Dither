@@ -131,7 +131,7 @@ function love.touchpressed(id, x, y)
 	if id == touches[1] then
 	touchx, touchy = camera:worldCoords(math.ceil(x), math.ceil(y))
 	end
-	if y <= dp(46) or y >= undo.y or x <= dp(44) or gui.checkOpenMenus() or fileBrowser ~= nil or colorpicker.enabled then candraw = false
+	if y <= menuBar.h or y >= undo.y or x <= dp(44) or gui.checkOpenMenus() or fileBrowser ~= nil or colorpicker.enabled then candraw = false
 	elseif y > dp(46) or x > dp(44) then candraw = true
 	end
 	local palx, paly = paletteCamera:worldCoords(x, y)
