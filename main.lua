@@ -37,7 +37,7 @@ function love.load()
 	currentcolor = {0, 0, 0, 255}
 	gui.load()
 	colorpicker.load()
-	toolbar.load()
+	--toolbar.load()
 	table.insert(history, 1, newdata:encode("png"))
 	imgx, imgy = 0, 0
 	xamm = 0

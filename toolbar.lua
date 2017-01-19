@@ -2,11 +2,11 @@ toolbar = {}
 local tb = toolbar
 icpath = "icons/white/ic_"
 function toolbar.load()
-	tools = {}
 	options = {}
 	showingPencilSlider = false
 	pencilSize = 1
-	tools.pencil = gooi.newButton():setIcon(icpath.."pencil.png")
+	tools = {
+	pencil = gooi.newButton():setIcon(icpath.."pencil.png")
 	:onRelease(function(self)
 		gui.toast("Pencil Tool")
 		
@@ -20,17 +20,18 @@ function toolbar.load()
 			gooi.removeComponent(pencilSlider)
 			showingPencilSlider = false
 		end
-	end)
-	tools.eraser= gooi.newButton():setIcon(icpath.."eraser.png")
-	:onRelease(function() gui.toast("Eraser Tool") tool = tools.eraser end)
-	tools.eyedropper = gooi.newButton():setIcon(icpath.."eyedropper.png")
-	:onRelease(function() gui.toast("Eyedropper") tool = tools.eyedropper end)
-	tools.fill = gooi.newButton():setIcon(icpath.."fill.png")
-	:onRelease(function() gui.toast("Flood Fill") tool = tools.fill end)
-	tools.pan = gooi.newButton():setIcon(icpath.."cursor_move.png")
-	:onRelease(function() gui.toast("Pan Camera") tool = tools.pan end)
-	tools.move = gooi.newButton():setIcon(icpath.."cursor_pointer.png")
-	:onRelease(function() gui.toast("Move") tool = tools.move end)
+	end),
+	eraser= gooi.newButton():setIcon(icpath.."eraser.png")
+	:onRelease(function(self) gui.toast("Eraser Tool") tool = self end),
+	eyedropper = gooi.newButton():setIcon(icpath.."eyedropper.png")
+	:onRelease(function(self) gui.toast("Eyedropper") tool = self end),
+	fill = gooi.newButton():setIcon(icpath.."fill.png")
+	:onRelease(function(self) gui.toast("Flood Fill") tool = self end),
+	pan = gooi.newButton():setIcon(icpath.."cursor_move.png")
+	:onRelease(function(self) gui.toast("Pan Camera") tool = self end),
+	move = gooi.newButton():setIcon(icpath.."cursor_pointer.png")
+	:onRelease(function(self) gui.toast("Move") tool = self end)
+	}
 	
 	for i, v in pairs(tools) do
 		v:setGroup("toolbar")
@@ -38,12 +39,13 @@ function toolbar.load()
 	end
 	
 	toolbar.layout = gooi.newPanel(dp(2), dp(38), dp(46), dp(46*6), "grid 6x1")
-	tb.layout:add(tools.pencil, "1,1")
-	tb.layout:add(tools.eraser, "2,1")
-	tb.layout:add(tools.eyedropper, "3,1")
-	tb.layout:add(tools.fill, "4,1")
-	tb.layout:add(tools.move, "5,1")
-	tb.layout:add(tools.pan, "6,1")
+	if toolbar.layout.y + toolbar.layout.h > cellWidget.y then
+	gooi.removeComponent(toolbar.layout)
+	toolbar.layout = gooi.newPanel(dp(2), dp(38), dp(46*2), dp(46*3), "grid 3x3")
+	end
+	for i, v in pairs(tools) do
+		toolbar.layout:add(v)
+	end
 end
 
 function toolbar.update(dt)

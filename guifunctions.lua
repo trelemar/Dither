@@ -58,6 +58,7 @@ function gui.load()
 	gui.loadPaletteManager()
 	gui.loadGridManager()
 	gui.loadCellWidget()
+	toolbar.load()
 	do local tbs = gooi.getByType("text")
 		for i, v in pairs(tbs) do
 		v:setStyle(tb)
