@@ -47,7 +47,7 @@ function gui.load()
 	--glo:add(redo, "b-r")
 	glo:add(undo, "b-r")
 	gooi.setStyle(raisedbutton)
-	cp = nB({x = sw - dp(50), y = undo.y - dp(50), w = dp(46), h = dp(46)}):onRelease(function() gui.toggleColorPicker() colorpicker.updateSliders() end)
+	cp = gooi.newRadio({x = sw - dp(50), y = undo.y - dp(50), w = dp(46), h = dp(46)}):onRelease(function() gui.toggleColorPicker() colorpicker.updateSliders() end)
 	cp.showBorder, cp.borderWidth, cp.borderColor = true, dp(2), colors.black
 	cp.bgColor = currentcolor
 	gui.loadFileMenu()
@@ -57,7 +57,7 @@ function gui.load()
 	gui.loadNewFileMenu()
 	gui.loadPaletteManager()
 	gui.loadGridManager()
-	gui.loadTimeline()
+	gui.loadCellWidget()
 	do local tbs = gooi.getByType("text")
 		for i, v in pairs(tbs) do
 		v:setStyle(tb)
@@ -422,9 +422,15 @@ function gui.loadNewFileMenu()
 		gooi.setGroupVisible("newFileMenu", false)
 end
 
-function gui.loadTimeline()
-	gooi.setStyle(window)
-	Timeline = gooi.newPanel(0, sh - (sh/4), sw, sh/4, "grid 20x8"):setOpaque(true)
+function gui.loadCellWidget()
+	cellWidget = gooi.newPanel(dp(4), sh - dp(36*2) - dp(4), dp(36 * 6), dp(36*2), "grid 2x3"):setOpaque(true)
+	:setColspan(1, 2, 2)
+	:setColspan(2, 2, 2)
+	:add(gooi.newLabel({text = "LAYER:"}), "1,1")
+	:add(gooi.newSpinner({min = 1, value = 1}), "1,2")
+	--:add(gooi.newButton({icon = icpath.."plus.png"}), "1,4")
+	:add(gooi.newLabel("FRAME:"), "2,1")
+	:add(gooi.newSpinner({min = 1, value = 1}), "2,2")
 end
 
 function gui.toggleColorPicker()
