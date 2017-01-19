@@ -18,7 +18,7 @@ function gui.load()
 	end)
 	undo.bgColor = colors.tertairy
 	gooi.setStyle(flatbutton)
-	menuBar = gooi.newPanel(0, 0, sw, dp(34), "grid 1x10"):setOpaque(true)
+	menuBar = gooi.newPanel(0, 0, sw, dp(36), "grid 1x10"):setOpaque(true)
 	:setColspan(1, 8, 2)
 	menuBar.components = {
 	file = nB("FILE"):onRelease(function() gui.toggleMenu(menus.fileWindow) end),
@@ -26,7 +26,9 @@ function gui.load()
 	image = nB("IMAGE"),
 	view = nB("VIEW"):onPress(function() gui.toggleMenu(menus.viewMenu) end),
 	zoomslider = gooi.newSlider({w = dp(122), h = dp(36), value = 0.1}),
-	selection = nB("SELECT")
+	selection = nB("SELECT"),
+	layer = nB("LAYER"),
+	frame = nB("FRAME")
 	}
 	do local comps = menuBar.components
 	comps.zoomslider.fgColor = colors.primaryl
@@ -35,6 +37,8 @@ function gui.load()
 	:add(comps.image, "1,2")
 	:add(comps.view, "1,3")
 	:add(comps.selection, "1,4")
+	:add(comps.layer, "1,5")
+	:add(comps.frame, "1,6")
 	:add(comps.zoomslider, "1,8")
 	:add(gooi.newLabel("ZOOM"):setAlign("center"), "1,8")
 	:add(comps.options, "1,10")
@@ -53,6 +57,7 @@ function gui.load()
 	gui.loadNewFileMenu()
 	gui.loadPaletteManager()
 	gui.loadGridManager()
+	gui.loadTimeline()
 	do local tbs = gooi.getByType("text")
 		for i, v in pairs(tbs) do
 		v:setStyle(tb)
@@ -103,7 +108,6 @@ function gui.loadFileMenu()
 		menus.fileWindow:add(comps.openFile, "3,1")
 		menus.fileWindow:add(comps.saveFile, "4,1")
 		menus.fileWindow:add(comps.saveFileAs, "5,1")
-		
 		gooi.setGroupVisible("fileMenu", false)
 		gooi.setGroupEnabled("fileMenu", false)
 end
@@ -416,6 +420,11 @@ function gui.loadNewFileMenu()
 		
 		gooi.setGroupEnabled("newFileMenu", false)
 		gooi.setGroupVisible("newFileMenu", false)
+end
+
+function gui.loadTimeline()
+	gooi.setStyle(window)
+	Timeline = gooi.newPanel(0, sh - (sh/4), sw, sh/4, "grid 20x8"):setOpaque(true)
 end
 
 function gui.toggleColorPicker()

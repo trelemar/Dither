@@ -102,8 +102,8 @@ function love.draw()
 	do local zs = menuBar.components.zoomslider
 	lg.setColor(colors.white)
 	lg.setLineWidth(2)
-	lg.line(zs.x, zs.y + 14, zs.x, zs.h - 14)
-	lg.line(zs.x + zs.w, zs.y + 14, zs.x + zs.w, zs.h - 14)
+	lg.line(zs.x, zs.y + dp(4), zs.x, zs.h - dp(4))
+	lg.line(zs.x + zs.w, zs.y + dp(4), zs.x + zs.w, zs.h - dp(4))
 	end
 	gooi.draw("toolbar")
 	gooi.draw("fileMenu")
