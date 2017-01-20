@@ -11,6 +11,7 @@ function toolbar.load()
 		gui.toast("Pencil Tool")
 		
 		tool = tools.pencil
+		--[[
 		if tool == tools.pencil and not showingPencilSlider then
 			showingPencilSlider = true
 			gooi.setStyle(raisedbutton)
@@ -20,6 +21,7 @@ function toolbar.load()
 			gooi.removeComponent(pencilSlider)
 			showingPencilSlider = false
 		end
+		--]]
 	end),
 	eraser= gooi.newButton():setIcon(icpath.."eraser.png")
 	:onRelease(function(self) gui.toast("Eraser Tool") tool = self end),
@@ -41,11 +43,9 @@ function toolbar.load()
 	toolbar.layout = gooi.newPanel(dp(2), dp(38), dp(46), dp(46*6), "grid 6x1")
 	if toolbar.layout.y + toolbar.layout.h > cellWidget.y then
 	gooi.removeComponent(toolbar.layout)
-	toolbar.layout = gooi.newPanel(dp(2), dp(38), dp(46*2), dp(46*3), "grid 3x3")
+	toolbar.layout = gooi.newPanel(dp(2), dp(38), dp(46*2), dp(46*3), "grid 3x2")
 	end
-	for i, v in pairs(tools) do
-		toolbar.layout:add(v)
-	end
+	toolbar.layout:add(tools.pencil, tools.eraser, tools.eyedropper, tools.fill, tools.move, tools.pan)
 end
 
 function toolbar.update(dt)
