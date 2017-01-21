@@ -65,10 +65,10 @@ function toolbar.update(dt)
 end
 function drawFunctions()
 	local xmirror, ymirror = menus.optionsMenu.components.xmirror.checked, menus.optionsMenu.components.ymirror.checked
-	local w = newdata:getWidth()
+	local w = currentData:getWidth()
 	local cx = w/2
 	local px = tmath.distanceFromCenter(touchx, w)
-	local h = newdata:getHeight()
+	local h = currentData:getHeight()
 	local cy = h/2
 	local py = tmath.distanceFromCenter(touchy, h)
 	 if candraw and touchx ~= nil and touchx >= 0 and touchx <= currentimage:getWidth() and touchy >=0 and touchy <= currentimage:getHeight() then
@@ -77,18 +77,18 @@ function drawFunctions()
 			if pencilSize == 1 then
 				local color = currentcolor
 				if xmirror and not ymirror then
-					newdata:setPixel(px + cx, touchy, color)
-					newdata:setPixel(cx - px, touchy, color)
+					currentData:setPixel(px + cx, touchy, color)
+					currentData:setPixel(cx - px, touchy, color)
 				elseif ymirror and not xmirror then
-					newdata:setPixel(touchx, py + cy, color)
-					newdata:setPixel(touchx, cy - py, color)
+					currentData:setPixel(touchx, py + cy, color)
+					currentData:setPixel(touchx, cy - py, color)
 				elseif xmirror and ymirror then
-					newdata:setPixel(px + cx, py + cy, color)
-					newdata:setPixel(px + cx, cy - py, color)
-					newdata:setPixel(cx - px, cy - py, color)
-					newdata:setPixel(cx - px, py + cy, color)
+					currentData:setPixel(px + cx, py + cy, color)
+					currentData:setPixel(px + cx, cy - py, color)
+					currentData:setPixel(cx - px, cy - py, color)
+					currentData:setPixel(cx - px, py + cy, color)
 				else
-				newdata:setPixel(touchx, touchy, color)
+				currentData:setPixel(touchx, touchy, color)
 				end
 			elseif pencilSize ~= 1 then
 				biggerPencil(touchx, touchy, pencilSize, currentcolor)
@@ -96,24 +96,24 @@ function drawFunctions()
 		elseif tool == tools.eraser then
 			local color = {0, 0, 0, 0}
 				if xmirror and not ymirror then
-					newdata:setPixel(px + cx, touchy, color)
-					newdata:setPixel(cx - px, touchy, color)
+					currentData:setPixel(px + cx, touchy, color)
+					currentData:setPixel(cx - px, touchy, color)
 				elseif ymirror and not xmirror then
-					newdata:setPixel(touchx, py + cy, color)
-					newdata:setPixel(touchx, cy - py, color)
+					currentData:setPixel(touchx, py + cy, color)
+					currentData:setPixel(touchx, cy - py, color)
 				elseif xmirror and ymirror then
-					newdata:setPixel(px + cx, py + cy, color)
-					newdata:setPixel(px + cx, cy - py, color)
-					newdata:setPixel(cx - px, cy - py, color)
-					newdata:setPixel(cx - px, py + cy, color)
+					currentData:setPixel(px + cx, py + cy, color)
+					currentData:setPixel(px + cx, cy - py, color)
+					currentData:setPixel(cx - px, cy - py, color)
+					currentData:setPixel(cx - px, py + cy, color)
 				else
-				newdata:setPixel(touchx, touchy, color)
+				currentData:setPixel(touchx, touchy, color)
 				end
 		elseif tool == tools.eyedropper then
-			currentcolor = {newdata:getPixel(touchx, touchy)}
+			currentcolor = {currentData:getPixel(touchx, touchy)}
 		elseif tool == tools.fill then
-			targetcolor = newdata:getPixel(touchx, touchy)
-			if newdata:getPixel(touchx, touchy) ~= currentcolor then
+			targetcolor = currentData:getPixel(touchx, touchy)
+			if currentData:getPixel(touchx, touchy) ~= currentcolor then
 			floodFill(touchx, touchy, targetcolor, currentcolor)
 			end
 		--else

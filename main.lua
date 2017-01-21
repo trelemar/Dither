@@ -25,30 +25,34 @@ function love.load()
 	lg.setFont(fonts.rr)
 	love.graphics.setDefaultFilter("nearest")
 	lg.setBackgroundColor(120, 120, 140)
-	newdata = love.image.newImageData(32, 32)
-	camera = Camera(newdata:getWidth()/2, newdata:getHeight()/2, 4)
-	currentimage = love.graphics.newImage(newdata)
+	Frames = {{love.image.newImageData(32, 32)}}
+	currentFrame = Frames[1]
+	currentData = currentFrame[1]
+	currentLayer = 1
+	FrameImages = {love.graphics.newImage(currentData)}
+	camera = Camera(currentData:getWidth()/2, currentData:getHeight()/2, 4)
+	currentimage = FrameImages[1]
 	loadPalette("palettes/todayland.png")
 	alphaBG = love.graphics.newImage("bg.png")
 	alphaBG:setWrap("repeat")
 	updateAlphaQuad()
-	alphaCamera = Camera(newdata:getWidth(), newdata:getHeight())
+	alphaCamera = Camera(currentData:getWidth(), currentData:getHeight())
 	candraw = true
 	currentcolor = {0, 0, 0, 255}
 	gui.load()
 	colorpicker.load()
 	--toolbar.load()
-	table.insert(history, 1, newdata:encode("png"))
+	table.insert(history, 1, currentData:encode("png"))
 	imgx, imgy = 0, 0
 	xamm = 0
 	yamm = 0
-	imgQuad = love.graphics.newQuad(0, 0, newdata:getWidth(), newdata:getHeight(), newdata:getWidth(), newdata:getHeight())
+	imgQuad = love.graphics.newQuad(0, 0, currentData:getWidth(), currentData:getHeight(), currentData:getWidth(), currentData:getHeight())
 	gridCanvas = love.graphics.newCanvas()
-	shapeCanvas = love.graphics.newCanvas(newdata:getWidth(), newdata:getHeight())
+	--shapeCanvas = love.graphics.newCanvas(currentData:getWidth(), currentData:getHeight())
+	
 end
 
 function love.update(dt)
-	
 	Timer.update(dt)
 	if menuBar.components.zoomslider.value <= 0.01 then
 		camera:zoomTo(1)
@@ -85,9 +89,19 @@ function love.draw()
 	end
 	
 	camera:attach()
+	for i, v in pairs(currentFrame) do
+		if i < currentLayer then
+			lg.draw(FrameImages[i], 0, 0)
+		end
+	end
 	lg.draw(currentimage, imgQuad, 0, 0)
-	lg.draw(shapeCanvas, 0, 0)
+	for i, v in pairs(currentFrame) do
+		if i > currentLayer then
+			lg.draw(FrameImages[i], 0, 0)
+		end
+	end
 	camera:detach()
+	
 	if showgrid then
 	lg.draw(gridCanvas)
 	end
@@ -150,14 +164,17 @@ function love.touchpressed(id, x, y)
 	
 	drawFunctions()
 	currentimage:refresh()
+	for i, v in pairs(FrameImages) do
+		v:refresh()
+	end
 end
 h = 0
 function love.touchreleased(id, x, y)
 	
 	gooi.released(id, x, y)
 	if touchx ~= nil and touchy ~= nil then
-		if candraw and touchx >= 0 and touchx <= newdata:getWidth() and touchy >= 0 and touchy <= newdata:getHeight() and tool ~= tools.pan and tool ~= none or tool == tools.move then
-			table.insert(history, #history + 1, newdata:encode("png"))
+		if candraw and touchx >= 0 and touchx <= currentData:getWidth() and touchy >= 0 and touchy <= currentData:getHeight() and tool ~= tools.pan and tool ~= none or tool == tools.move then
+			table.insert(history, #history + 1, currentData:encode("png"))
 			if #history >= 10 then 
 				table.remove(history, 1) 
 			end
@@ -166,10 +183,10 @@ function love.touchreleased(id, x, y)
 	end
 	
 	if tool == tools.move and candraw then
-		imgQuad:setViewport(0, 0, newdata:getWidth(), newdata:getHeight())
-		newdata:mapPixel(pixelFunction.allwhite)
+		imgQuad:setViewport(0, 0, currentData:getWidth(), currentData:getHeight())
+		currentData:mapPixel(pixelFunction.allwhite)
 		pastedata = love.image.newImageData(history[h])
-		newdata:paste(pastedata, xamm, yamm, 0, 0, pastedata:getWidth(), pastedata:getHeight())
+		currentData:paste(pastedata, xamm, yamm, 0, 0, pastedata:getWidth(), pastedata:getHeight())
 		xamm, yamm = 0, 0
 	else
 	end
@@ -181,6 +198,7 @@ function love.touchreleased(id, x, y)
 	for i, v in pairs(touches) do
 		if id == v then touches[i] = nil end
 	end
+	
 	currentimage:refresh()
 end
 
@@ -199,7 +217,7 @@ function love.touchmoved(id, x, y)
 		local newtouchx, newtouchy = camera:worldCoords(math.ceil(x), math.ceil(y))
 		xamm = (math.ceil(touchx - newtouchx) * -1)
 		yamm = (math.ceil(touchy - newtouchy) * -1)
-		imgQuad:setViewport(xamm * -1, yamm * - 1, newdata:getWidth(), newdata:getHeight())
+		imgQuad:setViewport(xamm * -1, yamm * - 1, currentData:getWidth(), currentData:getHeight())
 	end
 	
 	 drawFunctions()
@@ -261,5 +279,5 @@ end
 
 
 function updateAlphaQuad()
-	alphaQuad = love.graphics.newQuad(0, 0, (newdata:getWidth() * 2), (newdata:getHeight() * 2), 2, 2)
+	alphaQuad = love.graphics.newQuad(0, 0, (currentData:getWidth() * 2), (currentData:getHeight() * 2), 2, 2)
 end

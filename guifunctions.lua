@@ -10,9 +10,9 @@ function gui.load()
 		if history[h - 1] ~= nil then
 		h = h - 1
 		--gui.toast(tostring(h - 1))
-		newdata = love.image.newImageData(history[h])
+		currentData = love.image.newImageData(history[h])
 		
-		currentimage = love.graphics.newImage(newdata)
+		currentimage = love.graphics.newImage(currentData)
 		table.remove(history, h + 1)
 		end
 	end)
@@ -91,7 +91,7 @@ function gui.loadFileMenu()
 				gui.toggleMenu(menus.fileWindow)
 				gui.toggleMenu(menus.saveMenu)
 			else
-				newdata:encode("png", fn)
+				currentData:encode("png", fn)
 				gui.toast(fn.." Saved!")
 				gui.toggleMenu(menus.fileWindow)
 			end
@@ -144,14 +144,14 @@ function gui.toggleFileBrowser()
 			if string.find(filename, ".png") then
 				fileBrowser:add(gooi.newButton({text = string.sub(filename, 1, 8).."...", align = "right"})
 				:onRelease(function()
-					newdata = love.image.newImageData(filename)
-					currentimage = love.graphics.newImage(newdata)
-					imgQuad = love.graphics.newQuad(0, 0, newdata:getWidth(), newdata:getHeight(), newdata:getWidth(), newdata:getHeight())
+					currentData = love.image.newImageData(filename)
+					currentimage = love.graphics.newImage(currentData)
+					imgQuad = love.graphics.newQuad(0, 0, currentData:getWidth(), currentData:getHeight(), currentData:getWidth(), currentData:getHeight())
 					updateAlphaQuad()
 					fn = filename
 					gui.toast("'"..fn.."'")
 					clearHistory()
-					table.insert(history, newdata:encode("png"))
+					table.insert(history, currentData:encode("png"))
 					h = #history
 					gooi.removeComponent(fileBrowser) fileBrowser = nil
 					centerImage()
@@ -201,7 +201,7 @@ function gui.loadSaveMenu()
 		comps.Save = gooi.newButton("SAVE")
 		:onRelease(function()
 			fn = comps.TextBox.text
-			newdata:encode("png", fn..".png")
+			currentData:encode("png", fn..".png")
 			gui.toggleMenu(menus.saveMenu)
 			gooi.alert("Save Succesful!")
 		end)
@@ -394,14 +394,14 @@ function gui.loadNewFileMenu()
 			elseif tonumber(comp.wText.text) <= 0 or tonumber(comp.hText.text) <= 0 then
 				gooi.alert("SIZE MUST BE\nGREATER THAN 0!")
 			else
-			newdata = love.image.newImageData(comp.wText.text, comp.hText.text)
-			currentimage = love.graphics.newImage(newdata)
+			currentData = love.image.newImageData(comp.wText.text, comp.hText.text)
+			currentimage = love.graphics.newImage(currentData)
 			updateAlphaQuad()
-			imgQuad = love.graphics.newQuad(0, 0, newdata:getWidth(), newdata:getHeight(), newdata:getWidth(), newdata:getHeight())
+			imgQuad = love.graphics.newQuad(0, 0, currentData:getWidth(), currentData:getHeight(), currentData:getWidth(), currentData:getHeight())
 			gui.toggleMenu(menus.newFileMenu)
 			clearHistory()
 			fn = nil
-			table.insert(history, newdata:encode("png"))
+			table.insert(history, currentData:encode("png"))
 			h = #history
 			centerImage()
 			end
@@ -424,12 +424,23 @@ function gui.loadNewFileMenu()
 end
 
 function gui.loadCellWidget()
-	cellWidget = gooi.newPanel(dp(4), sh - dp(32*2) - dp(4), dp(32 * 5), dp(32*2), "grid 2x3"):setOpaque(true)
+	cellWidget = gooi.newPanel(dp(4), sh - dp(32*2) - dp(4), dp(32 * 6), dp(32*2), "grid 2x4"):setOpaque(true)
 	:setColspan(1, 2, 2)
 	:setColspan(2, 2, 2)
-	:add(gooi.newLabel({text = "LAYER:", align = "center"}), "1,1")
-	:add(gooi.newSpinner({min = 1, value = 1,}), "1,2")
-	--:add(gooi.newButton({icon = icpath.."plus.png"}), "1,4")
+	gooi.setStyle(raisedbutton)
+	LayerSpinner = gooi.newSpinner({min = 1, max = #currentFrame, value = 1})
+
+	cellWidget:add(gooi.newLabel({text = "LAYER:", align = "center"}), "1,1")
+	:add(LayerSpinner, "1,2")
+	:add(gooi.newButton("+"):onRelease(function()
+		--table.insert(frameImage, currentLayer + 1, love.graphics.newImage(love.image.newImageData(currentData:getWidth(), currentData:getHeight())))
+		table.insert(currentFrame, currentLayer + 1, love.image.newImageData(currentData:getWidth(), currentData:getHeight()))
+		currentLayer = currentLayer + 1
+		currentData = currentFrame[currentLayer]
+		LayerSpinner.max, LayerSpinner.value = #currentFrame, currentLayer
+		table.insert(FrameImages, currentLayer, love.graphics.newImage(currentFrame[currentLayer]))
+		currentimage = FrameImages[currentLayer]
+	end), "1,4")
 	:add(gooi.newLabel({text = "FRAME:", align = "center"}), "2,1")
 	:add(gooi.newSpinner({min = 1, value = 1}), "2,2")
 end
@@ -466,6 +477,6 @@ function gui.checkOpenMenus()
 end
 
 function centerImage()
-	camera:lookAt(newdata:getWidth()/2, newdata:getHeight()/2)
-	alphaCamera:lookAt(newdata:getWidth(), newdata:getHeight())
+	camera:lookAt(currentData:getWidth()/2, currentData:getHeight()/2)
+	alphaCamera:lookAt(currentData:getWidth(), currentData:getHeight())
 end

@@ -11,20 +11,20 @@ function pixelFunction.clear(x,y,r,g,b,a)
 end
 
 function biggerPencil(x, y, size, color)
-	if not tmath.Within(x, y, newdata:getWidth(), newdata:getHeight()) then return end
+	if not tmath.Within(x, y, currentData:getWidth(), currentData:getHeight()) then return end
 	if x == touchx + size then return end
 	if y == touchy + size then return end
-	newdata:setPixel(x, y, color)
+	currentData:setPixel(x, y, color)
 	x = x + 1
 	return biggerPencil(x, y, size, color)
 end
 
 function floodFill(x, y, target_color, replacement_color)
-	if not tmath.Within(x, y, newdata:getWidth(), newdata:getHeight()) then return
+	if not tmath.Within(x, y, currentData:getWidth(), currentData:getHeight()) then return
 	elseif target_color == replacement_color then return
-	elseif newdata:getPixel(x, y) ~= target_color then return
+	elseif currentData:getPixel(x, y) ~= target_color then return
 	else
-	newdata:setPixel(x, y, replacement_color)
+	currentData:setPixel(x, y, replacement_color)
 	floodFill(x, y + 1, target_color, replacement_color)
 	floodFill(x, y - 1, target_color, replacement_color)
 	floodFill(x - 1, y, target_color, replacement_color)

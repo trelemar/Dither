@@ -18,7 +18,7 @@ colors = {
 	black = {0,0,0}
 }
 gridcolors = {
-	black = {0, 0, 0},
+	black = {40, 40, 40},
 	red = {255, 0, 0},
 	blue = {0, 0, 255}
 }
