@@ -27,7 +27,7 @@ function gui.load()
 	view = nB("VIEW"):onPress(function() gui.toggleMenu(menus.viewMenu) end),
 	zoomslider = gooi.newSlider({w = dp(122), h = dp(36), value = 0.1}),
 	selection = nB("SELECT"),
-	layer = nB("LAYER"),
+	layer = nB("LAYER"):onRelease(function() gui.toggleMenu(menus.layerMenu) end),
 	frame = nB("FRAME")
 	}
 	do local comps = menuBar.components
@@ -58,6 +58,7 @@ function gui.load()
 	gui.loadPaletteManager()
 	gui.loadGridManager()
 	gui.loadCellWidget()
+	gui.loadLayerMenu()
 	toolbar.load()
 	do local tbs = gooi.getByType("text")
 		for i, v in pairs(tbs) do
@@ -423,23 +424,43 @@ function gui.loadNewFileMenu()
 		gooi.setGroupVisible("newFileMenu", false)
 end
 
+function gui.loadLayerMenu()
+	gooi.setStyle(window)
+	menus.layerMenu = gooi.newPanel(defWindowArgs):setGroup("layerMenu"):setOpaque(true)
+	menus.layerMenu.components = {}
+	local comps = menus.layerMenu.components
+	comps.Label = gooi.newLabel("LAYER"):setOpaque(true)
+	comps.Label.align = "center"
+	gooi.setStyle(raisedbutton)
+	comps.newLayer = gooi.newButton({text = "ADD LAYER", icon = icpath.."plus.png"}):onRelease(function() NewLayer() end)
+	comps.newLayer.bgColor = colors.secondary
+	comps.removeLayer = gooi.newButton({text = "REMOVE LAYER", icon = icpath.."minus.png"}):onRelease(function() RemoveLayer() end)
+	comps.removeLayer.bgColor = colors.tertairy
+	comps.moveUp = gooi.newButton({text = "MOVE LAYER UP", icon = icpath.."chevron_up.png"})
+	comps.moveDown = gooi.newButton({text = "MOVE LAYER DOWN", icon = icpath.."chevron_down.png"})
+	comps.merge = gooi.newButton({text = "MERGE WITH BELOW", icon = icpath.."layers.png"})
+	for i, v in pairs(comps) do
+		v:setGroup("layerMenu")
+	end
+	menus.layerMenu:add(comps.Label, comps.newLayer, comps.removeLayer, comps.moveUp, comps.moveDown, comps.merge)
+	
+	gooi.setGroupEnabled("layerMenu", false)
+	gooi.setGroupVisible("layerMenu", false)
+end
+
 function gui.loadCellWidget()
 	cellWidget = gooi.newPanel(dp(4), sh - dp(32*2) - dp(4), dp(32 * 6), dp(32*2), "grid 2x4"):setOpaque(true)
 	:setColspan(1, 2, 2)
 	:setColspan(2, 2, 2)
 	gooi.setStyle(raisedbutton)
 	LayerSpinner = gooi.newSpinner({min = 1, max = #currentFrame, value = 1})
+	:onRelease(function(self) currentimage = FrameImages[currentLayer] end)
 
 	cellWidget:add(gooi.newLabel({text = "LAYER:", align = "center"}), "1,1")
 	:add(LayerSpinner, "1,2")
 	:add(gooi.newButton("+"):onRelease(function()
 		--table.insert(frameImage, currentLayer + 1, love.graphics.newImage(love.image.newImageData(currentData:getWidth(), currentData:getHeight())))
-		table.insert(currentFrame, currentLayer + 1, love.image.newImageData(currentData:getWidth(), currentData:getHeight()))
-		currentLayer = currentLayer + 1
-		currentData = currentFrame[currentLayer]
-		LayerSpinner.max, LayerSpinner.value = #currentFrame, currentLayer
-		table.insert(FrameImages, currentLayer, love.graphics.newImage(currentFrame[currentLayer]))
-		currentimage = FrameImages[currentLayer]
+		NewLayer()
 	end), "1,4")
 	:add(gooi.newLabel({text = "FRAME:", align = "center"}), "2,1")
 	:add(gooi.newSpinner({min = 1, value = 1}), "2,2")

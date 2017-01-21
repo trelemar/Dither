@@ -32,3 +32,21 @@ function floodFill(x, y, target_color, replacement_color)
 	return floodFill(x, y, target_color, replacement_color)
 	end
 end
+
+function NewLayer()
+	 table.insert(currentFrame, currentLayer + 1, love.image.newImageData(currentData:getWidth(), currentData:getHeight()))
+		currentLayer = currentLayer + 1
+		currentData = currentFrame[currentLayer]
+		LayerSpinner.max, LayerSpinner.value = #currentFrame, currentLayer
+		table.insert(FrameImages, currentLayer, love.graphics.newImage(currentFrame[currentLayer]))
+		currentimage = FrameImages[currentLayer]
+end
+
+function RemoveLayer()
+	table.remove(currentFrame, currentLayer)
+	currentLayer = currentLayer - 1
+	currentData = currentFrame[currentLayer]
+	LayerSpinner.max, LayerSpinner.value = LayerSpinner.max - 1, currentLayer
+	table.remove(FrameImages, currentLayer + 1)
+	currentimage = FrameImages[currentLayer]
+end

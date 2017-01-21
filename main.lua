@@ -69,6 +69,9 @@ function love.update(dt)
 			drawGrid(grids[i][1], grids[i][2], grids[i][3], grids[i][4], grids[i][5])
 		end
 		lg.setCanvas()
+		for i, v in pairs(FrameImages) do
+			v:refresh()
+		end
 	end
 	
 	
@@ -77,6 +80,8 @@ function love.update(dt)
 	cp.bgColor = currentcolor
 	toolbar.update(dt)
 	showgrid = menus.viewMenu.components.gridCheck.checked
+	currentLayer = LayerSpinner.value
+	currentData = currentFrame[LayerSpinner.value]
 end
 
 function love.draw()
@@ -128,6 +133,7 @@ function love.draw()
 	gooi.draw("colorpicker")
 	gooi.draw("paletteManager")
 	gooi.draw("gridManager")
+	gooi.draw("layerMenu")
 	lg.setColor(0, 0, 0, 255)
 	--[[
 	if touchx and touchy then
@@ -135,8 +141,17 @@ function love.draw()
 	lg.print(touchx.."\n"..touchy, sw/2, sh/2)
 	end
 	lg.setColor(255, 255, 255)
-	--]]
+	
 	--love.graphics.print("Current FPS: "..tostring(love.timer.getFPS( )), 10, 10)
+	lg.setColor(0, 0, 0)
+	lg.rectangle("fill", sw - 250, sh - 200, 250, 200)
+	lg.setColor(255, 255, 255)
+	lg.print(
+	"currentLayer: "..currentLayer.."\n"..
+	tostring(currentData)
+	
+	, sw - 250, sh - 200)
+	--]]
 end
 
 function love.touchpressed(id, x, y)
