@@ -10,6 +10,15 @@ function pixelFunction.clear(x,y,r,g,b,a)
 	return r, g, b, a
 end
 
+function pixelFunction.merge(x,y,r,g,b,a)
+	local nr, ng, nb, na = currentFrame[currentLayer]:getPixel(x, y)
+	if r == 0 and g == 0 and b == 0 and a == 0 then
+	else
+		r, g, b, a = nr, ng, nb, na
+	end
+	return r, g, b, a
+end
+
 function biggerPencil(x, y, size, color)
 	if not tmath.Within(x, y, currentData:getWidth(), currentData:getHeight()) then return end
 	if x == touchx + size then return end
@@ -42,6 +51,17 @@ function NewLayer()
 		currentimage = FrameImages[currentLayer]
 end
 
+function MoveLayer(direction)
+	local belowLayer = currentLayer + direction
+		currentFrame[currentLayer], currentFrame[belowLayer] = currentFrame[belowLayer], currentFrame[currentLayer]
+		FrameImages[currentLayer], FrameImages[belowLayer] = FrameImages[belowLayer], FrameImages[currentLayer]
+		LayerSpinner.value = LayerSpinner.value + direction
+	for i, v in pairs(FrameImages) do
+		v:refresh()
+	end
+	currentimage:refresh()
+end
+
 function RemoveLayer()
 	table.remove(currentFrame, currentLayer)
 	currentLayer = currentLayer - 1
@@ -49,4 +69,9 @@ function RemoveLayer()
 	LayerSpinner.max, LayerSpinner.value = LayerSpinner.max - 1, currentLayer
 	table.remove(FrameImages, currentLayer + 1)
 	currentimage = FrameImages[currentLayer]
+end
+
+function MergeLayer()
+	currentFrame[currentLayer - 1]:mapPixel(pixelFunction.merge)
+	RemoveLayer()
 end

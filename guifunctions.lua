@@ -436,9 +436,9 @@ function gui.loadLayerMenu()
 	comps.newLayer.bgColor = colors.secondary
 	comps.removeLayer = gooi.newButton({text = "REMOVE LAYER", icon = icpath.."minus.png"}):onRelease(function() RemoveLayer() end)
 	comps.removeLayer.bgColor = colors.tertairy
-	comps.moveUp = gooi.newButton({text = "MOVE LAYER UP", icon = icpath.."chevron_up.png"})
-	comps.moveDown = gooi.newButton({text = "MOVE LAYER DOWN", icon = icpath.."chevron_down.png"})
-	comps.merge = gooi.newButton({text = "MERGE WITH BELOW", icon = icpath.."layers.png"})
+	comps.moveUp = gooi.newButton({text = "MOVE LAYER UP", icon = icpath.."chevron_up.png"}):onRelease(function() MoveLayer(1) end)
+	comps.moveDown = gooi.newButton({text = "MOVE LAYER DOWN", icon = icpath.."chevron_down.png"}):onRelease(function() MoveLayer(-1) end)
+	comps.merge = gooi.newButton({text = "MERGE WITH BELOW", icon = icpath.."layers.png"}):onRelease(function() MergeLayer() end)
 	for i, v in pairs(comps) do
 		v:setGroup("layerMenu")
 	end
@@ -496,6 +496,25 @@ function gui.checkOpenMenus()
 		end
 	end
 end
+
+function gui.update(dt)
+	if LayerSpinner.value == 1 then
+		menus.layerMenu.components.moveDown.enabled = false
+		menus.layerMenu.components.removeLayer.enabled = false
+		menus.layerMenu.components.merge.enabled = false
+	else
+		menus.layerMenu.components.moveDown.enabled = true
+		menus.layerMenu.components.removeLayer.enabled = true
+		menus.layerMenu.components.merge.enabled = true
+	end 
+	
+	if LayerSpinner.value == LayerSpinner.max then
+		menus.layerMenu.components.moveUp.enabled = false
+	else
+		menus.layerMenu.components.moveUp.enabled = true
+	end
+end
+
 
 function centerImage()
 	camera:lookAt(currentData:getWidth()/2, currentData:getHeight()/2)

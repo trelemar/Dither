@@ -76,6 +76,7 @@ function love.update(dt)
 	
 	
 	gooi.update(dt)
+	gui.update(dt)
 	colorpicker.update(dt)
 	cp.bgColor = currentcolor
 	toolbar.update(dt)
@@ -135,6 +136,7 @@ function love.draw()
 	gooi.draw("gridManager")
 	gooi.draw("layerMenu")
 	lg.setColor(0, 0, 0, 255)
+
 	--[[
 	if touchx and touchy then
 	lg.setFont(fonts.rr)
