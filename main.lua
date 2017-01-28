@@ -1,3 +1,4 @@
+tmath = require "tmath"
 require "lib.gooi"
 require "pixelfunctions"
 dp = love.window.toPixels
@@ -13,7 +14,7 @@ Timer = require"lib.hump.timer"
 require "guifunctions"
 require "colorpicker"
 require "toolbar"
-tmath = require "tmath"
+--tmath = require "tmath"
 function love.load()
 	grids = {}
 	table.insert(grids, {1, 1, gridcolors.black, true, 1})

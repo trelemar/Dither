@@ -1,6 +1,6 @@
 toolbar = {}
 local tb = toolbar
-icpath = "icons/white/ic_"
+icpath = "icons/drawable-"..tmath.getDPI().."/ic_"
 function toolbar.load()
 	options = {}
 	showingPencilSlider = false

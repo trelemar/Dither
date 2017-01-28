@@ -11,4 +11,17 @@ function tmath.Within(x, y, w, h)
 	return bool
 end
 
+function tmath.getDPI()
+	local ps = love.window.getPixelScale()
+	local dpi = nil
+	if ps <= 1 then dpi = "mdpi"
+	elseif ps <= 1.5 then dpi = "hdpi"
+	elseif ps <= 2 then dpi = "xhdpi"
+	elseif ps <= 3 then dpi = "xxhdpi"
+	else dpi = "xxxhdpi"
+	end
+	
+	return dpi
+end
+
 return tmath
