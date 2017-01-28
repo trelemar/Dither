@@ -12,8 +12,7 @@ end
 
 function pixelFunction.merge(x,y,r,g,b,a)
 	local nr, ng, nb, na = currentFrame[currentLayer]:getPixel(x, y)
-	if r == 0 and g == 0 and b == 0 and a == 0 then
-	else
+	if nr ~= 0 and ng ~= 0 and nb ~= 0 and na ~= 0 then
 		r, g, b, a = nr, ng, nb, na
 	end
 	return r, g, b, a
