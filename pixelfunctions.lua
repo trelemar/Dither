@@ -46,8 +46,8 @@ function NewLayer()
 		currentLayer = currentLayer + 1
 		currentData = currentFrame[currentLayer]
 		LayerSpinner.max, LayerSpinner.value = #currentFrame, currentLayer
-		table.insert(FrameImages, currentLayer, love.graphics.newImage(currentFrame[currentLayer]))
-		currentimage = FrameImages[currentLayer]
+		table.insert(FrameImages[FrameSpinner.value], currentLayer, love.graphics.newImage(currentFrame[currentLayer]))
+		currentimage = FrameImages[FrameSpinner.value][currentLayer]
 end
 
 function MoveLayer(direction)
@@ -66,8 +66,8 @@ function RemoveLayer()
 	currentLayer = currentLayer - 1
 	currentData = currentFrame[currentLayer]
 	LayerSpinner.max, LayerSpinner.value = LayerSpinner.max - 1, currentLayer
-	table.remove(FrameImages, currentLayer + 1)
-	currentimage = FrameImages[currentLayer]
+	table.remove(FrameImages[FrameSpinner.value], currentLayer + 1)
+	currentimage = FrameImages[FrameSpinner.value][currentLayer]
 end
 
 function MergeLayer()

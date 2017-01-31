@@ -30,9 +30,9 @@ function love.load()
 	currentFrame = Frames[1]
 	currentData = currentFrame[1]
 	currentLayer = 1
-	FrameImages = {love.graphics.newImage(currentData)}
+	FrameImages = {{love.graphics.newImage(currentData)}}
 	camera = Camera(currentData:getWidth()/2, currentData:getHeight()/2, 4)
-	currentimage = FrameImages[1]
+	currentimage = FrameImages[1][1]
 	loadPalette("palettes/todayland.png")
 	alphaBG = love.graphics.newImage("bg.png")
 	alphaBG:setWrap("repeat")
@@ -70,7 +70,7 @@ function love.update(dt)
 			drawGrid(grids[i][1], grids[i][2], grids[i][3], grids[i][4], grids[i][5])
 		end
 		lg.setCanvas()
-		for i, v in pairs(FrameImages) do
+		for i, v in pairs(FrameImages[FrameSpinner.value]) do
 			v:refresh()
 		end
 	end
@@ -98,13 +98,13 @@ function love.draw()
 	camera:attach()
 	for i, v in pairs(currentFrame) do
 		if i < currentLayer then
-			lg.draw(FrameImages[i], 0, 0)
+			lg.draw(FrameImages[FrameSpinner.value][i], 0, 0)
 		end
 	end
 	lg.draw(currentimage, imgQuad, 0, 0)
 	for i, v in pairs(currentFrame) do
 		if i > currentLayer then
-			lg.draw(FrameImages[i], 0, 0)
+			lg.draw(FrameImages[FrameSpinner.value][i], 0, 0)
 		end
 	end
 	camera:detach()
@@ -182,7 +182,7 @@ function love.touchpressed(id, x, y)
 	
 	drawFunctions()
 	currentimage:refresh()
-	for i, v in pairs(FrameImages) do
+	for i, v in pairs(FrameImages[FrameSpinner.value]) do
 		v:refresh()
 	end
 end
