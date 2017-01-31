@@ -53,9 +53,9 @@ end
 function MoveLayer(direction)
 	local belowLayer = currentLayer + direction
 		currentFrame[currentLayer], currentFrame[belowLayer] = currentFrame[belowLayer], currentFrame[currentLayer]
-		FrameImages[currentLayer], FrameImages[belowLayer] = FrameImages[belowLayer], FrameImages[currentLayer]
+		FrameImages[FrameSpinner.value][currentLayer], FrameImages[FrameSpinner.value][belowLayer] = FrameImages[FrameSpinner.value][belowLayer], FrameImages[FrameSpinner.value][currentLayer]
 		LayerSpinner.value = LayerSpinner.value + direction
-	for i, v in pairs(FrameImages) do
+	for i, v in pairs(FrameImages[FrameSpinner.value]) do
 		v:refresh()
 	end
 	currentimage:refresh()
@@ -66,7 +66,7 @@ function RemoveLayer()
 	currentLayer = currentLayer - 1
 	currentData = currentFrame[currentLayer]
 	LayerSpinner.max, LayerSpinner.value = LayerSpinner.max - 1, currentLayer
-	table.remove(FrameImages[FrameSpinner.value], currentLayer + 1)
+	table.remove(FrameImages[LayerSpinner.value], currentLayer + 1)
 	currentimage = FrameImages[FrameSpinner.value][currentLayer]
 end
 
