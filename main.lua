@@ -81,9 +81,12 @@ function love.update(dt)
 	colorpicker.update(dt)
 	cp.bgColor = currentcolor
 	toolbar.update(dt)
+	currentFrame = Frames[FrameSpinner.value]
 	showgrid = menus.viewMenu.components.gridCheck.checked
 	currentLayer = LayerSpinner.value
 	currentData = currentFrame[LayerSpinner.value]
+	currentimage = FrameImages[FrameSpinner.value][LayerSpinner.value]
+	currentFrame = Frames[FrameSpinner.value]
 end
 
 function love.draw()

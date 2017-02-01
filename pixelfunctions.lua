@@ -74,3 +74,16 @@ function MergeLayer()
 	currentFrame[currentLayer - 1]:mapPixel(pixelFunction.merge)
 	RemoveLayer()
 end
+
+function NewFrame()
+	Frames[FrameSpinner.value + 1] = {}
+	FrameImages[FrameSpinner.value + 1] = {}
+	for i = 1, LayerSpinner.max do
+		table.insert(Frames[FrameSpinner.value + 1], love.image.newImageData(currentData:getWidth(), currentData:getHeight()))
+	end
+	for i, v in pairs(Frames[FrameSpinner.value + 1]) do
+		--FrameImages[FrameSpinner.value + 1][i] = love.graphics.newImage(v)
+		table.insert(FrameImages[FrameSpinner.value + 1], love.graphics.newImage(v))
+	end
+	FrameSpinner.max, FrameSpinner.value = FrameSpinner.max + 1, FrameSpinner.value + 1
+end

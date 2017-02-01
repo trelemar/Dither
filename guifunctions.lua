@@ -454,7 +454,9 @@ function gui.loadCellWidget()
 	:setColspan(2, 2, 2)
 	gooi.setStyle(raisedbutton)
 	LayerSpinner = gooi.newSpinner({min = 1, max = #currentFrame, value = 1})
-	:onRelease(function(self) currentimage = FrameImages[FrameSpinner.value][currentLayer] end)
+	:onRelease(function(self) 
+	--currentimage = FrameImages[FrameSpinner.value][LayerSpinner.value] 
+	end)
 	FrameSpinner = gooi.newSpinner({min = 1, max = 1, value = 1})
 	cellWidget:add(gooi.newLabel({text = "LAYER:", align = "center"}), "1,1")
 	:add(LayerSpinner, "1,2")
@@ -464,6 +466,7 @@ function gui.loadCellWidget()
 	end), "1,4")
 	:add(gooi.newLabel({text = "FRAME:", align = "center"}), "2,1")
 	:add(FrameSpinner, "2,2")
+	:add(gooi.newButton("+"):onPress(function() NewFrame() end), "2,4")
 end
 
 function gui.toggleColorPicker()
