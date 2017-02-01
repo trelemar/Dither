@@ -50,6 +50,19 @@ function NewLayer()
 		currentimage = FrameImages[FrameSpinner.value][currentLayer]
 end
 
+function NewLayerTest()
+	for i = 1, FrameSpinner.max do
+		table.insert(Frames[i], currentLayer + 1, love.image.newImageData(currentData:getWidth(), currentData:getHeight()))
+	end
+	currentLayer = currentLayer + 1
+	currentData = currentFrame[currentLayer]
+	LayerSpinner.max, LayerSpinner.value = #currentFrame, currentLayer
+	for i = 1, FrameSpinner.max do
+	table.insert(FrameImages[i], currentLayer, love.graphics.newImage(Frames[i][currentLayer]))
+	end
+	currentimage = FrameImages[FrameSpinner.value][currentLayer]
+end
+
 function MoveLayer(direction)
 	local belowLayer = currentLayer + direction
 		currentFrame[currentLayer], currentFrame[belowLayer] = currentFrame[belowLayer], currentFrame[currentLayer]
@@ -76,8 +89,8 @@ function MergeLayer()
 end
 
 function NewFrame()
-	Frames[FrameSpinner.value + 1] = {}
-	FrameImages[FrameSpinner.value + 1] = {}
+	table.insert(Frames, FrameSpinner.value + 1, {})
+	table.insert(FrameImages, FrameSpinner.value + 1, {})
 	for i = 1, LayerSpinner.max do
 		table.insert(Frames[FrameSpinner.value + 1], love.image.newImageData(currentData:getWidth(), currentData:getHeight()))
 	end
