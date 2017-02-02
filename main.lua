@@ -50,7 +50,7 @@ function love.load()
 	imgQuad = love.graphics.newQuad(0, 0, currentData:getWidth(), currentData:getHeight(), currentData:getWidth(), currentData:getHeight())
 	gridCanvas = love.graphics.newCanvas()
 	--shapeCanvas = love.graphics.newCanvas(currentData:getWidth(), currentData:getHeight())
-	
+	isPlaying = false
 end
 
 function love.update(dt)

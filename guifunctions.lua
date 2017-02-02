@@ -50,6 +50,20 @@ function gui.load()
 	cp = gooi.newButton({x = sw - dp(50), y = undo.y - dp(50), w = dp(46), h = dp(46)}):onRelease(function() gui.toggleColorPicker() colorpicker.updateSliders() end)
 	cp.showBorder, cp.borderWidth, cp.borderColor = true, dp(2), colors.black
 	cp.bgColor = currentcolor
+	play = gooi.newButton({text = "", icon = icpath.."play.png"})
+	:onRelease(function(self)
+		isPlaying = not isPlaying
+		if isPlaying then
+			play:setIcon(icpath.."pause.png")
+			play.bgColor = colors.tertairy
+		else
+			play:setIcon(icpath.."play.png")
+			play.bgColor = colors.secondary
+		end
+		gooi.setGroupEnabled("toolbar", not isPlaying)
+	end)
+	play.bgColor = colors.secondary
+	play:setBounds(cp.x, cp.y - cp.h - dp(4), cp.w, cp.h)
 	gui.loadFileMenu()
 	gui.loadSaveMenu()
 	gui.loadViewMenu()
@@ -437,8 +451,8 @@ function gui.loadLayerMenu()
 	comps.newLayer.bgColor = colors.secondary
 	comps.removeLayer = gooi.newButton({text = "REMOVE LAYER", icon = icpath.."minus.png"}):onRelease(function() RemoveLayer() end)
 	comps.removeLayer.bgColor = colors.tertairy
-	comps.moveUp = gooi.newButton({text = "MOVE LAYER UP", icon = icpath.."chevron_up.png"}):onRelease(function() MoveLayer(1) end)
-	comps.moveDown = gooi.newButton({text = "MOVE LAYER DOWN", icon = icpath.."chevron_down.png"}):onRelease(function() MoveLayer(-1) end)
+	comps.moveUp = gooi.newButton({text = "MOVE LAYER UP", icon = icpath.."arrange_bring_forward.png"}):onRelease(function() MoveLayer(1) end)
+	comps.moveDown = gooi.newButton({text = "MOVE LAYER DOWN", icon = icpath.."arrange_send_backward.png"}):onRelease(function() MoveLayer(-1) end)
 	comps.merge = gooi.newButton({text = "MERGE WITH BELOW", icon = icpath.."layers.png"}):onRelease(function() MergeLayer() end)
 	for i, v in pairs(comps) do
 		v:setGroup("layerMenu")
@@ -452,15 +466,18 @@ end
 function gui.loadFrameMenu()
 	gooi.setStyle(window)
 	menus.frameMenu = gooi.newPanel(compactWindowArgs):setGroup("frameMenu"):setOpaque(true)
+	:setColspan(1, 1, 4)
+	:setColspan(2, 1, 2)
 	menus.frameMenu.components = {}
 	local comps = menus.frameMenu.components
-	comps.Label = gooi.newLabel("FRAME")
+	comps.Label = gooi.newLabel("FRAME"):setAlign("center")
 	gooi.setStyle(raisedbutton)
-	
+	comps.Export = gooi.newButton({text = "EXPORT AS PNG", icon = icpath.."export.png"})
 	for i, v in pairs(comps) do
 		v:setGroup("frameMenu")
 	end
 	menus.frameMenu:add(comps.Label)
+	:add(comps.Export, "2,1")
 	
 	gooi.setGroupEnabled("frameMenu", false)
 	gooi.setGroupVisible("frameMenu", false)
