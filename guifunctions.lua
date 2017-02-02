@@ -28,7 +28,7 @@ function gui.load()
 	zoomslider = gooi.newSlider({w = dp(122), h = dp(36), value = 0.1}),
 	selection = nB("SELECT"),
 	layer = nB("LAYER"):onRelease(function() gui.toggleMenu(menus.layerMenu) end),
-	frame = nB("FRAME")
+	frame = nB("FRAME"):onRelease(function() gui.toggleMenu(menus.frameMenu) end),
 	}
 	do local comps = menuBar.components
 	comps.zoomslider.fgColor = colors.primaryl
@@ -59,6 +59,7 @@ function gui.load()
 	gui.loadGridManager()
 	gui.loadCellWidget()
 	gui.loadLayerMenu()
+	gui.loadFrameMenu()
 	toolbar.load()
 	do local tbs = gooi.getByType("text")
 		for i, v in pairs(tbs) do
@@ -432,7 +433,7 @@ function gui.loadLayerMenu()
 	comps.Label = gooi.newLabel("LAYER"):setOpaque(true)
 	comps.Label.align = "center"
 	gooi.setStyle(raisedbutton)
-	comps.newLayer = gooi.newButton({text = "ADD LAYER", icon = icpath.."plus.png"}):onRelease(function() NewLayer() end)
+	comps.newLayer = gooi.newButton({text = "ADD LAYER", icon = icpath.."plus.png"}):onRelease(function() NewLayerTest() end)
 	comps.newLayer.bgColor = colors.secondary
 	comps.removeLayer = gooi.newButton({text = "REMOVE LAYER", icon = icpath.."minus.png"}):onRelease(function() RemoveLayer() end)
 	comps.removeLayer.bgColor = colors.tertairy
@@ -446,6 +447,23 @@ function gui.loadLayerMenu()
 	
 	gooi.setGroupEnabled("layerMenu", false)
 	gooi.setGroupVisible("layerMenu", false)
+end
+
+function gui.loadFrameMenu()
+	gooi.setStyle(window)
+	menus.frameMenu = gooi.newPanel(compactWindowArgs):setGroup("frameMenu"):setOpaque(true)
+	menus.frameMenu.components = {}
+	local comps = menus.frameMenu.components
+	comps.Label = gooi.newLabel("FRAME")
+	gooi.setStyle(raisedbutton)
+	
+	for i, v in pairs(comps) do
+		v:setGroup("frameMenu")
+	end
+	menus.frameMenu:add(comps.Label)
+	
+	gooi.setGroupEnabled("frameMenu", false)
+	gooi.setGroupVisible("frameMenu", false)
 end
 
 function gui.loadCellWidget()

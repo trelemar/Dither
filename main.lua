@@ -139,6 +139,7 @@ function love.draw()
 	gooi.draw("paletteManager")
 	gooi.draw("gridManager")
 	gooi.draw("layerMenu")
+	gooi.draw("frameMenu")
 	lg.setColor(0, 0, 0, 255)
 
 	--[[
