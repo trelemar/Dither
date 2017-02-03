@@ -60,6 +60,7 @@ function gui.load()
 			play:setIcon(icpath.."play.png")
 			play.bgColor = colors.secondary
 		end
+		gui.toast(tostring(isPlaying))
 		gooi.setGroupEnabled("toolbar", not isPlaying)
 	end)
 	play.bgColor = colors.secondary
@@ -216,8 +217,14 @@ function gui.loadSaveMenu()
 		end)
 		comps.Save = gooi.newButton("SAVE")
 		:onRelease(function()
-			fn = comps.TextBox.text
-			currentData:encode("png", fn..".png")
+
+			if #Frames == 1 and #Frames[1] == 1 then
+				fn = comps.TextBox.text..".png"
+				Frames[1][1]:encode("png", fn)
+			else
+				fn = comps.TextBox.text..".lua"
+				saveDSF(fn)
+			end
 			gui.toggleMenu(menus.saveMenu)
 			gooi.alert("Save Succesful!")
 		end)
@@ -558,4 +565,40 @@ end
 function centerImage()
 	camera:lookAt(currentData:getWidth()/2, currentData:getHeight()/2)
 	alphaCamera:lookAt(currentData:getWidth(), currentData:getHeight())
+end
+
+function saveDSF(file)
+	local t = clone(Frames)
+	for i = 1, #t do
+		for l = 1, #t[i] do
+			t[i][l] = t[i][l]:getString()
+		end
+	end
+	love.filesystem.write(file, serialize(t))
+end
+
+function loadDSF(file)
+	for i = 1, #Frames do
+		table.remove(Frames[i])
+	end
+	local chunk = love.filesystem.load(file)
+	Frames = chunk()
+	for i = 1, #Frames do
+		FrameImages[i] = {}
+		for l = 1, #Frames[i] do
+			Frames[i][l] = love.image.newImageData(32, 32, Frames[i][l])
+			FrameImages[i][l] = love.graphics.newImage(Frames[i][l])
+		end
+	end
+	FrameSpinner.value, LayerSpinner.value = 1, 1
+	FrameSpinner.max, LayerSpinner.max = #Frames, #Frames[1]
+end
+
+function PlayAnimation(dt)
+if isPlaying == true then
+	if FrameSpinner.value < FrameSpinner.max then
+		FrameSpinner.value = FrameSpinner.value + 1
+	else FrameSpinner.value = 1
+	end
+end
 end

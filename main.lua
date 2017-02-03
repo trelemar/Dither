@@ -11,9 +11,11 @@ Camera = require"lib.hump.camera"
 showgrid = true
 showAlphaBG = true
 Timer = require"lib.hump.timer"
+require "lib.copytable"
 require "guifunctions"
 require "colorpicker"
 require "toolbar"
+serialize = require "lib.ser"
 --tmath = require "tmath"
 function love.load()
 	grids = {}
@@ -51,6 +53,7 @@ function love.load()
 	gridCanvas = love.graphics.newCanvas()
 	--shapeCanvas = love.graphics.newCanvas(currentData:getWidth(), currentData:getHeight())
 	isPlaying = false
+	--loadDSF("yeasss.lua")
 end
 
 function love.update(dt)
@@ -87,6 +90,7 @@ function love.update(dt)
 	currentData = currentFrame[LayerSpinner.value]
 	currentimage = FrameImages[FrameSpinner.value][LayerSpinner.value]
 	currentFrame = Frames[FrameSpinner.value]
+	PlayAnimation(dt)
 end
 
 function love.draw()
