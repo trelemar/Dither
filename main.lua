@@ -98,10 +98,12 @@ function love.draw()
 	
 	if menus.viewMenu.components.alphaBgCheck.checked then
 	alphaCamera:attach()
+	lg.setColor(255, 255, 255, 50)
 	lg.draw(alphaBG, alphaQuad, 0, 0)
 	alphaCamera:detach()
 	end
 	
+	lg.setColor(255, 255, 255, 255)
 	camera:attach()
 	for i, v in pairs(currentFrame) do
 		if i < currentLayer then
@@ -123,7 +125,7 @@ function love.draw()
 	paletteCamera:attach()
 	lg.draw(paletteImage, 0, 0)
 	paletteCamera:detach()
-	drawPaletteGrid(colors.primary)
+	drawPaletteGrid(colors.black)
 	--lg.setColor(colors.primary)
 	--lg.rectangle("fill", 0, 0, sw, dp(44))
 	gooi.draw()
@@ -290,7 +292,7 @@ end
 
 function drawPaletteGrid(color)
 		love.graphics.setColor(color)
-		love.graphics.setLineWidth(dp(3))
+		love.graphics.setLineWidth(dp(2))
 		for i = 0, (paletteImage:getWidth()) do
 			local x, y = paletteCamera:cameraCoords(i, 0)
 			local x2, y2 = paletteCamera:cameraCoords(i, paletteImage:getHeight())
@@ -305,5 +307,5 @@ end
 
 
 function updateAlphaQuad()
-	alphaQuad = love.graphics.newQuad(0, 0, (currentData:getWidth() * 2), (currentData:getHeight() * 2), 2, 2)
+	alphaQuad = love.graphics.newQuad(0, 0, (Frames[1][1]:getWidth() * 2), (Frames[1][1]:getHeight() * 2), 8, 8)
 end

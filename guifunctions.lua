@@ -417,10 +417,15 @@ function gui.loadNewFileMenu()
 			elseif tonumber(comp.wText.text) <= 0 or tonumber(comp.hText.text) <= 0 then
 				gooi.alert("SIZE MUST BE\nGREATER THAN 0!")
 			else
-			currentData = love.image.newImageData(comp.wText.text, comp.hText.text)
-			currentimage = love.graphics.newImage(currentData)
+			--currentData = love.image.newImageData(comp.wText.text, comp.hText.text)
+			--currentimage = love.graphics.newImage(currentData)
+			table.insert(Frames, 1, {})
+			Frames[1][1] = love.image.newImageData(comp.wText.text, comp.hText.text)
+			FrameSpinner.value, FrameSpinner.max, LayerSpinner.value, LayerSpinner.max = 1, 1, 1, 1
+			table.insert(FrameImages, 1, {})
+			FrameImages[1][1] = love.graphics.newImage(Frames[1][1])
 			updateAlphaQuad()
-			imgQuad = love.graphics.newQuad(0, 0, currentData:getWidth(), currentData:getHeight(), currentData:getWidth(), currentData:getHeight())
+			imgQuad = love.graphics.newQuad(0, 0, Frames[1][1]:getWidth(), Frames[1][1]:getHeight(), Frames[1][1]:getWidth(), Frames[1][1]:getHeight())
 			gui.toggleMenu(menus.newFileMenu)
 			clearHistory()
 			fn = nil
@@ -563,8 +568,8 @@ end
 
 
 function centerImage()
-	camera:lookAt(currentData:getWidth()/2, currentData:getHeight()/2)
-	alphaCamera:lookAt(currentData:getWidth(), currentData:getHeight())
+	camera:lookAt(Frames[1][1]:getWidth()/2, Frames[1][1]:getHeight()/2)
+	alphaCamera:lookAt(Frames[1][1]:getWidth(), Frames[1][1]:getHeight())
 end
 
 function saveDSF(file)
@@ -578,9 +583,7 @@ function saveDSF(file)
 end
 
 function loadDSF(file)
-	for i = 1, #Frames do
-		table.remove(Frames[i])
-	end
+	clearFrames()
 	local chunk = love.filesystem.load(file)
 	Frames = chunk()
 	for i = 1, #Frames do

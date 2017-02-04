@@ -15,10 +15,10 @@ colors = {
 	--"#001CB4",
 	primaryd = "#FF002C",
 	white = {255,255,255},
-	black = {0,0,0}
+	black = {0,0,0, 255}
 }
 gridcolors = {
-	black = {40, 40, 40},
+	black = {40, 40, 40, 180},
 	red = {255, 0, 0},
 	blue = {0, 0, 255}
 }

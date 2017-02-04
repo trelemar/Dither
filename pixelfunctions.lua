@@ -11,7 +11,7 @@ function pixelFunction.clear(x,y,r,g,b,a)
 end
 
 function pixelFunction.merge(x,y,r,g,b,a)
-	local nr, ng, nb, na = currentFrame[currentLayer]:getPixel(x, y)
+	local nr, ng, nb, na = thedata:getPixel(x, y)
 	if na ~= 0 then
 		r, g, b, a = nr, ng, nb, na
 	end
@@ -75,17 +75,31 @@ function MoveLayer(direction)
 end
 
 function RemoveLayer()
-	table.remove(currentFrame, currentLayer)
-	currentLayer = currentLayer - 1
-	currentData = currentFrame[currentLayer]
-	LayerSpinner.max, LayerSpinner.value = LayerSpinner.max - 1, currentLayer
-	table.remove(FrameImages[LayerSpinner.value], currentLayer + 1)
-	currentimage = FrameImages[FrameSpinner.value][currentLayer]
+	for i = 1, #Frames do
+		table.remove(Frames[i], LayerSpinner.value)
+		table.remove(FrameImages[i], LayerSpinner.value)
+	end
+	--currentLayer = currentLayer - 1
+	--currentData = currentFrame[currentLayer]
+	LayerSpinner.max, LayerSpinner.value = LayerSpinner.max - 1, LayerSpinner.value - 1
+	--table.remove(FrameImages[LayerSpinner.value], currentLayer + 1)
+	--currentimage = FrameImages[FrameSpinner.value][currentLayer]
 end
 
 function MergeLayer()
-	currentFrame[currentLayer - 1]:mapPixel(pixelFunction.merge)
+	--currentFrame[currentLayer - 1]:mapPixel(pixelFunction.merge)
+	for i = 1, #Frames do
+		thedata = Frames[i][LayerSpinner.value]
+		Frames[i][LayerSpinner.value - 1]:mapPixel(pixelFunction.merge)
+	end
 	RemoveLayer()
+end
+
+function clearFrames()
+	for i = 1, #Frames do
+		table.remove(Frames[i])
+		table.remove(FrameImages[i])
+	end
 end
 
 function NewFrame()
