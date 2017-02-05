@@ -189,7 +189,6 @@ function love.touchpressed(id, x, y)
 		colorpicker.bslider.value = colorpicker.bslider.value / 255
 		end
 	end
-	
 	drawFunctions()
 	currentimage:refresh()
 	for i, v in pairs(FrameImages[FrameSpinner.value]) do

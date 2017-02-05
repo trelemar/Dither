@@ -64,6 +64,7 @@ function toolbar.update(dt)
 	end
 end
 function drawFunctions()
+	if #touches == 1 then
 	local xmirror, ymirror = menus.optionsMenu.components.xmirror.checked, menus.optionsMenu.components.ymirror.checked
 	local w = currentData:getWidth()
 	local cx = w/2
@@ -71,6 +72,7 @@ function drawFunctions()
 	local h = currentData:getHeight()
 	local cy = h/2
 	local py = tmath.distanceFromCenter(touchy, h)
+	end
 	 if candraw and touchx ~= nil and touchx >= 0 and touchx <= currentimage:getWidth() and touchy >=0 and touchy <= currentimage:getHeight() then
 		--coordlabel.text = "x: " .. touchx
 		if tool == tools.pencil then

@@ -64,6 +64,7 @@ function gui.load()
 		--gui.toast(tostring(isPlaying))
 		--gooi.setGroupEnabled("toolbar", not isPlaying)
 		DelaySlider:setVisible(isPlaying)
+		fpsLabel:setVisible(isPlaying)
 	end)
 	play.bgColor = colors.secondary
 	play:setBounds(cp.x, cp.y - cp.h - dp(4), cp.w, cp.h)
@@ -519,7 +520,12 @@ function gui.loadCellWidget()
 	:add(gooi.newButton("+"):onPress(function() NewFrame() end), "2,4")
 	DelaySlider = gooi.newSpinner({x = sw/2, y = sh/2, w = dp(126), h = dp(36), min = 1, max = 100, value = 50})
 	DelaySlider:setVisible(false)
+	fpsLabel = gooi.newLabel("FPS"):setAlign("center"):setOpaque(true)
 	glo:add(DelaySlider, "b-r")
+	do local s = DelaySlider
+		fpsLabel:setBounds(s.x, s.y - s.h, s.w, s.h)
+	end
+	fpsLabel:setVisible(false)
 end
 
 function gui.toggleColorPicker()
