@@ -54,14 +54,16 @@ function gui.load()
 	:onRelease(function(self)
 		isPlaying = not isPlaying
 		if isPlaying then
+			
 			play:setIcon(icpath.."pause.png")
 			play.bgColor = colors.tertairy
 		else
 			play:setIcon(icpath.."play.png")
 			play.bgColor = colors.secondary
 		end
-		gui.toast(tostring(isPlaying))
-		gooi.setGroupEnabled("toolbar", not isPlaying)
+		--gui.toast(tostring(isPlaying))
+		--gooi.setGroupEnabled("toolbar", not isPlaying)
+		DelaySlider:setVisible(isPlaying)
 	end)
 	play.bgColor = colors.secondary
 	play:setBounds(cp.x, cp.y - cp.h - dp(4), cp.w, cp.h)
@@ -496,7 +498,7 @@ function gui.loadFrameMenu()
 end
 
 function gui.loadCellWidget()
-	cellWidget = gooi.newPanel(dp(4), sh - dp(32*2) - dp(4), dp(32 * 6), dp(32*2), "grid 2x4"):setOpaque(true)
+	cellWidget = gooi.newPanel(dp(2), sh - dp(32*2) - dp(2), dp(32 * 6), dp(32*2), "grid 2x4"):setOpaque(true)
 	:setColspan(1, 2, 2)
 	:setColspan(2, 2, 2)
 	gooi.setStyle(raisedbutton)
@@ -515,6 +517,9 @@ function gui.loadCellWidget()
 	:add(gooi.newLabel({text = "FRAME:", align = "center"}), "2,1")
 	:add(FrameSpinner, "2,2")
 	:add(gooi.newButton("+"):onPress(function() NewFrame() end), "2,4")
+	DelaySlider = gooi.newSpinner({x = sw/2, y = sh/2, w = dp(126), h = dp(36), min = 1, max = 100, value = 50})
+	DelaySlider:setVisible(false)
+	glo:add(DelaySlider, "b-r")
 end
 
 function gui.toggleColorPicker()
@@ -596,12 +601,15 @@ function loadDSF(file)
 	FrameSpinner.value, LayerSpinner.value = 1, 1
 	FrameSpinner.max, LayerSpinner.max = #Frames, #Frames[1]
 end
-
+local delay = 0
 function PlayAnimation(dt)
 if isPlaying == true then
 	if FrameSpinner.value < FrameSpinner.max then
-		FrameSpinner.value = FrameSpinner.value + 1
-	else FrameSpinner.value = 1
+		delay = delay + DelaySlider.value / 100
+		if delay >= 1 then
+		FrameSpinner.value = FrameSpinner.value + 1 delay = 0
+		end
+	else FrameSpinner.value = 1 delay = 0
 	end
 end
 end
