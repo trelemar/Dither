@@ -170,7 +170,7 @@ end
 
 function love.mousepressed(x, y, button, isTouch)
 	isTouch = false
-	gooi.pressed(button, x, y)
+	gooi.pressed()
 	coordx, coordy = camera:worldCoords(math.ceil(x), math.ceil(y))
 	if y <= dp(36) or y >= undo.y or x <= dp(44) or gui.checkOpenMenus() or fileBrowser ~= nil or colorpicker.enabled then 
 		candraw = false
@@ -199,7 +199,7 @@ function love.mousepressed(x, y, button, isTouch)
 end
 
 function love.mousereleased(x, y, button, isTouch)
-	gooi.released(button, x, y)
+	gooi.released()
 	if coordx ~= nil and coordy ~= nil then
 		if candraw and coordx >= 0 and coordx <= currentData:getWidth() and coordy >= 0 and coordy <= currentData:getHeight() and tool ~= tools.pan and tool ~= none or tool == tools.move then
 			for i, v in pairs(currentFrame) do
@@ -237,7 +237,7 @@ end
 
 function love.mousemoved(x, y, dx, dy, isTouch)
 	mouseDown = love.mouse.isDown(1)
-	gooi.moved(mouseDown, x, y)
+	gooi.moved()
 	if tool ~= tools.pan and tool ~= tools.move then
 		coordx, coordy = camera:worldCoords(math.ceil(x), math.ceil(y))
 	elseif candraw and tool == tools.pan and y > dp(46) and mouseDown == true then
