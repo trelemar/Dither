@@ -10,6 +10,7 @@ require "styles"
 Camera = require"lib.hump.camera"
 showgrid = true
 showAlphaBG = true
+isTouch = false
 Timer = require"lib.hump.timer"
 require "lib.copytable"
 require "guifunctions"
@@ -24,6 +25,7 @@ function love.load()
 	table.insert(grids, {16, 16, gridcolors.blue, true, 1})
 	love.filesystem.createDirectory("palettes/")
 	touches = {}
+	buttonId = {}
 	history = {}
 	lg.setFont(fonts.rr)
 	love.graphics.setDefaultFilter("nearest")
@@ -98,7 +100,6 @@ function love.draw()
 	
 	if menus.viewMenu.components.alphaBgCheck.checked then
 	alphaCamera:attach()
-	lg.setColor(255, 255, 255, 50)
 	lg.draw(alphaBG, alphaQuad, 0, 0)
 	alphaCamera:detach()
 	end
@@ -167,7 +168,99 @@ function love.draw()
 	--]]
 end
 
+function love.mousepressed(x, y, button, isTouch)
+	isTouch = false
+	gooi.pressed(button, x, y)
+	coordx, coordy = camera:worldCoords(math.ceil(x), math.ceil(y))
+	if y <= dp(36) or y >= undo.y or x <= dp(44) or gui.checkOpenMenus() or fileBrowser ~= nil or colorpicker.enabled then 
+		candraw = false
+	elseif y > dp(46) or x > dp(44) then 
+		candraw = true
+	end
+	local palx, paly = paletteCamera:worldCoords(x, y)
+	if palx >= 0 and palx <= paletteImage:getWidth() and paly >= 0 and paly <= paletteImage:getHeight() then
+		candraw = false
+		if not colorpicker.enabled then
+			currentcolor = {palettedata:getPixel(palx, paly)}
+			colorpicker.updateSliders()
+		else
+			colorpicker.rslider.value, colorpicker.gslider.value, colorpicker.bslider.value = palettedata:getPixel(palx, paly)
+			colorpicker.rslider.value = colorpicker.rslider.value / 255
+			colorpicker.gslider.value = colorpicker.gslider.value / 255
+			colorpicker.bslider.value = colorpicker.bslider.value / 255
+		end
+	end
+	
+	drawFunctions()
+	currentimage:refresh()
+	for i, v in pairs(FrameImages[FrameSpinner.value]) do
+		v:refresh()
+	end
+end
+
+function love.mousereleased(x, y, button, isTouch)
+	gooi.released(button, x, y)
+	if coordx ~= nil and coordy ~= nil then
+		if candraw and coordx >= 0 and coordx <= currentData:getWidth() and coordy >= 0 and coordy <= currentData:getHeight() and tool ~= tools.pan and tool ~= none or tool == tools.move then
+			for i, v in pairs(currentFrame) do
+  				table.insert(history, #history + 1, currentData:encode("png"))
+  			end
+			if #history >= 10 then 
+				table.remove(history, 1) 
+			end
+		h = #history
+		end
+	end
+	
+	if tool == tools.move and candraw then
+		imgQuad:setViewport(0, 0, currentData:getWidth(), currentData:getHeight())
+		currentData:mapPixel(pixelFunction.allwhite)
+		pastedata = love.image.newImageData(history[h])
+		currentData:paste(pastedata, xamm, yamm, 0, 0, pastedata:getWidth(), pastedata:getHeight())
+		xamm, yamm = 0, 0
+	else
+	end
+	
+	if buttonId[1] == button then
+		coordx, coordy = nil, nil
+	end
+
+	buttonId[1] = button
+	
+	for i, v in pairs(buttonId) do
+		if button == v then buttonId[i] = nil end
+	end
+
+	
+	currentimage:refresh()
+end
+
+function love.mousemoved(x, y, dx, dy, isTouch)
+	mouseDown = love.mouse.isDown(1)
+	gooi.moved(mouseDown, x, y)
+	if tool ~= tools.pan and tool ~= tools.move then
+		coordx, coordy = camera:worldCoords(math.ceil(x), math.ceil(y))
+	elseif candraw and tool == tools.pan and y > dp(46) and mouseDown == true then
+		local newcoordx, newcoordy = camera:worldCoords(math.ceil(x), math.ceil(y))
+		camera:move(coordx - newcoordx, coordy - newcoordy)
+		alphaCamera:move((coordx-newcoordx)*2, (coordy - newcoordy)*2)
+	end
+	if candraw and tool == tools.move and y > dp(46) and mouseDown == true then
+		
+		local newcoordx, newcoordy = camera:worldCoords(math.ceil(x), math.ceil(y))
+		xamm = (math.ceil(coordx - newcoordx) * -1)
+		yamm = (math.ceil(coordy - newcoordy) * -1)
+		imgQuad:setViewport(xamm * -1, yamm * - 1, currentData:getWidth(), currentData:getHeight())
+	end
+	
+	if mouseDown == true then
+	 	drawFunctions()
+	end
+	currentimage:refresh()
+end
+
 function love.touchpressed(id, x, y)
+	isTouch = true
 	table.insert(touches, #touches + 1, id)
 	gooi.pressed(id, x, y)
 	if id == touches[1] then

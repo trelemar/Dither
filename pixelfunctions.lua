@@ -28,17 +28,18 @@ function biggerPencil(x, y, size, color)
 end
 
 function floodFill(x, y, target_color, replacement_color)
+
 	if not tmath.Within(x, y, currentData:getWidth(), currentData:getHeight()) then return
-	elseif target_color == replacement_color then return
-	elseif currentData:getPixel(x, y) ~= target_color then return
+	elseif serialize(target_color) == serialize(replacement_color) then return
+	elseif serialize({currentData:getPixel(x, y)}) ~= serialize(target_color) then return
 	else
-	currentData:setPixel(x, y, replacement_color)
-	floodFill(x, y + 1, target_color, replacement_color)
-	floodFill(x, y - 1, target_color, replacement_color)
-	floodFill(x - 1, y, target_color, replacement_color)
-	floodFill(x + 1, y, target_color, replacement_color)
-	return floodFill(x, y, target_color, replacement_color)
+		currentData:setPixel(x, y, replacement_color)
+		floodFill(x, y + 1, target_color, replacement_color)
+		floodFill(x, y - 1, target_color, replacement_color)
+		floodFill(x + 1, y, target_color, replacement_color)
+		floodFill(x - 1, y, target_color, replacement_color)
 	end
+
 end
 
 function NewLayer()
