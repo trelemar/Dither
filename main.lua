@@ -25,7 +25,6 @@ function love.load()
 	table.insert(grids, {16, 16, gridcolors.blue, true, 1})
 	love.filesystem.createDirectory("palettes/")
 	touches = {}
-	buttonId = {}
 	history = {}
 	lg.setFont(fonts.rr)
 	love.graphics.setDefaultFilter("nearest")
@@ -220,17 +219,6 @@ function love.mousereleased(x, y, button, isTouch)
 		xamm, yamm = 0, 0
 	else
 	end
-	
-	if buttonId[1] == button then
-		coordx, coordy = nil, nil
-	end
-
-	buttonId[1] = button
-	
-	for i, v in pairs(buttonId) do
-		if button == v then buttonId[i] = nil end
-	end
-
 	
 	currentimage:refresh()
 end
