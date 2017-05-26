@@ -54,6 +54,7 @@ function love.load()
 	gridCanvas = love.graphics.newCanvas()
 	--shapeCanvas = love.graphics.newCanvas(currentData:getWidth(), currentData:getHeight())
 	isPlaying = false
+	firstStroke = false
 	--loadDSF("yeasss.lua")
 end
 
@@ -108,18 +109,15 @@ function love.draw()
 	for i, v in pairs(currentFrame) do
 		if i < currentLayer then
 			lg.draw(FrameImages[FrameSpinner.value][i], 0, 0)
-		end
-	end
-	lg.draw(currentimage, imgQuad, 0, 0)
-	for i, v in pairs(currentFrame) do
-		if i > currentLayer then
+		elseif i > currentLayer then
 			lg.draw(FrameImages[FrameSpinner.value][i], 0, 0)
 		end
 	end
+	lg.draw(currentimage, imgQuad, 0, 0)
 	camera:detach()
 	
 	if showgrid then
-	lg.draw(gridCanvas)
+		lg.draw(gridCanvas)
 	end
 	lg.setColor(255, 255, 255)
 	paletteCamera:attach()
@@ -130,10 +128,10 @@ function love.draw()
 	--lg.rectangle("fill", 0, 0, sw, dp(44))
 	gooi.draw()
 	do local zs = menuBar.components.zoomslider
-	lg.setColor(colors.white)
-	lg.setLineWidth(2)
-	lg.line(zs.x, zs.y + dp(4), zs.x, zs.h - dp(4))
-	lg.line(zs.x + zs.w, zs.y + dp(4), zs.x + zs.w, zs.h - dp(4))
+		lg.setColor(colors.white)
+		lg.setLineWidth(2)
+		lg.line(zs.x, zs.y + dp(4), zs.x, zs.h - dp(4))
+		lg.line(zs.x + zs.w, zs.y + dp(4), zs.x + zs.w, zs.h - dp(4))
 	end
 	gooi.draw("toolbar")
 	gooi.draw("fileMenu")
@@ -169,6 +167,7 @@ end
 
 function love.mousepressed(x, y, button, isTouch)
 	isTouch = false
+	firstStroke = true
 	gooi.pressed()
 	coordx, coordy = camera:worldCoords(math.ceil(x), math.ceil(y))
 	if y <= dp(36) or y >= undo.y or x <= dp(44) or gui.checkOpenMenus() or fileBrowser ~= nil or colorpicker.enabled then 
@@ -201,9 +200,7 @@ function love.mousereleased(x, y, button, isTouch)
 	gooi.released()
 	if coordx ~= nil and coordy ~= nil then
 		if candraw and coordx >= 0 and coordx <= currentData:getWidth() and coordy >= 0 and coordy <= currentData:getHeight() and tool ~= tools.pan and tool ~= none or tool == tools.move then
-			for i, v in pairs(currentFrame) do
-  				table.insert(history, #history + 1, currentData:encode("png"))
-  			end
+  			table.insert(history, #history + 1, currentData:encode("png"))
 			if #history >= 10 then 
 				table.remove(history, 1) 
 			end
@@ -243,8 +240,10 @@ function love.mousemoved(x, y, dx, dy, isTouch)
 	
 	if mouseDown == true then
 	 	drawFunctions()
+	 	firstStroke = false
 	end
 	currentimage:refresh()
+
 end
 
 function love.touchpressed(id, x, y)

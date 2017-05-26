@@ -183,6 +183,15 @@ function gui.toggleFileBrowser()
 	end
 end
 
+--update sub button button colors
+function gui.tglSubButtons()
+	if usePixelPerfect then
+		pixPerfectBtn.bgColor = colors.secondary
+	else
+		pixPerfectBtn.bgColor = colors.primaryl
+	end
+end
+
 function gui.loadPaletteManager()
 	gooi.setStyle(window)
 	menus.paletteManager = gooi.newPanel(compactWindowArgs):setGroup("paletteManager"):setOpaque(true)
@@ -505,7 +514,7 @@ function gui.loadCellWidget()
 	gooi.setStyle(raisedbutton)
 	LayerSpinner = gooi.newSpinner({min = 1, max = #currentFrame, value = 1})
 	:onRelease(function(self) 
-	--currentimage = FrameImages[FrameSpinner.value][LayerSpinner.value] 
+	-- currentimage = FrameImages[FrameSpinner.value][LayerSpinner.value] 
 	end)
 	FrameSpinner = gooi.newSpinner({min = 1, max = 1, value = 1})
 	cellWidget:add(gooi.newLabel({text = "LAYER:", align = "center"}), "1,1")
@@ -547,9 +556,9 @@ function gui.toast(message)
 end
 
 function clearHistory()
- for i, v in pairs(history) do
-  history[i] = nil
- end
+	for i, v in pairs(history) do
+ 		history[i] = nil
+	end
 end
 
 function gui.checkOpenMenus()
