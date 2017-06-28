@@ -20,25 +20,56 @@ end
 
 function biggerPencil(x, y, size, color)
 	if not tmath.Within(x, y, currentData:getWidth(), currentData:getHeight()) then return end
-	if x == touchx + size then return end
-	if y == touchy + size then return end
+	if x == coordx + size then return end
+	if y == coordy + size then return end
 	currentData:setPixel(x, y, color)
 	x = x + 1
 	return biggerPencil(x, y, size, color)
 end
 
-function floodFill(x, y, target_color, replacement_color)
-	if not tmath.Within(x, y, currentData:getWidth(), currentData:getHeight()) then return
-	elseif target_color == replacement_color then return
-	elseif currentData:getPixel(x, y) ~= target_color then return
-	else
-	currentData:setPixel(x, y, replacement_color)
-	floodFill(x, y + 1, target_color, replacement_color)
-	floodFill(x, y - 1, target_color, replacement_color)
-	floodFill(x - 1, y, target_color, replacement_color)
-	floodFill(x + 1, y, target_color, replacement_color)
-	return floodFill(x, y, target_color, replacement_color)
+function pixelPerfect()
+	if firstStroke then
+		lastPixX = coorIntX
+		lastPixY = coorIntY
+		_lastPixX = coorIntX
+		_lastPixY = coorIntY
 	end
+	distanceSq = tmath.distSqrd(lastPixX,lastPixY,coorIntX,coorIntY)
+
+	skipUpdate = false
+	if firstStroke or distanceSq > 2 then
+		currentData:setPixel(coorIntX,coorIntY,color)
+	else
+		distanceSq = tmath.distSqrd(_lastPixX, _lastPixY, coorIntX,coorIntY)
+		if distanceSq > 2 then
+			currentData:setPixel(lastPixX, lastPixY, color)
+		else
+			lastPixX = coorIntX
+			lastPixY = coorIntY
+			skipUpdate = true
+		end
+	end
+	if (not skipUpdate) then
+		_lastPixX = lastPixX
+		_lastPixY = lastPixY
+		lastPixX = coorIntX
+		lastPixY = coorIntY
+	end
+end
+
+function floodFill(x, y, target_color, replacement_color)
+
+	if not tmath.Within(x, y, currentData:getWidth(), currentData:getHeight()) then return
+	elseif serialize(target_color) == serialize(replacement_color) then return
+	elseif serialize({currentData:getPixel(x, y)}) ~= serialize(target_color) then return
+	else
+		currentData:setPixel(x, y, replacement_color)
+		floodFill(x, y + 1, target_color, replacement_color)
+		floodFill(x, y - 1, target_color, replacement_color)
+		floodFill(x + 1, y, target_color, replacement_color)
+		floodFill(x - 1, y, target_color, replacement_color)
+	end
+
 end
 
 function NewLayer()
