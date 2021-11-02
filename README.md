@@ -1,7 +1,7 @@
-#Dither
+# Dither
 An Android pixel art editor made with [LÖVE](love2d.org).
 ![Imgur](http://i.imgur.com/L7wlgHm.jpg)
-##Install
+## Install
 1. **Download** and install [**LÖVE** For Android](https://play.google.com/store/apps/details?id=org.love2d.android).
 
 2. **Clone** this repository to your device. You can also download as a zip if you'd like, if you don't want seamless updates during alpha.
@@ -11,7 +11,7 @@ An Android pixel art editor made with [LÖVE](love2d.org).
 
 4. Profit?
 
-##Features
+## Features
 - Pan and Scale Viewport.
 - **Editing Tools:** Pencil, Eraser, Floodfill, Move, Eyedropper.
 - Custom color palettes.
@@ -21,6 +21,6 @@ An Android pixel art editor made with [LÖVE](love2d.org).
 - **File Operations:**
 New, Load, Save, Save As, Undo.
 
-##Usage
-#####Some useful information:
+## Usage
+##### Some useful information:
 Due to the limitations of the current version of löve, file manipulation is limited to löve's app data directory. To find out this directory for your device, simply open Dither, then File > Open File. the directory will be the header of the file browser window. This means that currently you cannot save and load files from outside of this directory.
